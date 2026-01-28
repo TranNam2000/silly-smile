@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding strings -->
+    <string name="obd_title1">Translate Instantly</string>
+    <string name="obd_detail1">Get real-time translations in over 100 languages. Speak, type, or scan text to bridge any communication gap!</string>
+    <string name="obd_title2">Live Camera Translation</string>
+    <string name="obd_detail2">Point your camera at signs, menus, or documents, and see translations appear instantly on your screen.</string>
+    <string name="obd_title3">Voice-to-Voice Translation</string>
+    <string name="obd_detail3">Have conversations across languages effortlessly. Speak naturally, and let your app handle the rest!</string>
+    <string name="obd_title_new">Welcome to Quick Translator</string>
+    <string name="obd_detail_new">Your All-in-one Language Partner</string>
+    <!-- Navigation strings -->
+    <string name="next">Next</string>
+    <string name="start">Getting Started</string>
+    <string name="continue_btn">Continue</string>
+    
+    <!-- Language strings -->
+    <string name="language">Language</string>
+    
+    <!-- Splash strings -->
+    <string name="title_splash">Quick Translate All Languages</string>
+    
+    <!-- App name -->
+    <string name="app_name">AI Translate</string>
+    
+    <!-- Policy and version strings -->
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="version">Version</string>
+    
+    <!-- Navigation Fragment labels -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    
+    <!-- Additional strings -->
+    <string name="share">Share</string>
+    <string name="update_available">Update Available</string>
+    <string name="update_message">A new version of the app is available. Please update to continue using all features.</string>
+    <string name="update_later">Later</string>
+    <string name="update_now">Update Now</string>
+</resources>

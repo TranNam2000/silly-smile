@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Glowing purple border -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:endColor="#B84FE0"
+                android:startColor="#5E31D6"
+                android:type="linear" />
+            <corners android:radius="50dp" />
+        </shape>
+    </item>
+    
+    <!-- Dark background -->
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#2A2D41" />
+            <corners android:radius="48dp" />
+        </shape>
+    </item>
+</layer-list>
+

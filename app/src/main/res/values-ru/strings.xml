@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">4K Обои</string>
+    <string name="smile">Улыбка</string>
+    <string name="categories">Категории</string>
+
+    <!-- Category names -->
+    <string name="category_all">Все</string>
+    <string name="category_marvel">Марвел</string>
+    <string name="category_nature">Природа</string>
+    <string name="category_car">Машина</string>
+    <string name="category_cartoon">Мультфильм</string>
+    <string name="category_cute">Милые</string>
+    <string name="category_brainrot">Брейнрот</string>
+    <string name="category_anime">Аниме</string>
+
+    <!-- Settings -->
+    <string name="setting">Настройки</string>
+    <string name="unlock_all_wallpaper">Разблокировать все обои</string>
+    <string name="language">Язык</string>
+    <string name="english">Английский</string>
+    <string name="feedback">Отзыв</string>
+    <string name="app_preferences">Настройки приложения</string>
+    <string name="rate_app">Оценить Приложение</string>
+    <string name="legal">Юридическая информация</string>
+    <string name="go_premium">Перейти на Премиум</string>
+    <string name="others">Другое</string>
+    <string name="term_and_privacy">Условия и Конфиденциальность</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Применить</string>
+    <string name="get_it">Получить</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Разблокировать Обои</string>
+    <string name="watch_1_video_to_unlock">Посмотрите 1 Видео Для Разблокировки</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Предварительный просмотр</string>
+    <string name="save">Сохранить</string>
+    <string name="reset_changes">Сбросить изменения</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Анимированные GIF Живые Обои</string>
+    <string name="wallpaper_description_2">Анимированные GIF Обои 2</string>
+
+    <string name="lottie_wallpaper_description">Анимированные Lottie Живые Обои</string>
+    <string name="funny_smile_live_wallpaper">Забавная Улыбка Живые Обои</string>
+    <string name="successfully">Успешно Установлено</string>
+    <string name="your_wallpaper_is_ready">Ваши обои готовы!</string>
+
+    <!-- History -->
+    <string name="delete">Удалить</string>
+    <string name="favorite">Избранное</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">Нет доступных обоев!</string>
+    <string name="error_no_crop_info">Ошибка: Невозможно получить информацию об обрезке!</string>
+    <string name="error_wallpaper_not_selected">Ошибка: Обои не выбраны</string>
+    <string name="error_download_failed">Ошибка: Не удалось загрузить GIF</string>
+    <string name="error_processing_image">Ошибка: %s</string>
+    <string name="error_set_wallpaper_failed">Пожалуйста, попробуйте снова</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Установка в качестве главного экрана…</string>
+    <string name="setting_lock_screen">Установка в качестве экрана блокировки…</string>
+    <string name="setting_both_screens">Установка в качестве главного экрана и экрана блокировки…</string>
+    <string name="setting_wallpaper">Установка обоев…</string>
+    <string name="downloading">Загрузка…</string>
+    <string name="wallpaper_set_home">Успешно установлено в качестве главного экрана!</string>
+    <string name="wallpaper_set_lock">Успешно установлено в качестве экрана блокировки!</string>
+    <string name="wallpaper_set_both">Успешно установлено в качестве главного экрана и экрана блокировки!</string>
+    <string name="wallpaper_set_success">Обои успешно установлены!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Изображение сохранено: %s</string>
+    <string name="image_cached">Изображение кэшировано в: %s</string>
+    <string name="processing_image">Обработка изображения…</string>
+    <string name="permissions_needed">Требуются разрешения для доступа к медиа</string>
+    <string name="err_path">Ошибка: Файл изображения не найден</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Требуется Разрешение</string>
+    <string name="permission_message">Этому приложению требуется доступ к вашим фотографиям для установки обоев. Пожалуйста, предоставьте разрешение в Настройках.</string>
+    <string name="settings">Настройки</string>
+    <string name="cancel">Отмена</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Получайте уведомления о новых обоях и обновлениях приложения. Вы можете изменить это в любое время в Настройках.</string>
+    <string name="allow">Разрешить</string>
+    <string name="not_now">Не Сейчас</string>
+    <string name="obd_title1">Открыть</string>
+    <string name="obd_detail1">Забавные Обои</string>
+    <string name="obd_title2">Исследовать</string>
+    <string name="obd_detail2">4K Трендовые Обои</string>
+    <string name="obd_title3">Хорошее Настроение</string>
+    <string name="obd_detail3">При Каждой Разблокировке</string>
+</resources>
+
+
+

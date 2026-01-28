@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">4K वॉलपेपर</string>
+    <string name="smile">मुस्कान</string>
+    <string name="categories">श्रेणियाँ</string>
+
+    <!-- Category names -->
+    <string name="category_all">सभी</string>
+    <string name="category_marvel">मार्वल</string>
+    <string name="category_nature">प्रकृति</string>
+    <string name="category_car">कार</string>
+    <string name="category_cartoon">कार्टून</string>
+    <string name="category_cute">प्यारा</string>
+    <string name="category_brainrot">ब्रेनरॉट</string>
+    <string name="category_anime">एनीमे</string>
+
+    <!-- Settings -->
+    <string name="setting">सेटिंग</string>
+    <string name="unlock_all_wallpaper">सभी वॉलपेपर अनलॉक करें</string>
+    <string name="language">भाषा</string>
+    <string name="english">अंग्रेज़ी</string>
+    <string name="feedback">फीडबैक</string>
+    <string name="app_preferences">ऐप प्राथमिकताएं</string>
+    <string name="rate_app">ऐप को रेट करें</string>
+    <string name="legal">कानूनी</string>
+    <string name="go_premium">प्रीमियम प्राप्त करें</string>
+    <string name="others">अन्य</string>
+    <string name="term_and_privacy">नियम और गोपनीयता</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">लागू करें</string>
+    <string name="get_it">प्राप्त करें</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">वॉलपेपर अनलॉक करें</string>
+    <string name="watch_1_video_to_unlock">अनलॉक करने के लिए 1 वीडियो देखें</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">पूर्वावलोकन</string>
+    <string name="save">सहेजें</string>
+    <string name="reset_changes">परिवर्तन रीसेट करें</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">एनिमेटेड GIF लाइव वॉलपेपर</string>
+    <string name="wallpaper_description_2">एनिमेटेड GIF वॉलपेपर 2</string>
+
+    <string name="lottie_wallpaper_description">एनिमेटेड लॉटी लाइव वॉलपेपर</string>
+    <string name="funny_smile_live_wallpaper">मज़ेदार मुस्कान लाइव वॉलपेपर</string>
+    <string name="successfully">सफलतापूर्वक सेट किया गया</string>
+    <string name="your_wallpaper_is_ready">आपका वॉलपेपर तैयार है!</string>
+
+    <!-- History -->
+    <string name="delete">हटाएं</string>
+    <string name="favorite">पसंदीदा</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">कोई वॉलपेपर उपलब्ध नहीं!</string>
+    <string name="error_no_crop_info">त्रुटि: क्रॉप जानकारी प्राप्त करने में असमर्थ!</string>
+    <string name="error_wallpaper_not_selected">त्रुटि: कोई वॉलपेपर चयनित नहीं</string>
+    <string name="error_download_failed">त्रुटि: GIF डाउनलोड करने में विफल</string>
+    <string name="error_processing_image">त्रुटि: %s</string>
+    <string name="error_set_wallpaper_failed">कृपया पुनः प्रयास करें</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">होम स्क्रीन के रूप में सेट किया जा रहा है…</string>
+    <string name="setting_lock_screen">लॉक स्क्रीन के रूप में सेट किया जा रहा है…</string>
+    <string name="setting_both_screens">होम और लॉक स्क्रीन के रूप में सेट किया जा रहा है…</string>
+    <string name="setting_wallpaper">वॉलपेपर सेट किया जा रहा है…</string>
+    <string name="downloading">डाउनलोड हो रहा है…</string>
+    <string name="wallpaper_set_home">होम स्क्रीन के रूप में सफलतापूर्वक सेट किया गया!</string>
+    <string name="wallpaper_set_lock">लॉक स्क्रीन के रूप में सफलतापूर्वक सेट किया गया!</string>
+    <string name="wallpaper_set_both">होम और लॉक स्क्रीन के रूप में सफलतापूर्वक सेट किया गया!</string>
+    <string name="wallpaper_set_success">वॉलपेपर सफलतापूर्वक सेट किया गया!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">छवि सहेजी गई: %s</string>
+    <string name="image_cached">छवि कैश में: %s</string>
+    <string name="processing_image">छवि प्रोसेस हो रही है…</string>
+    <string name="permissions_needed">मीडिया तक पहुंचने के लिए अनुमतियां आवश्यक हैं</string>
+    <string name="err_path">त्रुटि: छवि फ़ाइल नहीं मिली</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">अनुमति आवश्यक</string>
+    <string name="permission_message">इस ऐप को वॉलपेपर सेट करने के लिए आपकी फ़ोटो तक पहुंच की आवश्यकता है। कृपया सेटिंग्स में अनुमति दें।</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="cancel">रद्द करें</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">नए वॉलपेपर और ऐप अपडेट के बारे में सूचित हों। आप इसे किसी भी समय सेटिंग्स में बदल सकते हैं।</string>
+    <string name="allow">अनुमति दें</string>
+    <string name="not_now">अभी नहीं</string>
+    <string name="obd_title1">खोजें</string>
+    <string name="obd_detail1">मज़ेदार वॉलपेपर</string>
+    <string name="obd_title2">एक्सप्लोर करें</string>
+    <string name="obd_detail2">4K ट्रेंडिंग वॉलपेपर</string>
+    <string name="obd_title3">अच्छा महसूस करें</string>
+    <string name="obd_detail3">हर अनलॉक पर</string>
+</resources>
+
+
+

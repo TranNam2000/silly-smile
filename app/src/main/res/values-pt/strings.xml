@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">Papel de Parede 4K</string>
+    <string name="smile">Sorriso</string>
+    <string name="categories">Categorias</string>
+
+    <!-- Category names -->
+    <string name="category_all">Todos</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Natureza</string>
+    <string name="category_car">Carro</string>
+    <string name="category_cartoon">Desenho Animado</string>
+    <string name="category_cute">Fofo</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Configuração</string>
+    <string name="unlock_all_wallpaper">Desbloquear todos os papéis de parede</string>
+    <string name="language">Idioma</string>
+    <string name="english">Inglês</string>
+    <string name="feedback">Feedback</string>
+    <string name="app_preferences">Preferências do aplicativo</string>
+    <string name="rate_app">Avaliar Aplicativo</string>
+    <string name="legal">Legal</string>
+    <string name="go_premium">Tornar-se Premium</string>
+    <string name="others">Outros</string>
+    <string name="term_and_privacy">Termos e Privacidade</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Aplicar</string>
+    <string name="get_it">Obter</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Desbloquear Papel de Parede</string>
+    <string name="watch_1_video_to_unlock">Assista 1 Vídeo Para Desbloquear</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Visualizar</string>
+    <string name="save">Salvar</string>
+    <string name="reset_changes">Redefinir alterações</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Papel de Parede Animado GIF</string>
+    <string name="wallpaper_description_2">Papel de Parede Animado GIF 2</string>
+
+    <string name="lottie_wallpaper_description">Papel de Parede Animado Lottie</string>
+    <string name="funny_smile_live_wallpaper">Papel de Parede Sorriso Engraçado</string>
+    <string name="successfully">Definido com Sucesso</string>
+    <string name="your_wallpaper_is_ready">Seu papel de parede está pronto!</string>
+
+    <!-- History -->
+    <string name="delete">Excluir</string>
+    <string name="favorite">Favorito</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">Nenhum papel de parede disponível!</string>
+    <string name="error_no_crop_info">Erro: Não foi possível obter informações de recorte!</string>
+    <string name="error_wallpaper_not_selected">Erro: Nenhum papel de parede selecionado</string>
+    <string name="error_download_failed">Erro: Falha ao baixar GIF</string>
+    <string name="error_processing_image">Erro: %s</string>
+    <string name="error_set_wallpaper_failed">Por favor, tente novamente</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Definindo como tela inicial…</string>
+    <string name="setting_lock_screen">Definindo como tela de bloqueio…</string>
+    <string name="setting_both_screens">Definindo como tela inicial e de bloqueio…</string>
+    <string name="setting_wallpaper">Definindo papel de parede…</string>
+    <string name="downloading">Baixando…</string>
+    <string name="wallpaper_set_home">Definido como tela inicial com sucesso!</string>
+    <string name="wallpaper_set_lock">Definido como tela de bloqueio com sucesso!</string>
+    <string name="wallpaper_set_both">Definido como tela inicial e de bloqueio com sucesso!</string>
+    <string name="wallpaper_set_success">Papel de parede definido com sucesso!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Imagem salva: %s</string>
+    <string name="image_cached">Imagem em cache em: %s</string>
+    <string name="processing_image">Processando imagem…</string>
+    <string name="permissions_needed">Permissões necessárias para acessar mídia</string>
+    <string name="err_path">Erro: Arquivo de imagem não encontrado</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Permissão Necessária</string>
+    <string name="permission_message">Este aplicativo precisa acessar suas fotos para definir papéis de parede. Por favor, conceda permissão nas Configurações.</string>
+    <string name="settings">Configurações</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Seja notificado sobre novos papéis de parede e atualizações do aplicativo. Você pode alterar isso a qualquer momento nas Configurações.</string>
+    <string name="allow">Permitir</string>
+    <string name="not_now">Agora Não</string>
+    <string name="obd_title1">Descobrir</string>
+    <string name="obd_detail1">Papéis de Parede Engraçados</string>
+    <string name="obd_title2">Explorar</string>
+    <string name="obd_detail2">Papéis de Parede 4K em Tendência</string>
+    <string name="obd_title3">Sentir-se Bem</string>
+    <string name="obd_detail3">A Cada Desbloqueio</string>
+</resources>
+
+
+

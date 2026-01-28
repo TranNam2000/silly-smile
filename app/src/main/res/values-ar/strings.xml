@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">خلفية 4K</string>
+    <string name="smile">ابتسامة</string>
+    <string name="categories">الفئات</string>
+
+    <!-- Category names -->
+    <string name="category_all">الكل</string>
+    <string name="category_marvel">مارفل</string>
+    <string name="category_nature">الطبيعة</string>
+    <string name="category_car">سيارة</string>
+    <string name="category_cartoon">كرتون</string>
+    <string name="category_cute">لطيف</string>
+    <string name="category_brainrot">برينروت</string>
+    <string name="category_anime">أنمي</string>
+
+    <!-- Settings -->
+    <string name="setting">الإعدادات</string>
+    <string name="unlock_all_wallpaper">فتح جميع الخلفيات</string>
+    <string name="language">اللغة</string>
+    <string name="english">الإنجليزية</string>
+    <string name="feedback">الملاحظات</string>
+    <string name="app_preferences">تفضيلات التطبيق</string>
+    <string name="rate_app">تقييم التطبيق</string>
+    <string name="legal">قانوني</string>
+    <string name="go_premium">احصل على النسخة المميزة</string>
+    <string name="others">أخرى</string>
+    <string name="term_and_privacy">الشروط والخصوصية</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">تطبيق</string>
+    <string name="get_it">احصل عليه</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">فتح الخلفية</string>
+    <string name="watch_1_video_to_unlock">شاهد فيديو واحد للفتح</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">معاينة</string>
+    <string name="save">حفظ</string>
+    <string name="reset_changes">إعادة تعيين التغييرات</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">خلفية GIF متحركة</string>
+    <string name="wallpaper_description_2">خلفية GIF متحركة 2</string>
+
+    <string name="lottie_wallpaper_description">خلفية Lottie متحركة</string>
+    <string name="funny_smile_live_wallpaper">خلفية الابتسامة المضحكة</string>
+    <string name="successfully">تم التعيين بنجاح</string>
+    <string name="your_wallpaper_is_ready">خلفيتك جاهزة!</string>
+
+    <!-- History -->
+    <string name="delete">حذف</string>
+    <string name="favorite">المفضلة</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">لا توجد خلفيات متاحة!</string>
+    <string name="error_no_crop_info">خطأ: غير قادر على الحصول على معلومات القص!</string>
+    <string name="error_wallpaper_not_selected">خطأ: لم يتم تحديد خلفية</string>
+    <string name="error_download_failed">خطأ: فشل تنزيل GIF</string>
+    <string name="error_processing_image">خطأ: %s</string>
+    <string name="error_set_wallpaper_failed">يرجى المحاولة مرة أخرى</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">جاري التعيين كشاشة رئيسية…</string>
+    <string name="setting_lock_screen">جاري التعيين كشاشة قفل…</string>
+    <string name="setting_both_screens">جاري التعيين كشاشة رئيسية وقفل…</string>
+    <string name="setting_wallpaper">جاري تعيين الخلفية…</string>
+    <string name="downloading">جاري التنزيل…</string>
+    <string name="wallpaper_set_home">تم التعيين كشاشة رئيسية بنجاح!</string>
+    <string name="wallpaper_set_lock">تم التعيين كشاشة قفل بنجاح!</string>
+    <string name="wallpaper_set_both">تم التعيين كشاشة رئيسية وقفل بنجاح!</string>
+    <string name="wallpaper_set_success">تم تعيين الخلفية بنجاح!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">تم حفظ الصورة: %s</string>
+    <string name="image_cached">الصورة المخزنة مؤقتًا في: %s</string>
+    <string name="processing_image">جاري معالجة الصورة…</string>
+    <string name="permissions_needed">الأذونات المطلوبة للوصول إلى الوسائط</string>
+    <string name="err_path">خطأ: لم يتم العثور على ملف الصورة</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">الإذن مطلوب</string>
+    <string name="permission_message">يحتاج هذا التطبيق إلى الوصول إلى صورك لتعيين الخلفيات. يرجى منح الإذن في الإعدادات.</string>
+    <string name="settings">الإعدادات</string>
+    <string name="cancel">إلغاء</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">احصل على إشعارات حول الخلفيات الجديدة وتحديثات التطبيق. يمكنك تغيير ذلك في أي وقت في الإعدادات.</string>
+    <string name="allow">السماح</string>
+    <string name="not_now">ليس الآن</string>
+    <string name="obd_title1">اكتشف</string>
+    <string name="obd_detail1">خلفيات مضحكة</string>
+    <string name="obd_title2">استكشف</string>
+    <string name="obd_detail2">خلفيات 4K الرائجة</string>
+    <string name="obd_title3">شعور جيد</string>
+    <string name="obd_detail3">في كل فتح</string>
+</resources>
+
+
+

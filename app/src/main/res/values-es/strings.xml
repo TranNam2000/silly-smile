@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">Fondo de Pantalla 4K</string>
+    <string name="smile">Sonrisa</string>
+    <string name="categories">Categorías</string>
+
+    <!-- Category names -->
+    <string name="category_all">Todos</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Naturaleza</string>
+    <string name="category_car">Coche</string>
+    <string name="category_cartoon">Dibujos Animados</string>
+    <string name="category_cute">Lindo</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Configuración</string>
+    <string name="unlock_all_wallpaper">Desbloquear todos los fondos</string>
+    <string name="language">Idioma</string>
+    <string name="english">Inglés</string>
+    <string name="feedback">Comentarios</string>
+    <string name="app_preferences">Preferencias de la aplicación</string>
+    <string name="rate_app">Calificar aplicación</string>
+    <string name="legal">Legal</string>
+    <string name="go_premium">Hazte Premium</string>
+    <string name="others">Otros</string>
+    <string name="term_and_privacy">Términos y Privacidad</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Aplicar</string>
+    <string name="get_it">Obtener</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Desbloquear Fondo</string>
+    <string name="watch_1_video_to_unlock">Ver 1 Video Para Desbloquear</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Vista Previa</string>
+    <string name="save">Guardar</string>
+    <string name="reset_changes">Restablecer cambios</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Fondo de Pantalla Animado GIF</string>
+    <string name="wallpaper_description_2">Fondo de Pantalla Animado GIF 2</string>
+
+    <string name="lottie_wallpaper_description">Fondo de Pantalla Animado Lottie</string>
+    <string name="funny_smile_live_wallpaper">Fondo de Pantalla Sonrisa Divertida</string>
+    <string name="successfully">Configurado Exitosamente</string>
+    <string name="your_wallpaper_is_ready">¡Tu fondo de pantalla está listo!</string>
+
+    <!-- History -->
+    <string name="delete">Eliminar</string>
+    <string name="favorite">Favorito</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">¡No hay fondos disponibles!</string>
+    <string name="error_no_crop_info">Error: ¡No se puede obtener información de recorte!</string>
+    <string name="error_wallpaper_not_selected">Error: No se seleccionó ningún fondo</string>
+    <string name="error_download_failed">Error: No se pudo descargar el GIF</string>
+    <string name="error_processing_image">Error: %s</string>
+    <string name="error_set_wallpaper_failed">Por favor, inténtalo de nuevo</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Configurando como pantalla de inicio…</string>
+    <string name="setting_lock_screen">Configurando como pantalla de bloqueo…</string>
+    <string name="setting_both_screens">Configurando como pantalla de inicio y bloqueo…</string>
+    <string name="setting_wallpaper">Configurando fondo de pantalla…</string>
+    <string name="downloading">Descargando…</string>
+    <string name="wallpaper_set_home">¡Configurado como pantalla de inicio exitosamente!</string>
+    <string name="wallpaper_set_lock">¡Configurado como pantalla de bloqueo exitosamente!</string>
+    <string name="wallpaper_set_both">¡Configurado como pantalla de inicio y bloqueo exitosamente!</string>
+    <string name="wallpaper_set_success">¡Fondo de pantalla configurado exitosamente!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Imagen guardada: %s</string>
+    <string name="image_cached">Imagen en caché en: %s</string>
+    <string name="processing_image">Procesando imagen…</string>
+    <string name="permissions_needed">Se necesitan permisos para acceder a los medios</string>
+    <string name="err_path">Error: Archivo de imagen no encontrado</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Permiso Requerido</string>
+    <string name="permission_message">Esta aplicación necesita acceso a tus fotos para configurar fondos de pantalla. Por favor, otorga el permiso en Configuración.</string>
+    <string name="settings">Configuración</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Recibe notificaciones sobre nuevos fondos de pantalla y actualizaciones de la aplicación. Puedes cambiar esto en cualquier momento en Configuración.</string>
+    <string name="allow">Permitir</string>
+    <string name="not_now">Ahora No</string>
+    <string name="obd_title1">Descubrir</string>
+    <string name="obd_detail1">Fondos Divertidos</string>
+    <string name="obd_title2">Explorar</string>
+    <string name="obd_detail2">Fondos 4K en Tendencia</string>
+    <string name="obd_title3">Sentirse Bien</string>
+    <string name="obd_detail3">En Cada Desbloqueo</string>
+</resources>
+
+
+

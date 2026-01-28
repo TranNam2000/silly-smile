@@ -1,0 +1,476 @@
+[
+  {
+    "id": 1,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_1.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_1.webp"
+  },
+  {
+    "id": 2,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_2.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_2.webp"
+  },
+  {
+    "id": 3,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_3.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_3.webp"
+  },
+  {
+    "id": 4,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_4.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_4.webp"
+  },
+  {
+    "id": 5,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_5.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_5.webp"
+  },
+  {
+    "id": 6,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_6.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_6.webp"
+  },
+  {
+    "id": 7,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_7.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_7.webp"
+  },
+  {
+    "id": 8,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_8.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_8.webp"
+  },
+  {
+    "id": 9,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_9.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_9.webp"
+  },
+  {
+    "id": 10,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_10.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_10.webp"
+  },
+  {
+    "id": 11,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_11.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_11.webp"
+  },
+  {
+    "id": 12,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_12.webp",
+    "category": "anime",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/anime_12.webp"
+  },
+  {
+    "id": 13,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_1.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_1.webp"
+  },
+  {
+    "id": 14,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_2.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_2.webp"
+  },
+  {
+    "id": 15,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_3.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_3.webp"
+  },
+  {
+    "id": 16,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_4.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_4.webp"
+  },
+  {
+    "id": 17,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_5.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_5.webp"
+  },
+  {
+    "id": 18,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_6.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_6.webp"
+  },
+  {
+    "id": 19,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_7.webp",
+    "category": "brainrot",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/brainrot_7.webp"
+  },
+  {
+    "id": 20,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_1.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_1.webp"
+  },
+  {
+    "id": 21,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_2.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_2.webp"
+  },
+  {
+    "id": 22,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_3.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_3.webp"
+  },
+  {
+    "id": 23,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_4.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_4.webp"
+  },
+  {
+    "id": 24,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_5.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_5.webp"
+  },
+  {
+    "id": 25,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_6.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_6.webp"
+  },
+  {
+    "id": 26,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_7.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_7.webp"
+  },
+  {
+    "id": 27,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_8.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_8.webp"
+  },
+  {
+    "id": 28,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_9.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_9.webp"
+  },
+  {
+    "id": 29,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_10.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_10.webp"
+  },
+  {
+    "id": 30,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_11.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_11.webp"
+  },
+  {
+    "id": 31,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_12.webp",
+    "category": "car",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/car_12.webp"
+  },
+  {
+    "id": 32,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_1.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_1.webp"
+  },
+  {
+    "id": 33,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_2.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_2.webp"
+  },
+  {
+    "id": 34,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_3.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_3.webp"
+  },
+  {
+    "id": 35,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_4.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_4.webp"
+  },
+  {
+    "id": 36,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_5.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_5.webp"
+  },
+  {
+    "id": 37,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_6.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_6.webp"
+  },
+  {
+    "id": 38,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_7.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_7.webp"
+  },
+  {
+    "id": 39,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_8.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_8.webp"
+  },
+  {
+    "id": 40,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_9.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_9.webp"
+  },
+  {
+    "id": 41,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_10.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_10.webp"
+  },
+  {
+    "id": 42,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_11.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_11.webp"
+  },
+  {
+    "id": 43,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_12.webp",
+    "category": "cartoon",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/catoon_12.webp"
+  },
+  {
+    "id": 44,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_1.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_1.webp"
+  },
+  {
+    "id": 45,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_2.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_2.webp"
+  },
+  {
+    "id": 46,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_3.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_3.webp"
+  },
+  {
+    "id": 47,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_4.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_4.webp"
+  },
+  {
+    "id": 48,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_5.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_5.webp"
+  },
+  {
+    "id": 49,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_6.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_6.webp"
+  },
+  {
+    "id": 50,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_7.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_7.webp"
+  },
+  {
+    "id": 51,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_8.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_8.webp"
+  },
+  {
+    "id": 52,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_9.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_9.webp"
+  },
+  {
+    "id": 53,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_10.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_10.webp"
+  },
+  {
+    "id": 54,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_11.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_11.webp"
+  },
+  {
+    "id": 55,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_12.webp",
+    "category": "cute",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/cute_12.webp"
+  },
+  {
+    "id": 56,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_1.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_1.webp"
+  },
+  {
+    "id": 57,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_2.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_2.webp"
+  },
+  {
+    "id": 58,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_3.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_3.webp"
+  },
+  {
+    "id": 59,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_4.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_4.webp"
+  },
+  {
+    "id": 60,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_5.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_5.webp"
+  },
+  {
+    "id": 61,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_6.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_6.webp"
+  },
+  {
+    "id": 62,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_7.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_7.webp"
+  },
+  {
+    "id": 63,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_8.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_8.webp"
+  },
+  {
+    "id": 64,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_9.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_9.webp"
+  },
+  {
+    "id": 65,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_10.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_10.webp"
+  },
+  {
+    "id": 66,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_11.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_11.webp"
+  },
+  {
+    "id": 67,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_12.webp",
+    "category": "marvel",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/mavel_12.webp"
+  },
+  {
+    "id": 68,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_1.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_1.webp"
+  },
+  {
+    "id": 69,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_2.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_2.webp"
+  },
+  {
+    "id": 70,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_3.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_3.webp"
+  },
+  {
+    "id": 71,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_4.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_4.webp"
+  },
+  {
+    "id": 72,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_5.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_5.webp"
+  },
+  {
+    "id": 73,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_6.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_6.webp"
+  },
+  {
+    "id": 74,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_7.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_7.webp"
+  },
+  {
+    "id": 75,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_8.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_8.webp"
+  },
+  {
+    "id": 76,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_9.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_9.webp"
+  },
+  {
+    "id": 77,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_10.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_10.webp"
+  },
+  {
+    "id": 78,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_11.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_11.webp"
+  },
+  {
+    "id": 79,
+    "preview": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_12.webp",
+    "category": "nature",
+    "background": "https://studiomedia.monkeyuni.net/App/uploads/wallpaper/nature_12.webp"
+  }
+]

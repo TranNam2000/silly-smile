@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">4K 배경화면</string>
+    <string name="smile">미소</string>
+    <string name="categories">카테고리</string>
+
+    <!-- Category names -->
+    <string name="category_all">전체</string>
+    <string name="category_marvel">마블</string>
+    <string name="category_nature">자연</string>
+    <string name="category_car">자동차</string>
+    <string name="category_cartoon">만화</string>
+    <string name="category_cute">귀여운</string>
+    <string name="category_brainrot">브레인롯</string>
+    <string name="category_anime">애니메이션</string>
+
+    <!-- Settings -->
+    <string name="setting">설정</string>
+    <string name="unlock_all_wallpaper">모든 배경화면 잠금 해제</string>
+    <string name="language">언어</string>
+    <string name="english">영어</string>
+    <string name="feedback">피드백</string>
+    <string name="app_preferences">앱 환경설정</string>
+    <string name="rate_app">앱 평가하기</string>
+    <string name="legal">법적 정보</string>
+    <string name="go_premium">프리미엄으로 업그레이드</string>
+    <string name="others">기타</string>
+    <string name="term_and_privacy">약관 및 개인정보</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">적용</string>
+    <string name="get_it">가져오기</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">배경화면 잠금 해제</string>
+    <string name="watch_1_video_to_unlock">잠금 해제하려면 동영상 1개 시청</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">미리보기</string>
+    <string name="save">저장</string>
+    <string name="reset_changes">변경사항 재설정</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">애니메이션 GIF 라이브 배경화면</string>
+    <string name="wallpaper_description_2">애니메이션 GIF 배경화면 2</string>
+
+    <string name="lottie_wallpaper_description">애니메이션 Lottie 라이브 배경화면</string>
+    <string name="funny_smile_live_wallpaper">재미있는 미소 라이브 배경화면</string>
+    <string name="successfully">성공적으로 설정됨</string>
+    <string name="your_wallpaper_is_ready">배경화면이 준비되었습니다!</string>
+
+    <!-- History -->
+    <string name="delete">삭제</string>
+    <string name="favorite">즐겨찾기</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">사용 가능한 배경화면이 없습니다!</string>
+    <string name="error_no_crop_info">오류: 자르기 정보를 가져올 수 없습니다!</string>
+    <string name="error_wallpaper_not_selected">오류: 배경화면이 선택되지 않았습니다</string>
+    <string name="error_download_failed">오류: GIF 다운로드 실패</string>
+    <string name="error_processing_image">오류: %s</string>
+    <string name="error_set_wallpaper_failed">다시 시도해 주세요</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">홈 화면으로 설정 중…</string>
+    <string name="setting_lock_screen">잠금 화면으로 설정 중…</string>
+    <string name="setting_both_screens">홈 및 잠금 화면으로 설정 중…</string>
+    <string name="setting_wallpaper">배경화면 설정 중…</string>
+    <string name="downloading">다운로드 중…</string>
+    <string name="wallpaper_set_home">홈 화면으로 성공적으로 설정되었습니다!</string>
+    <string name="wallpaper_set_lock">잠금 화면으로 성공적으로 설정되었습니다!</string>
+    <string name="wallpaper_set_both">홈 및 잠금 화면으로 성공적으로 설정되었습니다!</string>
+    <string name="wallpaper_set_success">배경화면이 성공적으로 설정되었습니다!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">이미지 저장됨: %s</string>
+    <string name="image_cached">이미지 캐시됨: %s</string>
+    <string name="processing_image">이미지 처리 중…</string>
+    <string name="permissions_needed">미디어 액세스에 필요한 권한</string>
+    <string name="err_path">오류: 이미지 파일을 찾을 수 없습니다</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">권한 필요</string>
+    <string name="permission_message">이 앱은 배경화면을 설정하기 위해 사진에 대한 액세스가 필요합니다. 설정에서 권한을 부여해 주세요.</string>
+    <string name="settings">설정</string>
+    <string name="cancel">취소</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">새로운 배경화면 및 앱 업데이트에 대한 알림을 받으세요. 설정에서 언제든지 변경할 수 있습니다.</string>
+    <string name="allow">허용</string>
+    <string name="not_now">나중에</string>
+    <string name="obd_title1">발견</string>
+    <string name="obd_detail1">재미있는 배경화면</string>
+    <string name="obd_title2">탐색</string>
+    <string name="obd_detail2">4K 트렌드 배경화면</string>
+    <string name="obd_title3">기분 좋게</string>
+    <string name="obd_detail3">잠금 해제할 때마다</string>
+</resources>
+
+
+

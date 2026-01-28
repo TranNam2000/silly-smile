@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base style for GradientTextView -->
+    <style name="GradientTextBase">
+        <item name="enableGradient">true</item>
+        <item name="angle">0</item>
+    </style>
+
+    <!-- Text Gradient App Style -->
+    <style name="textGradientApp" parent="GradientTextBase">
+        <item name="startColor">#5936C8</item>
+        <item name="centerColor">#C54DE2</item>
+        <item name="endColor">#FFFFFF</item>
+    </style>
+
+    <!-- Base style for GradientMaterialCardView -->
+    <style name="GradientCardBase">
+        <item name="enableCardGradient">true</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+
+    <!-- Button Gradient App Style -->
+    <style name="buttonGradientApp" parent="GradientCardBase">
+        <item name="cardStartColor">#78C2FF</item>
+        <item name="cardCenterColor">#E1BFFF</item>
+        <item name="cardCenterColor2">#FEE5D8</item>
+        <item name="cardEndColor">#FF84C4</item>
+        <item name="cardAngle">135</item>
+    </style>
+
+    <!-- Button Gradient App Style -->
+    <style name="buttonGradientApp2" parent="GradientCardBase">
+        <item name="cardStartColor">#C72357</item>
+        <item name="cardCenterColor">#FF72E0</item>
+        <item name="cardCenterColor2">#DCE92E</item>
+        <item name="cardEndColor">#006772</item>
+        <item name="cardAngle">90</item>
+    </style>
+
+    <!-- Additional Preset Styles -->
+
+    <!-- Sunset Gradient Text -->
+    <style name="textGradientSunset" parent="GradientTextBase">
+        <item name="startColor">#FFA726</item>
+        <item name="centerColor">#FF7043</item>
+        <item name="centerColor2">#E91E63</item>
+        <item name="endColor">#9C27B0</item>
+        <item name="angle">45</item>
+    </style>
+
+    <!-- Ocean Gradient Text -->
+    <style name="textGradientOcean" parent="GradientTextBase">
+        <item name="startColor">#E3F2FD</item>
+        <item name="centerColor">#42A5F5</item>
+        <item name="endColor">#0D47A1</item>
+        <item name="angle">90</item>
+    </style>
+
+    <!-- Rainbow Gradient Text -->
+    <style name="textGradientRainbow" parent="GradientTextBase">
+        <item name="startColor">#FF0000</item>
+        <item name="centerColor">#FFFF00</item>
+        <item name="centerColor2">#00FF00</item>
+        <item name="endColor">#0000FF</item>
+        <item name="angle">0</item>
+    </style>
+
+    <!-- Sunset Card -->
+    <style name="cardGradientSunset" parent="GradientCardBase">
+        <item name="cardStartColor">#FFA726</item>
+        <item name="cardCenterColor">#FF7043</item>
+        <item name="cardCenterColor2">#E91E63</item>
+        <item name="cardEndColor">#9C27B0</item>
+        <item name="cardAngle">90</item>
+    </style>
+
+    <!-- Ocean Card -->
+    <style name="cardGradientOcean" parent="GradientCardBase">
+        <item name="cardStartColor">#E3F2FD</item>
+        <item name="cardCenterColor">#42A5F5</item>
+        <item name="cardCenterColor2">#1E88E5</item>
+        <item name="cardEndColor">#0D47A1</item>
+        <item name="cardAngle">90</item>
+    </style>
+
+    <!-- Forest Card -->
+    <style name="cardGradientForest" parent="GradientCardBase">
+        <item name="cardStartColor">#C8E6C9</item>
+        <item name="cardCenterColor">#66BB6A</item>
+        <item name="cardCenterColor2">#43A047</item>
+        <item name="cardEndColor">#2E7D32</item>
+        <item name="cardAngle">135</item>
+    </style>
+
+    <!-- Fire Card -->
+    <style name="cardGradientFire" parent="GradientCardBase">
+        <item name="cardStartColor">#FFEB3B</item>
+        <item name="cardCenterColor">#FF9800</item>
+        <item name="cardCenterColor2">#FF5722</item>
+        <item name="cardEndColor">#D32F2F</item>
+        <item name="cardAngle">45</item>
+    </style>
+
+    <!-- Purple Dream Card -->
+    <style name="cardGradientPurple" parent="GradientCardBase">
+        <item name="cardStartColor">#E1BEE7</item>
+        <item name="cardCenterColor">#BA68C8</item>
+        <item name="cardCenterColor2">#9C27B0</item>
+        <item name="cardEndColor">#6A1B9A</item>
+        <item name="cardAngle">90</item>
+    </style>
+
+</resources>
+
+
+

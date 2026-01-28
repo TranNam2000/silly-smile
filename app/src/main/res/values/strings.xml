@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">4K Wallpaper</string>
+    <string name="smile">Smile</string>
+    <string name="categories">Categories</string>
+
+    <!-- Category names -->
+    <string name="category_all">All</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Nature</string>
+    <string name="category_car">Car</string>
+    <string name="category_cartoon">Cartoon</string>
+    <string name="category_cute">Cute</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Setting</string>
+    <string name="unlock_all_wallpaper">Unlock all wallpaper</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="feedback">Feedback</string>
+    <string name="app_preferences">App preferences</string>
+    <string name="rate_app">Rate App</string>
+    <string name="legal">Legal</string>
+    <string name="go_premium">Go Premium</string>
+    <string name="others">Others</string>
+    <string name="term_and_privacy">Term and Privacy</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Apply</string>
+    <string name="get_it">Get It</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Unlock Wallpaper</string>
+    <string name="watch_1_video_to_unlock">Watch 1 Video To Unlock</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Preview</string>
+    <string name="save">Save</string>
+    <string name="reset_changes">Reset changes</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Animated GIF Live Wallpaper</string>
+    <string name="wallpaper_description_2">Animated GIF Wallpaper2</string>
+
+    <string name="lottie_wallpaper_description">Animated Lottie Live Wallpaper</string>
+    <string name="funny_smile_live_wallpaper">Funny Smile Live Wallpaper</string>
+    <string name="successfully">Set Successfully</string>
+    <string name="your_wallpaper_is_ready">Your wallpaper is ready!</string>
+
+    <!-- History -->
+    <string name="delete">Delete</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">No wallpaper available!</string>
+    <string name="error_no_crop_info">Error: Unable to get crop info!</string>
+    <string name="error_wallpaper_not_selected">Error: No wallpaper selected</string>
+    <string name="error_download_failed">Error: Failed to download GIF</string>
+    <string name="error_processing_image">Error: %s</string>
+    <string name="error_set_wallpaper_failed">Please try again</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Setting as home screen…</string>
+    <string name="setting_lock_screen">Setting as lock screen…</string>
+    <string name="setting_both_screens">Setting as home and lock screen…</string>
+    <string name="setting_wallpaper">Setting wallpaper…</string>
+    <string name="downloading">Downloading…</string>
+    <string name="wallpaper_set_home">Set as home screen successfully!</string>
+    <string name="wallpaper_set_lock">Set as lock screen successfully!</string>
+    <string name="wallpaper_set_both">Set as home and lock screen successfully!</string>
+    <string name="wallpaper_set_success">Wallpaper set successfully!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Image saved: %s</string>
+    <string name="image_cached">Image cached at: %s</string>
+    <string name="processing_image">Processing image…</string>
+    <string name="permissions_needed">Permissions needed to access media</string>
+    <string name="err_path">Error: Image file not found</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_message">This app needs access to your photos to set wallpapers. Please grant permission in Settings.</string>
+    <string name="settings">Settings</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Get notified about new wallpapers and app updates. You can change this anytime in Settings.</string>
+    <string name="allow">Allow</string>
+    <string name="not_now">Not Now</string>
+    <string name="obd_title1">Discover</string>
+    <string name="obd_detail1">Silly Wallpaper</string>
+    <string name="obd_title2">Explore</string>
+    <string name="obd_detail2">4K Trending Wallpapers</string>
+    <string name="obd_title3">Feel Good</string>
+    <string name="obd_detail3">Every Unlock</string>
+</resources>

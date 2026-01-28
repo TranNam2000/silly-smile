@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">Hình Nền 4K</string>
+    <string name="smile">Nụ Cười</string>
+    <string name="categories">Danh Mục</string>
+
+    <!-- Category names -->
+    <string name="category_all">Tất Cả</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Thiên Nhiên</string>
+    <string name="category_car">Xe Hơi</string>
+    <string name="category_cartoon">Hoạt Hình</string>
+    <string name="category_cute">Dễ Thương</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Cài Đặt</string>
+    <string name="unlock_all_wallpaper">Mở khóa tất cả hình nền</string>
+    <string name="language">Ngôn Ngữ</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="feedback">Phản Hồi</string>
+    <string name="app_preferences">Tùy chọn ứng dụng</string>
+    <string name="rate_app">Đánh Giá Ứng Dụng</string>
+    <string name="legal">Pháp Lý</string>
+    <string name="go_premium">Nâng Cấp Premium</string>
+    <string name="others">Khác</string>
+    <string name="term_and_privacy">Điều Khoản và Quyền Riêng Tư</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Áp Dụng</string>
+    <string name="get_it">Lấy Ngay</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Mở Khóa Hình Nền</string>
+    <string name="watch_1_video_to_unlock">Xem 1 Video Để Mở Khóa</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Xem Trước</string>
+    <string name="save">Lưu</string>
+    <string name="reset_changes">Đặt lại thay đổi</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Hình Nền Động GIF</string>
+    <string name="wallpaper_description_2">Hình Nền Động GIF 2</string>
+
+    <string name="lottie_wallpaper_description">Hình Nền Động Lottie</string>
+    <string name="funny_smile_live_wallpaper">Hình Nền Động Nụ Cười Vui</string>
+    <string name="successfully">Đặt Thành Công</string>
+    <string name="your_wallpaper_is_ready">Hình nền của bạn đã sẵn sàng!</string>
+
+    <!-- History -->
+    <string name="delete">Xóa</string>
+    <string name="favorite">Yêu Thích</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">Không có hình nền khả dụng!</string>
+    <string name="error_no_crop_info">Lỗi: Không thể lấy thông tin cắt!</string>
+    <string name="error_wallpaper_not_selected">Lỗi: Chưa chọn hình nền</string>
+    <string name="error_download_failed">Lỗi: Không thể tải GIF</string>
+    <string name="error_processing_image">Lỗi: %s</string>
+    <string name="error_set_wallpaper_failed">Vui lòng thử lại</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Đang đặt làm màn hình chính…</string>
+    <string name="setting_lock_screen">Đang đặt làm màn hình khóa…</string>
+    <string name="setting_both_screens">Đang đặt làm màn hình chính và khóa…</string>
+    <string name="setting_wallpaper">Đang đặt hình nền…</string>
+    <string name="downloading">Đang tải xuống…</string>
+    <string name="wallpaper_set_home">Đã đặt làm màn hình chính thành công!</string>
+    <string name="wallpaper_set_lock">Đã đặt làm màn hình khóa thành công!</string>
+    <string name="wallpaper_set_both">Đã đặt làm màn hình chính và khóa thành công!</string>
+    <string name="wallpaper_set_success">Đã đặt hình nền thành công!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Đã lưu hình ảnh: %s</string>
+    <string name="image_cached">Hình ảnh được lưu tại: %s</string>
+    <string name="processing_image">Đang xử lý hình ảnh…</string>
+    <string name="permissions_needed">Cần quyền truy cập phương tiện</string>
+    <string name="err_path">Lỗi: Không tìm thấy tệp hình ảnh</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Yêu Cầu Quyền</string>
+    <string name="permission_message">Ứng dụng này cần quyền truy cập ảnh của bạn để đặt hình nền. Vui lòng cấp quyền trong Cài đặt.</string>
+    <string name="settings">Cài Đặt</string>
+    <string name="cancel">Hủy</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Nhận thông báo về hình nền mới và cập nhật ứng dụng. Bạn có thể thay đổi điều này bất cứ lúc nào trong Cài đặt.</string>
+    <string name="allow">Cho Phép</string>
+    <string name="not_now">Không Phải Bây Giờ</string>
+    <string name="obd_title1">Khám Phá</string>
+    <string name="obd_detail1">Hình Nền Vui Nhộn</string>
+    <string name="obd_title2">Tìm Hiểu</string>
+    <string name="obd_detail2">Hình Nền 4K Thịnh Hành</string>
+    <string name="obd_title3">Cảm Giác Tốt</string>
+    <string name="obd_detail3">Mỗi Lần Mở Khóa</string>
+</resources>
+
+
+

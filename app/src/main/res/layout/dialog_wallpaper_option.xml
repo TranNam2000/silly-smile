@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_set_wallpaper"
+    android:orientation="vertical"
+    android:padding="@dimen/_16sdp">
+
+    <!-- Option: Màn hình chính -->
+
+    <TextView
+        android:id="@+id/option_home"
+        style="@style/NotoSans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/_16sdp"
+        android:text="Màn hình chính"
+        android:textColor="@color/text_color_dialog"
+        android:textSize="@dimen/_16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.1"
+        android:background="@color/white" />
+
+    <!-- Option: Màn hình khóa -->
+    <TextView
+        android:id="@+id/option_lock"
+        style="@style/NotoSans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/_16sdp"
+        android:text="Màn hình khóa"
+        android:textColor="@color/text_color_dialog"
+        android:textSize="@dimen/_16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.1"
+        android:background="@color/text_color_dialog" />
+
+    <!-- Option: Màn hình chính và khóa -->
+    <TextView
+        android:id="@+id/option_both"
+        style="@style/NotoSans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+
+        android:padding="@dimen/_16sdp"
+        android:text="Màn hình chính và khóa"
+        android:textColor="@color/text_color_dialog"
+        android:textSize="@dimen/_16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:alpha="0.3"
+        android:background="@color/text_color_dialog" />
+
+    <!-- Option: HỦY -->
+    <TextView
+        android:id="@+id/option_cancel"
+        style="@style/NotoSansBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="@dimen/_16sdp"
+        android:text="HỦY"
+        android:textColor="@color/text_color_dialog"
+        android:textSize="@dimen/_16sp" />
+
+</LinearLayout>
+

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:orientation="vertical"
+        tools:context="com.jrm.dollcoloring.ui.component.splash.SplashActivity">
+
+        <!-- Content layout that takes remaining height -->
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <!-- ImageView for GIF -->
+            <com.jrm.base.tracking.TrackableImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lottie_animation"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                android:src="@drawable/icon_splash"
+                app:lottie_loop="true"/>
+
+            <!-- App name text below GIF -->
+<!--            <TextView-->
+<!--                android:id="@+id/appNameText"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_16sdp"-->
+<!--                android:paddingHorizontal="@dimen/_12sdp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:visibility="visible"-->
+<!--                android:text="@string/title_splash"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="@dimen/_18sdp"-->
+<!--                android:fontFamily="@font/wix_madefor_display_bold" />-->
+
+
+        </LinearLayout>
+
+        <!-- Loading box at bottom with wrap_content height -->
+        <LinearLayout
+            android:id="@+id/loading_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                <com.jrm.view.gradient.GradientTextView
+                    android:id="@+id/appNameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/wix_madefor_display_bold"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    style="@style/textGradientApp"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_detail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <com.jrm.onboarding.splash.SplashProgressBar
+                    android:id="@+id/splashProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.jrm.base.tracking.TrackableTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="App is loading.. Ads will show"/>
+                <com.ads.nomyek_admob.ads_components.ads_native.YNMNativeAdView
+                    android:id="@+id/native_onboarding"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:visibility="gone"
+                    app:layoutCustomNativeAd="@layout/custom_native_admob_medium"
+                    app:layoutLoading="@layout/native_shimmer_placeholder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layout_editor_absoluteX="0dp" />
+
+            </LinearLayout>
+            <com.jrm.base.tracking.TrackableLinearLayout
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_common_button"
+                android:id="@+id/layout_continue"
+                android:visibility="invisible"
+                android:clickable="true"
+                android:layout_marginHorizontal="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:enableTracking="true">
+                <com.jrm.base.tracking.TrackableButton
+                    android:id="@+id/btn_continue"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/transparent"
+                    android:backgroundTint="@color/transparent"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="#18085E"
+                    android:text="@string/continue_btn"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/wix_madefor_display_bold"
+                    android:textStyle="bold"
+                    app:enableTracking="true" />
+            </com.jrm.base.tracking.TrackableLinearLayout>
+            <com.ads.nomyek_admob.ads_components.ads_banner.YNMBannerAdView
+                android:layout_marginTop="@dimen/_5sdp"
+                android:visibility="gone"
+                android:id="@+id/bannerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

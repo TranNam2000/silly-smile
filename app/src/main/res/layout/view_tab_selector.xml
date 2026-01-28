@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_selector_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/_3sdp">
+
+    <TextView
+        android:id="@+id/tab_left"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/tab_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:minWidth="@dimen/_80sdp"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:text="@string/smile"
+        android:textColor="@color/tab_text_color"
+        android:textSize="@dimen/_12sp"
+        android:textStyle="bold" />
+
+    <Space
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tab_right"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/tab_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:minWidth="@dimen/_100sdp"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:text="@string/_4k_wallpaper"
+        android:textColor="@color/tab_text_color"
+        android:textSize="@dimen/_12sp" />
+
+</LinearLayout>
+

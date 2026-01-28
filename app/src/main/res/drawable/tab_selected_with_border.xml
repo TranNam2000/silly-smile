@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Border gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="135"
+                android:endColor="#B84FE0"
+                android:startColor="#5E31D6"
+                android:type="linear" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+    
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="135"
+                android:endColor="#0B1219"
+                android:startColor="#2A2D41"
+                android:type="linear" />
+            <corners android:radius="98dp" />
+        </shape>
+    </item>
+</layer-list>
+

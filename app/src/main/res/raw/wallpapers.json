@@ -1,0 +1,617 @@
+{
+  "app_info": {
+    "name": "Silly Smile Live Wallpaper",
+    "package": "com.sillysmileswallpapers.funkywallpaper.evileyeswallpaper.funkysmiles4",
+    "version": "1.V007"
+  },
+  "wallpapers": {
+    "silly_smile": {
+      "name": "Silly Smile Collection",
+      "description": "Bộ ảnh nền Silly Smile",
+      "folder_path": "assets/silly_smile/",
+      "items": [
+        {
+          "id": "silly_smile_1",
+          "order": 1,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_1.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_2",
+          "order": 2,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_2.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_3",
+          "order": 3,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_3.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_4",
+          "order": 4,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_4.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_5",
+          "order": 5,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_5.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_6",
+          "order": 6,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_6.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_7",
+          "order": 7,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_7.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_8",
+          "order": 8,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_8.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_9",
+          "order": 9,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_9.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_10",
+          "order": 10,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_10.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_11",
+          "order": 11,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_11.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        },
+        {
+          "id": "silly_smile_12",
+          "order": 12,
+          "static_image": null,
+          "animated_gif": {
+            "filename": "silly_smile_12.gif",
+            "source_path": "https://vnmedia2.monkeyuni.net/App/uploads/productivity/",
+            "type": "animated_gif",
+            "linked": true
+          }
+        }
+      ]
+    },
+    "evil_smile": {
+      "name": "Evil Smile Collection",
+      "description": "Bộ ảnh nền Evil Smile",
+      "folder_path": "assets/evil_smile/",
+      "items": [
+        {
+          "id": "evil_smile_1",
+          "order": 1,
+          "static_image": {
+            "filename": "static.png",
+            "source_path": "assets/evil_smile/evil_smile_1/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_2",
+          "order": 2,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_2/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_3",
+          "order": 3,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_3/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_4",
+          "order": 4,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_4/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_5",
+          "order": 5,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_5/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_6",
+          "order": 6,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_6/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_7",
+          "order": 7,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_7/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_8",
+          "order": 8,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_8/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_9",
+          "order": 9,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_9/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_10",
+          "order": 10,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_10/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_13",
+          "order": 13,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_13/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_14",
+          "order": 14,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_14/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_16",
+          "order": 16,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_16/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_17",
+          "order": 17,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_17/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_18",
+          "order": 18,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_18/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_19",
+          "order": 19,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_19/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_20",
+          "order": 20,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_20/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "evil_smile_evil",
+          "order": 21,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/evil_smile/evil_smile_evil/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        }
+      ]
+    },
+    "scary_face": {
+      "name": "Scary Face Collection",
+      "description": "Bộ ảnh nền Scary Face",
+      "folder_path": "assets/scary_face/",
+      "items": [
+        {
+          "id": "scary_face_1",
+          "order": 1,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_1/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_2",
+          "order": 2,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_2/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_3",
+          "order": 3,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_3/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_4",
+          "order": 4,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_4/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_5",
+          "order": 5,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_5/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_6",
+          "order": 6,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_6/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_7",
+          "order": 7,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_7/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_8",
+          "order": 8,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_8/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_9",
+          "order": 9,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_9/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_10",
+          "order": 10,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_10/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_11",
+          "order": 11,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_11/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_12",
+          "order": 12,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_12/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_13",
+          "order": 13,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_13/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_14",
+          "order": 14,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_14/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_15",
+          "order": 15,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_15/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "scary_face_16",
+          "order": 16,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/scary_face/scary_face_16/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        }
+      ]
+    },
+    "funky_smile": {
+      "name": "Funky Smile Collection",
+      "description": "Bộ ảnh nền Funky Smile",
+      "folder_path": "assets/funky_smile/",
+      "items": [
+        {
+          "id": "funky_smile_1",
+          "order": 1,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_1/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_2",
+          "order": 2,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_2/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_3",
+          "order": 3,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_3/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_4",
+          "order": 4,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_4/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_5",
+          "order": 5,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_5/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_6",
+          "order": 6,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_6/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_7",
+          "order": 7,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_7/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        },
+        {
+          "id": "funky_smile_8",
+          "order": 8,
+          "static_image": {
+            "filename": "static.webp",
+            "source_path": "assets/funky_smile/funky_smile_8/",
+            "type": "static_image"
+          },
+          "animated_gif": null
+        }
+      ]
+    }
+  },
+  "statistics": {
+    "total_collections": 4,
+    "total_items": 55,
+    "items_with_animation": 12,
+    "items_static_only": 43,
+    "collections": {
+      "silly_smile": {
+        "total": 12,
+        "with_animation": 12,
+        "static_only": 0
+      },
+      "evil_smile": {
+        "total": 22,
+        "with_animation": 0,
+        "static_only": 22
+      },
+      "scary_face": {
+        "total": 16,
+        "with_animation": 0,
+        "static_only": 16
+      },
+      "funky_smile": {
+        "total": 8,
+        "with_animation": 0,
+        "static_only": 8
+      }
+    }
+  }
+}

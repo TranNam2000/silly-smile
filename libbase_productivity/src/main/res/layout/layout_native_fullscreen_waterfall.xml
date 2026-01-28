@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fullscreen_native_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:visibility="visible">
+
+    <!-- Native Ad View using YNMNativeAdView -->
+    <com.ads.nomyek_admob.ads_components.ads_native.YNMNativeAdView
+        android:id="@+id/native_onboarding_full"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutCustomNativeAd="@layout/custom_native_admob_medium"
+        app:layoutLoading="@layout/native_shimmer_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <com.jrm.base.tracking.TrackableImageView
+        android:id="@+id/btn_next"
+        android:visibility="visible"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:includeFontPadding="false"
+        android:src="@drawable/fn_close"
+        android:layout_alignParentEnd="true"
+        app:lottie_rawRes="@raw/ob_insider_loading"
+        app:lottie_autoPlay="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:layout_gravity="top|start"
+        app:lottie_loop="true" />
+
+</FrameLayout>

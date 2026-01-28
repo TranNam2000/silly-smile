@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Attributes for TrackableView components -->
+    <declare-styleable name="TrackableView">
+        <!-- Enable or disable automatic tracking (default: true) -->
+        <attr name="enableTracking" format="boolean" />
+        
+        <!-- Custom screen name override (optional) -->
+        <attr name="customScreenName" format="string" />
+        
+        <!-- Custom element type override (optional) -->
+        <attr name="customElementType" format="string" />
+    </declare-styleable>
+
+    <!-- Attributes for PageIndicatorView (from pageindicatorview library) -->
+    <declare-styleable name="PageIndicatorView">
+        <attr name="piv_viewPager" format="reference" />
+        <attr name="piv_interactiveAnimation" format="boolean" />
+        <attr name="piv_animationType" format="enum">
+            <enum name="none" value="0" />
+            <enum name="color" value="1" />
+            <enum name="scale" value="2" />
+            <enum name="worm" value="3" />
+            <enum name="slide" value="4" />
+            <enum name="fill" value="5" />
+            <enum name="thinWorm" value="6" />
+            <enum name="drop" value="7" />
+            <enum name="swap" value="8" />
+        </attr>
+        <attr name="piv_selectedColor" format="color" />
+        <attr name="piv_unselectedColor" format="color" />
+        <attr name="piv_dynamicCount" format="boolean" />
+        <attr name="piv_count" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="GradientTextView">
+        <attr name="enableGradient" format="boolean" />
+        <attr name="startColor" format="color" />
+        <attr name="endColor" format="color" />
+        <attr name="centerColor" format="color" />
+        <attr name="centerColor2" format="color" />
+        <attr name="angle" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="GradientMaterialCardView">
+        <attr name="enableCardGradient" format="boolean" />
+        <attr name="cardStartColor" format="color" />
+        <attr name="cardEndColor" format="color" />
+        <attr name="cardCenterColor" format="color" />
+        <attr name="cardCenterColor2" format="color" />
+        <attr name="cardAngle" format="integer" />
+    </declare-styleable>
+    <!-- Attributes for YNMNativeAdView (from nomyek_admob library) -->
+    <declare-styleable name="YNMNativeAdView">
+        <attr name="layoutLoading" format="reference" />
+        <attr name="layoutCustomNativeAd" format="reference" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,7 @@
+<!-- File: res/xml/remote_config_defaults.xml -->
+<defaultsMap>
+    <entry>
+        <key>iap_flow</key>
+        <value>flow_2</value> <!-- Default to variant A -->
+    </entry>
+</defaultsMap>

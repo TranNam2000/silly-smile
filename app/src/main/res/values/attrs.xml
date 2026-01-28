@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GradientTextView">
+        <attr name="gradientStartColor" format="color" />
+        <attr name="gradientCenterColor" format="color" />
+        <attr name="gradientEndColor" format="color" />
+        <attr name="gradientAngle" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="WallpaperPreviewCard">
+        <attr name="showBadge" format="boolean" />
+        <attr name="badgeText" format="string" />
+        <attr name="preview" format="boolean" />
+        <attr name="showBorderView" format="boolean" />
+    </declare-styleable>
+</resources>
+

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager_onboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.rd.PageIndicatorView
+            android:id="@+id/indicator_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbarSize="@dimen/_2sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="380dp"
+            app:piv_animationType="scale"
+            app:piv_count="4"
+            app:piv_dynamicCount="true"
+            app:piv_interactiveAnimation="true"
+            app:piv_selectedColor="@color/obd_theme_color"
+            app:piv_unselectedColor="#FFFFFF"
+            app:piv_viewPager="@id/viewpager_onboard" />
+
+        <com.rd.PageIndicatorView
+            android:id="@+id/indicator_view_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="290dp"
+            android:scrollbarSize="@dimen/_2sdp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:piv_animationType="scale"
+            app:piv_count="4"
+            app:piv_dynamicCount="true"
+            app:piv_interactiveAnimation="true"
+            app:piv_selectedColor="#1380FF"
+            app:piv_unselectedColor="#1A1380FF"
+            app:piv_viewPager="@id/viewpager_onboard" />
+
+        <com.jrm.base.tracking.TrackableTextView
+            android:id="@+id/tv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/start"
+            android:textColor="@color/textColor"
+            android:drawableEnd="@drawable/chevron_right_black"
+            android:drawablePadding="@dimen/_6sdp"
+            android:includeFontPadding="false"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintBottom_toBottomOf="@id/indicator_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/indicator_view"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:enableTracking="true" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loading_anim"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:visibility="invisible"
+            android:layout_alignParentEnd="true"
+            app:lottie_rawRes="@raw/ob_insider_loading"
+            app:lottie_autoPlay="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_loop="true" />
+
+<!--        <com.jrm.base.tracking.TrackableTextView-->
+<!--            android:id="@+id/tv_next2"-->
+<!--            android:visibility="visible"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:drawableEnd="@drawable/chevron_right_black"-->
+<!--            android:drawablePadding="@dimen/_6sdp"-->
+<!--            android:fontFamily="@font/poppins_medium"-->
+<!--            android:includeFontPadding="false"-->
+<!--            android:text="@string/next"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="@dimen/_14sdp"-->
+<!--            android:layout_marginTop="@dimen/_10sdp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:enableTracking="true" />-->
+        <com.jrm.base.tracking.TrackableImageView
+            android:id="@+id/tv_next2"
+            android:visibility="visible"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:includeFontPadding="false"
+            android:src="@drawable/fn_close"
+            android:layout_alignParentEnd="true"
+            app:lottie_rawRes="@raw/ob_insider_loading"
+            app:lottie_autoPlay="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_loop="true" />
+
+
+        <com.jrm.base.tracking.TrackableLinearLayout
+            android:id="@+id/layout_continue_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="15dp"
+            android:background="@drawable/bg_common_button"
+            android:clickable="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="20dp"
+            app:enableTracking="true">
+
+            <com.jrm.base.tracking.TrackableButton
+                android:id="@+id/btn_continue"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/transparent"
+                android:backgroundTint="@color/transparent"
+                android:fontFamily="@font/wix_madefor_display_bold"
+                android:gravity="center"
+                android:text="Continue"
+                android:textAlignment="center"
+                android:textColor="#18085E"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:enableTracking="true" />
+        </com.jrm.base.tracking.TrackableLinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

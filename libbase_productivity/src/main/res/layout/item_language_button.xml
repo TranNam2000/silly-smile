@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jrm.base.tracking.TrackableCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/button_bound"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_45sdp"
+    android:focusable="false"
+    android:clickable="false"
+    android:elevation="0dp"
+    android:descendantFocusability="blocksDescendants"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardElevation="0dp"
+    android:background="@color/theme_color_secondary"
+    android:backgroundTint="@color/theme_color_secondary"
+    app:strokeWidth="0dp"
+    app:enableTracking="false">
+
+    <RelativeLayout
+        android:id="@+id/button_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/lang_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/lang_flag"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:contentDescription="@string/language"
+            android:src="@drawable/english_flag"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/lang_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/lang_flag"
+            android:fontFamily="@font/wix_madefor_display_medium"
+            android:text="@string/share"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp"
+            tools:ignore="MissingConstraints,RelativeOverlap"
+            tools:layout_editor_absoluteX="68dp"
+            tools:layout_editor_absoluteY="26dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="@dimen/_12sdp">
+
+            <RadioButton
+                android:id="@+id/lang_rdo"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:buttonTint="@color/obd_theme_color"
+                android:checked="false"
+                android:clickable="false"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/guide"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/ob_click" />
+    </RelativeLayout>
+
+    </com.jrm.base.tracking.TrackableCardView>

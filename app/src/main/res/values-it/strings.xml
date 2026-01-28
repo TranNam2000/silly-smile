@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">Sfondo 4K</string>
+    <string name="smile">Sorriso</string>
+    <string name="categories">Categorie</string>
+
+    <!-- Category names -->
+    <string name="category_all">Tutti</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Natura</string>
+    <string name="category_car">Auto</string>
+    <string name="category_cartoon">Cartone Animato</string>
+    <string name="category_cute">Carino</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Impostazioni</string>
+    <string name="unlock_all_wallpaper">Sblocca tutti gli sfondi</string>
+    <string name="language">Lingua</string>
+    <string name="english">Inglese</string>
+    <string name="feedback">Feedback</string>
+    <string name="app_preferences">Preferenze dell\'app</string>
+    <string name="rate_app">Valuta l\'App</string>
+    <string name="legal">Legale</string>
+    <string name="go_premium">Passa a Premium</string>
+    <string name="others">Altri</string>
+    <string name="term_and_privacy">Termini e Privacy</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Applica</string>
+    <string name="get_it">Ottieni</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Sblocca Sfondo</string>
+    <string name="watch_1_video_to_unlock">Guarda 1 Video Per Sbloccare</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Anteprima</string>
+    <string name="save">Salva</string>
+    <string name="reset_changes">Ripristina modifiche</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Sfondo Animato GIF</string>
+    <string name="wallpaper_description_2">Sfondo Animato GIF 2</string>
+
+    <string name="lottie_wallpaper_description">Sfondo Animato Lottie</string>
+    <string name="funny_smile_live_wallpaper">Sfondo Sorriso Divertente</string>
+    <string name="successfully">Impostato con Successo</string>
+    <string name="your_wallpaper_is_ready">Il tuo sfondo è pronto!</string>
+
+    <!-- History -->
+    <string name="delete">Elimina</string>
+    <string name="favorite">Preferito</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">Nessuno sfondo disponibile!</string>
+    <string name="error_no_crop_info">Errore: Impossibile ottenere informazioni di ritaglio!</string>
+    <string name="error_wallpaper_not_selected">Errore: Nessuno sfondo selezionato</string>
+    <string name="error_download_failed">Errore: Download GIF fallito</string>
+    <string name="error_processing_image">Errore: %s</string>
+    <string name="error_set_wallpaper_failed">Riprova</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Impostazione come schermata iniziale…</string>
+    <string name="setting_lock_screen">Impostazione come schermata di blocco…</string>
+    <string name="setting_both_screens">Impostazione come schermata iniziale e di blocco…</string>
+    <string name="setting_wallpaper">Impostazione sfondo…</string>
+    <string name="downloading">Download in corso…</string>
+    <string name="wallpaper_set_home">Impostato come schermata iniziale con successo!</string>
+    <string name="wallpaper_set_lock">Impostato come schermata di blocco con successo!</string>
+    <string name="wallpaper_set_both">Impostato come schermata iniziale e di blocco con successo!</string>
+    <string name="wallpaper_set_success">Sfondo impostato con successo!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Immagine salvata: %s</string>
+    <string name="image_cached">Immagine memorizzata in cache: %s</string>
+    <string name="processing_image">Elaborazione immagine…</string>
+    <string name="permissions_needed">Autorizzazioni necessarie per accedere ai media</string>
+    <string name="err_path">Errore: File immagine non trovato</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Autorizzazione Richiesta</string>
+    <string name="permission_message">Questa app ha bisogno di accedere alle tue foto per impostare gli sfondi. Concedi l\'autorizzazione nelle Impostazioni.</string>
+    <string name="settings">Impostazioni</string>
+    <string name="cancel">Annulla</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Ricevi notifiche su nuovi sfondi e aggiornamenti dell\'app. Puoi modificarlo in qualsiasi momento nelle Impostazioni.</string>
+    <string name="allow">Consenti</string>
+    <string name="not_now">Non Ora</string>
+    <string name="obd_title1">Scopri</string>
+    <string name="obd_detail1">Sfondi Divertenti</string>
+    <string name="obd_title2">Esplora</string>
+    <string name="obd_detail2">Sfondi 4K di Tendenza</string>
+    <string name="obd_title3">Sentirsi Bene</string>
+    <string name="obd_detail3">Ad Ogni Sblocco</string>
+</resources>
+
+
+

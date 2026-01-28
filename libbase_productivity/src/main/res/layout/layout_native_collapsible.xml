@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <FrameLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_native_large"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints" />
+
+    <com.ads.nomyek_admob.ads_components.ads_native.YNMNativeAdView
+        android:id="@+id/native_onboarding"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:visibility="visible"
+        app:layoutCustomNativeAd="@layout/custom_native_admob_collap"
+        app:layoutLoading="@layout/native_shimmer_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/hide_native"
+        android:layout_margin="20dp"
+        android:tint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

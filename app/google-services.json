@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "772060492246",
+    "project_id": "silly-smile-f5402",
+    "storage_bucket": "silly-smile-f5402.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772060492246:android:eb27ad3fb2c5e42c9f3477",
+        "android_client_info": {
+          "package_name": "silly.smile.wallpaper.live"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEL7OhVKFZmxDqJNneXOiOHigxxR5cybA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

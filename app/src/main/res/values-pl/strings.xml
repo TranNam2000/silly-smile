@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">Tapeta 4K</string>
+    <string name="smile">Uśmiech</string>
+    <string name="categories">Kategorie</string>
+
+    <!-- Category names -->
+    <string name="category_all">Wszystkie</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Natura</string>
+    <string name="category_car">Samochód</string>
+    <string name="category_cartoon">Kreskówka</string>
+    <string name="category_cute">Słodkie</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Ustawienia</string>
+    <string name="unlock_all_wallpaper">Odblokuj wszystkie tapety</string>
+    <string name="language">Język</string>
+    <string name="english">Angielski</string>
+    <string name="feedback">Opinia</string>
+    <string name="app_preferences">Preferencje aplikacji</string>
+    <string name="rate_app">Oceń Aplikację</string>
+    <string name="legal">Prawne</string>
+    <string name="go_premium">Przejdź na Premium</string>
+    <string name="others">Inne</string>
+    <string name="term_and_privacy">Warunki i Prywatność</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Zastosuj</string>
+    <string name="get_it">Pobierz</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Odblokuj Tapetę</string>
+    <string name="watch_1_video_to_unlock">Obejrzyj 1 Film Aby Odblokować</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Podgląd</string>
+    <string name="save">Zapisz</string>
+    <string name="reset_changes">Resetuj zmiany</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Animowana Tapeta GIF</string>
+    <string name="wallpaper_description_2">Animowana Tapeta GIF 2</string>
+
+    <string name="lottie_wallpaper_description">Animowana Tapeta Lottie</string>
+    <string name="funny_smile_live_wallpaper">Zabawna Tapeta Uśmiechu</string>
+    <string name="successfully">Ustawiono Pomyślnie</string>
+    <string name="your_wallpaper_is_ready">Twoja tapeta jest gotowa!</string>
+
+    <!-- History -->
+    <string name="delete">Usuń</string>
+    <string name="favorite">Ulubione</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">Brak dostępnych tapet!</string>
+    <string name="error_no_crop_info">Błąd: Nie można uzyskać informacji o przycinaniu!</string>
+    <string name="error_wallpaper_not_selected">Błąd: Nie wybrano tapety</string>
+    <string name="error_download_failed">Błąd: Nie udało się pobrać GIF</string>
+    <string name="error_processing_image">Błąd: %s</string>
+    <string name="error_set_wallpaper_failed">Spróbuj ponownie</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Ustawianie jako ekran główny…</string>
+    <string name="setting_lock_screen">Ustawianie jako ekran blokady…</string>
+    <string name="setting_both_screens">Ustawianie jako ekran główny i blokady…</string>
+    <string name="setting_wallpaper">Ustawianie tapety…</string>
+    <string name="downloading">Pobieranie…</string>
+    <string name="wallpaper_set_home">Pomyślnie ustawiono jako ekran główny!</string>
+    <string name="wallpaper_set_lock">Pomyślnie ustawiono jako ekran blokady!</string>
+    <string name="wallpaper_set_both">Pomyślnie ustawiono jako ekran główny i blokady!</string>
+    <string name="wallpaper_set_success">Tapeta ustawiona pomyślnie!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Obraz zapisany: %s</string>
+    <string name="image_cached">Obraz w pamięci podręcznej: %s</string>
+    <string name="processing_image">Przetwarzanie obrazu…</string>
+    <string name="permissions_needed">Wymagane uprawnienia do dostępu do multimediów</string>
+    <string name="err_path">Błąd: Nie znaleziono pliku obrazu</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Wymagane Uprawnienie</string>
+    <string name="permission_message">Ta aplikacja potrzebuje dostępu do twoich zdjęć, aby ustawić tapety. Przyznaj uprawnienie w Ustawieniach.</string>
+    <string name="settings">Ustawienia</string>
+    <string name="cancel">Anuluj</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Otrzymuj powiadomienia o nowych tapetach i aktualizacjach aplikacji. Możesz to zmienić w dowolnym momencie w Ustawieniach.</string>
+    <string name="allow">Zezwól</string>
+    <string name="not_now">Nie Teraz</string>
+    <string name="obd_title1">Odkryj</string>
+    <string name="obd_detail1">Zabawne Tapety</string>
+    <string name="obd_title2">Eksploruj</string>
+    <string name="obd_detail2">Tapety 4K w Trendach</string>
+    <string name="obd_title3">Poczuj Się Dobrze</string>
+    <string name="obd_detail3">Przy Każdym Odblokowaniu</string>
+</resources>
+
+
+

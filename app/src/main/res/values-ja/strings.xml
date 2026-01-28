@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">4K壁紙</string>
+    <string name="smile">スマイル</string>
+    <string name="categories">カテゴリー</string>
+
+    <!-- Category names -->
+    <string name="category_all">すべて</string>
+    <string name="category_marvel">マーベル</string>
+    <string name="category_nature">自然</string>
+    <string name="category_car">車</string>
+    <string name="category_cartoon">漫画</string>
+    <string name="category_cute">かわいい</string>
+    <string name="category_brainrot">ブレインロット</string>
+    <string name="category_anime">アニメ</string>
+
+    <!-- Settings -->
+    <string name="setting">設定</string>
+    <string name="unlock_all_wallpaper">すべての壁紙をアンロック</string>
+    <string name="language">言語</string>
+    <string name="english">英語</string>
+    <string name="feedback">フィードバック</string>
+    <string name="app_preferences">アプリの設定</string>
+    <string name="rate_app">アプリを評価</string>
+    <string name="legal">法的情報</string>
+    <string name="go_premium">プレミアムにアップグレード</string>
+    <string name="others">その他</string>
+    <string name="term_and_privacy">利用規約とプライバシー</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">適用</string>
+    <string name="get_it">入手</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">壁紙をアンロック</string>
+    <string name="watch_1_video_to_unlock">アンロックするには1本の動画を視聴</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">プレビュー</string>
+    <string name="save">保存</string>
+    <string name="reset_changes">変更をリセット</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">アニメーションGIFライブ壁紙</string>
+    <string name="wallpaper_description_2">アニメーションGIF壁紙2</string>
+
+    <string name="lottie_wallpaper_description">アニメーションLottieライブ壁紙</string>
+    <string name="funny_smile_live_wallpaper">面白いスマイルライブ壁紙</string>
+    <string name="successfully">設定成功</string>
+    <string name="your_wallpaper_is_ready">壁紙の準備ができました！</string>
+
+    <!-- History -->
+    <string name="delete">削除</string>
+    <string name="favorite">お気に入り</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">利用可能な壁紙がありません！</string>
+    <string name="error_no_crop_info">エラー：クロップ情報を取得できません！</string>
+    <string name="error_wallpaper_not_selected">エラー：壁紙が選択されていません</string>
+    <string name="error_download_failed">エラー：GIFのダウンロードに失敗しました</string>
+    <string name="error_processing_image">エラー：%s</string>
+    <string name="error_set_wallpaper_failed">もう一度お試しください</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">ホーム画面として設定中…</string>
+    <string name="setting_lock_screen">ロック画面として設定中…</string>
+    <string name="setting_both_screens">ホーム画面とロック画面として設定中…</string>
+    <string name="setting_wallpaper">壁紙を設定中…</string>
+    <string name="downloading">ダウンロード中…</string>
+    <string name="wallpaper_set_home">ホーム画面として設定に成功しました！</string>
+    <string name="wallpaper_set_lock">ロック画面として設定に成功しました！</string>
+    <string name="wallpaper_set_both">ホーム画面とロック画面として設定に成功しました！</string>
+    <string name="wallpaper_set_success">壁紙の設定に成功しました！</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">画像を保存しました：%s</string>
+    <string name="image_cached">画像をキャッシュしました：%s</string>
+    <string name="processing_image">画像を処理中…</string>
+    <string name="permissions_needed">メディアにアクセスするには権限が必要です</string>
+    <string name="err_path">エラー：画像ファイルが見つかりません</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">権限が必要です</string>
+    <string name="permission_message">このアプリは壁紙を設定するために写真へのアクセスが必要です。設定で権限を付与してください。</string>
+    <string name="settings">設定</string>
+    <string name="cancel">キャンセル</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">新しい壁紙やアプリの更新について通知を受け取ります。これはいつでも設定で変更できます。</string>
+    <string name="allow">許可</string>
+    <string name="not_now">後で</string>
+    <string name="obd_title1">発見</string>
+    <string name="obd_detail1">面白い壁紙</string>
+    <string name="obd_title2">探索</string>
+    <string name="obd_detail2">4Kトレンド壁紙</string>
+    <string name="obd_title3">気分が良い</string>
+    <string name="obd_detail3">ロック解除のたびに</string>
+</resources>
+
+
+

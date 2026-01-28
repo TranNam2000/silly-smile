@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="dark_background">#1A1A1A</color>
+    <color name="bottom_bar_background">#2A2A2A</color>
+    <color name="nav_item_text">#7C7C7C</color>
+    <color name="nav_item_selected">#FFFFFF</color>
+    <color name="purple_primary">#9C27B0</color>
+    <color name="purple_dark">#6A1B9A</color>
+    
+    <!-- Status Bar & Navigation Bar -->
+    <color name="status_bar_color">#0D0F1A</color>
+    <color name="navigation_bar_color">#0D0F1A</color>
+    <!-- Tab colors -->
+    <color name="tab_background">#1E1E1E</color>
+    <color name="tab_selected">#2D2D2D</color>
+    <color name="tab_text_unselected">#7C7C7C</color>
+    <color name="tab_text_selected">#FFFFFF</color>
+    <color name="color_text">#FDFDFD</color>
+    
+    <!-- Progress Dialog -->
+    <color name="text_secondary">#8E8E93</color>
+    <color name="text_color_dialog">#333333</color>
+    
+    <!-- Text colors -->
+    <color name="text_primary">#FFFFFF</color>
+
+</resources>

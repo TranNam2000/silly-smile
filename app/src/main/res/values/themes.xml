@@ -1,0 +1,40 @@
+<resources>
+
+    <style name="Base.Theme.MyApplication" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary colors -->
+        <item name="colorPrimaryDark">@color/purple_dark</item>
+        <item name="colorAccent">@color/purple_primary</item>
+        <item name="android:statusBarColor">@color/dark_background</item>
+        <item name="android:colorPrimary">@color/white</item>
+    </style>
+
+    <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
+
+    <style name="TabTextSelected">
+        <item name="android:fontFamily">@font/noto_sans_extra_bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TabTextUnselected">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- Noto Sans Medium Style -->
+    <style name="NotoSansMedium">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="NotoSans">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="NotoSansBold">
+        <item name="android:fontFamily">@font/noto_sans_extra_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

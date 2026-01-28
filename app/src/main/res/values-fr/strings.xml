@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Live Silly Smile Wallpaper</string>
+    <string name="_4k_wallpaper">Fond d\'écran 4K</string>
+    <string name="smile">Sourire</string>
+    <string name="categories">Catégories</string>
+
+    <!-- Category names -->
+    <string name="category_all">Tous</string>
+    <string name="category_marvel">Marvel</string>
+    <string name="category_nature">Nature</string>
+    <string name="category_car">Voiture</string>
+    <string name="category_cartoon">Dessin Animé</string>
+    <string name="category_cute">Mignon</string>
+    <string name="category_brainrot">Brainrot</string>
+    <string name="category_anime">Anime</string>
+
+    <!-- Settings -->
+    <string name="setting">Paramètres</string>
+    <string name="unlock_all_wallpaper">Déverrouiller tous les fonds d\'écran</string>
+    <string name="language">Langue</string>
+    <string name="english">Anglais</string>
+    <string name="feedback">Commentaires</string>
+    <string name="app_preferences">Préférences de l\'application</string>
+    <string name="rate_app">Évaluer l\'Application</string>
+    <string name="legal">Légal</string>
+    <string name="go_premium">Passer Premium</string>
+    <string name="others">Autres</string>
+    <string name="term_and_privacy">Conditions et Confidentialité</string>
+
+    <!-- Detail Screen -->
+    <string name="apply">Appliquer</string>
+    <string name="get_it">Obtenir</string>
+
+    <!-- Dialog -->
+    <string name="unlock_wallpaper">Déverrouiller le Fond d\'écran</string>
+    <string name="watch_1_video_to_unlock">Regardez 1 Vidéo Pour Déverrouiller</string>
+
+    <!-- Edit Screen -->
+    <string name="silly_smile">Silly Smile</string>
+    <string name="preview">Aperçu</string>
+    <string name="save">Enregistrer</string>
+    <string name="reset_changes">Réinitialiser les modifications</string>
+
+    <!-- Live Wallpaper -->
+    <string name="wallpaper_description">Fond d\'écran Animé GIF</string>
+    <string name="wallpaper_description_2">Fond d\'écran Animé GIF 2</string>
+
+    <string name="lottie_wallpaper_description">Fond d\'écran Animé Lottie</string>
+    <string name="funny_smile_live_wallpaper">Fond d\'écran Sourire Amusant</string>
+    <string name="successfully">Défini avec Succès</string>
+    <string name="your_wallpaper_is_ready">Votre fond d\'écran est prêt!</string>
+
+    <!-- History -->
+    <string name="delete">Supprimer</string>
+    <string name="favorite">Favori</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_wallpaper">Aucun fond d\'écran disponible!</string>
+    <string name="error_no_crop_info">Erreur: Impossible d\'obtenir les informations de recadrage!</string>
+    <string name="error_wallpaper_not_selected">Erreur: Aucun fond d\'écran sélectionné</string>
+    <string name="error_download_failed">Erreur: Échec du téléchargement du GIF</string>
+    <string name="error_processing_image">Erreur: %s</string>
+    <string name="error_set_wallpaper_failed">Veuillez réessayer</string>
+
+    <!-- Wallpaper Setting Messages -->
+    <string name="setting_home_screen">Définition comme écran d\'accueil…</string>
+    <string name="setting_lock_screen">Définition comme écran de verrouillage…</string>
+    <string name="setting_both_screens">Définition comme écran d\'accueil et de verrouillage…</string>
+    <string name="setting_wallpaper">Définition du fond d\'écran…</string>
+    <string name="downloading">Téléchargement…</string>
+    <string name="wallpaper_set_home">Défini comme écran d\'accueil avec succès!</string>
+    <string name="wallpaper_set_lock">Défini comme écran de verrouillage avec succès!</string>
+    <string name="wallpaper_set_both">Défini comme écran d\'accueil et de verrouillage avec succès!</string>
+    <string name="wallpaper_set_success">Fond d\'écran défini avec succès!</string>
+
+    <!-- Image Processing -->
+    <string name="image_saved">Image enregistrée: %s</string>
+    <string name="image_cached">Image mise en cache à: %s</string>
+    <string name="processing_image">Traitement de l\'image…</string>
+    <string name="permissions_needed">Autorisations nécessaires pour accéder aux médias</string>
+    <string name="err_path">Erreur: Fichier image introuvable</string>
+
+    <!-- Permission Dialog -->
+    <string name="permission_required">Autorisation Requise</string>
+    <string name="permission_message">Cette application a besoin d\'accéder à vos photos pour définir des fonds d\'écran. Veuillez accorder l\'autorisation dans les Paramètres.</string>
+    <string name="settings">Paramètres</string>
+    <string name="cancel">Annuler</string>
+
+    <!-- Notification Permission -->
+    <string name="notification_permission_message">Soyez informé des nouveaux fonds d\'écran et des mises à jour de l\'application. Vous pouvez modifier cela à tout moment dans les Paramètres.</string>
+    <string name="allow">Autoriser</string>
+    <string name="not_now">Pas Maintenant</string>
+    <string name="obd_title1">Découvrir</string>
+    <string name="obd_detail1">Fonds d\'écran Amusants</string>
+    <string name="obd_title2">Explorer</string>
+    <string name="obd_detail2">Fonds d\'écran 4K Tendance</string>
+    <string name="obd_title3">Se Sentir Bien</string>
+    <string name="obd_detail3">À Chaque Déverrouillage</string>
+</resources>
+
+
+
