@@ -44,7 +44,7 @@
             android:value="${ad_app_id}" /> <!-- FileProvider for sharing images -->
 
         <activity
-            android:name="com.jrm.onboarding.splash.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

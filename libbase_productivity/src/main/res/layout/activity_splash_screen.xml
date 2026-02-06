@@ -4,45 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
         android:orientation="vertical"
         tools:context="com.jrm.dollcoloring.ui.component.splash.SplashActivity">
-
-        <!-- Content layout that takes remaining height -->
         <LinearLayout
-            android:id="@+id/content"
+            android:id="@+id/content_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
-            <!-- ImageView for GIF -->
-            <com.jrm.base.tracking.TrackableImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/lottie_animation"
-                android:layout_gravity="center"
-                app:lottie_autoPlay="true"
-                android:src="@drawable/icon_splash"
-                app:lottie_loop="true"/>
-
-            <!-- App name text below GIF -->
-<!--            <TextView-->
-<!--                android:id="@+id/appNameText"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/_16sdp"-->
-<!--                android:paddingHorizontal="@dimen/_12sdp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:visibility="visible"-->
-<!--                android:text="@string/title_splash"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="@dimen/_18sdp"-->
-<!--                android:fontFamily="@font/wix_madefor_display_bold" />-->
-
 
         </LinearLayout>
 
@@ -60,18 +33,6 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical">
-                <com.jrm.view.gradient.GradientTextView
-                    android:id="@+id/appNameText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/wix_madefor_display_bold"
-                    android:gravity="center"
-                    android:text="@string/app_name"
-                    style="@style/textGradientApp"
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_detail"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
                 <com.jrm.onboarding.splash.SplashProgressBar
                     android:id="@+id/splashProgressBar"
                     android:layout_width="match_parent"
@@ -127,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                app:layoutLoading="@layout/native_shimmer_placeholder"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </LinearLayout>
 

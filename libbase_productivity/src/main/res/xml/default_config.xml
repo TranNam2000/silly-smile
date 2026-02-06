@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <defaultsMap>
+    <!-- Empty = app loads from raw (ad_config_quran_android_1.json, id_registry_quran_android_1.json) -->
+    <entry>
+        <key>ad_config</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>id_registry</key>
+        <value></value>
+    </entry>
     <!-- Basic Configuration -->
     <entry>
         <key>time_reload_banner</key>
@@ -138,6 +147,18 @@
     <entry>
         <key>interstitial_rule</key>
         <value>1/2</value>
+    </entry>
+    <entry>
+        <key>time_interstitial_cooldown</key>
+        <value>30</value>
+    </entry>
+    <entry>
+        <key>time_out_full_screen_ad</key>
+        <value>5</value>
+    </entry>
+    <entry>
+        <key>time_out_reward</key>
+        <value>5</value>
     </entry>
     <entry>
         <key>format_splash</key>

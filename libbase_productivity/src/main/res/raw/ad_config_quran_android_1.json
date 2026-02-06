@@ -1,287 +1,513 @@
 {
-    "schema_version": 1,
-    "updated_at": "2025-12-24T10:00:00Z",
-    "version": "2",
-    "configs": {
+  "schema_version": 2,
+  "updated_at": "2026-02-03T02:28:12.497118Z",
+  "version": "9",
+  "session_configs": [
+    {
+      "session_range": {
+        "from": 1,
+        "to": 1
+      },
+      "configs": {
         "disable_obd_ad": false,
         "disable_all_ad": false,
-        "interstitial_rule": "1/4",
-        "time_interstitial_cooldown": 30,
+        "interstitial_rule": "1/2",
+        "time_interstitial_cooldown": 15,
         "number_finish_obd": 1,
         "time_out_full_screen_ad": 5,
         "time_out_reward": 5
-    },
-    "screen_obd": {
+      },
+      "screen_obd": {
         "splash": {
-            "enable": true,
-            "min_time_splash": 6,
-            "time_out_splash": 12,
-            "enable_btn_continue": false
+          "enable": true,
+          "min_time_splash": 5,
+          "time_out_splash": 12,
+          "enable_btn_continue": true
         },
         "paywall": {
-            "enable": true,
-            "show_session_finish_obd": true
+          "enable": true,
+          "show_after": "splash",
+          "show_session_finish_obd": true
         },
         "paywall_limited": {
-            "enable": true,
-            "show_session_finish_obd": true
+          "enable": true,
+          "show_session_finish_obd": true
         },
         "language": {
-            "is_two_screen": false,
-            "enable": true
+          "is_two_screen": true,
+          "enable": true
         },
         "onboarding": {
-            "number_screen": 3,
-            "enable": true
+          "number_screen": 4,
+          "enable": true
         }
-    },
-    "ad_placements": {
-      "fs_splash":  {
-            "type": "full_screen_ad",
-            "enable": false,
-            "ordered_priority_ads": "101_spl_inter_high_f1;101_spl_inter",
-            "session_cap": -1,
-            "max_attempt": 1,
-            "native_config": {
-                "layout_res": "custom_native_fsn_layout",
-                "meta_layout_res": "custom_native_fsn_layout",
-                "delay_time": 5
-            }
+      },
+      "ad_placements": {
+        "fs_splash": {
+          "type": "full_screen_ad",
+          "enable": true,
+          "ordered_priority_ads": "101_spl_inter_high_f1;101_spl_inter",
+          "session_cap": -1,
+          "max_attempt": 1,
+          "native_config": {
+            "layout_res": "custom_native_fsn_layout",
+            "meta_layout_res": "custom_native_fsn_layout",
+            "delay_time": 5
+          }
+        },
+        "splash_ad_view1": {
+          "type": "banner",
+          "enable": true,
+          "ordered_priority_ads": "103_spl_banner_high_f1;103_spl_banner",
+          "native_config": {
+            "reload_time": 15
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "splash_ad_view": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "102_spl_native_high_f1;102_spl_native",
-            "native_config": {
-                "layout_res": "native_admob_medium_2",
-                "meta_layout_res": "native_admob_medium_2",
-                "reload_time": 0
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "102_spl_native_high_f1;102_spl_banner_high_f1",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "language_1_ad_view": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "201_lfo_native_high_f1;201_lfo_native",
-            "native_config": {
-                "layout_res": "native_admob_large_2",
-                "meta_layout_res": "native_admob_large_2",
-                "reload_time": 0
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "201_lfo_native_high_f1;201_lfo_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "language_2_ad_view": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "202_lfo_native_high_f1;202_lfo_native",
-            "native_config": {
-                "layout_res": "native_admob_medium",
-                "meta_layout_res": "native_admob_medium"
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "202_lfo_native_high_f1;202_lfo_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "onboarding_1": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "301_onb_native_high_f1;301_onb_native",
-            "native_config": {
-                "layout_res": "native_admob_medium_2",
-                "meta_layout_res": "native_admob_medium_2"
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "301_onb_native_high_f1;301_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "onboarding_2": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "302_onb_native_high_f1;302_onb_native",
-            "native_config": {
-                "layout_res": "native_admob_large",
-                "meta_layout_res": "native_admob_large"
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "302_onb_native_high_f1;302_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "onboarding_3": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "303_onb_native_high_f1;303_onb_native",
-            "native_config": {
-                "layout_res": "native_admob_medium_2",
-                "meta_layout_res": "native_admob_medium_2"
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_fsn",
+          "enable": true,
+          "ordered_priority_ads": "303_onb_native_high_f1;303_onb_native",
+          "native_config": {
+            "layout_res": "custom_native_fsn_layout",
+            "meta_layout_res": "custom_native_fsn_layout",
+            "delay_time": 3
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "onboarding_4": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "304_onb_native_high_f1;304_onb_native",
-            "native_config": {
-                "layout_res": "native_admob_banner_large",
-                "meta_layout_res": "native_admob_banner_large"
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "304_onb_native_high_f1;304_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "onboarding_5": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "304_onb_native_high_f1;304_onb_native",
-            "native_config": {
-                "layout_res": "native_admob_medium",
-                "meta_layout_res": "native_admob_medium"
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "304_onb_native_high_f1;304_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium",
+            "meta_layout_res": "native_admob_medium",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "onboarding_inter": {
-            "type": "interstitial",
-            "enable": true,
-            "ordered_priority_ads": "306_onb_inter_high_f1;306_onb_inter",
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "interstitial",
+          "enable": false,
+          "ordered_priority_ads": "306_onb_inter_high_f1;306_onb_inter",
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "fs_click": {
-            "type": "full_screen_ad",
-            "enable": true,
-            "ordered_priority_ads": "402_click_inter_high_f1;402_click_inter",
-            "session_cap": -1,
-            "max_attempt": 1,
-            "native_config": {
-                "layout_res": "custom_native_fsn_layout",
-                "meta_layout_res": "custom_native_fsn_layout",
-                "delay_time": 5
-            }
+          "type": "full_screen_ad",
+          "enable": true,
+          "ordered_priority_ads": "402_click_inter_high_f1;402_click_inter",
+          "session_cap": -1,
+          "max_attempt": 1,
+          "native_config": {
+            "layout_res": "custom_native_fsn_layout",
+            "meta_layout_res": "custom_native_fsn_layout",
+            "delay_time": 5
+          }
         },
         "home_nabanner": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "404_home_nabanner_high_f1;404_home_nabanner",
-            "native_config": {
-                "layout_res": "native_admob_banner",
-                "meta_layout_res": "native_admob_banner",
-                "reload_time": 15
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "404_home_nabanner_high_f1;404_home_nabanner",
+          "native_config": {
+            "layout_res": "native_admob_banner",
+            "meta_layout_res": "native_admob_banner",
+            "reload_time": 15
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         },
         "home_native": {
-            "type": "native_view",
-            "enable": true,
-            "ordered_priority_ads": "401_home_native_high_f1;401_home_native",
-            "native_config": {
-                "layout_res": "native_admob_medium",
-                "meta_layout_res": "native_admob_medium",
-                "reload_time": 30
-            },
-            "session_cap": -1,
-            "max_attempt": 1
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "401_home_native_high_f1;401_home_native",
+          "native_config": {
+            "layout_res": "native_admob_medium",
+            "meta_layout_res": "native_admob_medium",
+            "reload_time": 15
+          },
+          "session_cap": -1,
+          "max_attempt": 1
         }
+      }
     },
-    "ad_item": {
-        "101_spl_inter": {
-            "type": "interstitial",
-            "unit": "101_spl_inter"
+    {
+      "session_range": {
+        "from": 2,
+        "to": -1
+      },
+      "configs": {
+        "disable_obd_ad": false,
+        "disable_all_ad": false,
+        "interstitial_rule": "1/2",
+        "time_interstitial_cooldown": 15,
+        "number_finish_obd": 1,
+        "time_out_full_screen_ad": 5,
+        "time_out_reward": 5
+      },
+      "screen_obd": {
+        "splash": {
+          "enable": true,
+          "min_time_splash": 5,
+          "time_out_splash": 12,
+          "enable_btn_continue": false
         },
-        "101_spl_inter_high_f1": {
-            "type": "interstitial",
-            "unit": "101_spl_inter_high_f1"
+        "paywall": {
+          "enable": true,
+          "show_after": "splash",
+          "show_session_finish_obd": true
         },
-        "101_spl_inter_medium": {
-            "type": "interstitial",
-            "unit": "101_spl_inter_medium"
+        "paywall_limited": {
+          "enable": true,
+          "show_session_finish_obd": true
         },
-        "102_spl_native": {
-            "type": "native",
-            "unit": "102_spl_native"
+        "language": {
+          "is_two_screen": true,
+          "enable": true
         },
-        "102_spl_native_high_f1": {
-            "type": "native",
-            "unit": "102_spl_native_high_f1"
-        },
-        "201_lfo_native": {
-            "type": "native",
-            "unit": "201_lfo_native"
-        },
-        "201_lfo_native_high_f1": {
-            "type": "native",
-            "unit": "201_lfo_native_high_f1"
-        },
-        "202_lfo_native": {
-            "type": "native",
-            "unit": "202_lfo_native"
-        },
-        "202_lfo_native_high_f1": {
-            "type": "native",
-            "unit": "202_lfo_native_high_f1"
-        },
-        "301_onb_native": {
-            "type": "native",
-            "unit": "301_onb_native"
-        },
-        "301_onb_native_high_f1": {
-            "type": "native",
-            "unit": "301_onb_native_high_f1"
-        },
-        "302_onb_native": {
-            "type": "native",
-            "unit": "302_onb_native"
-        },
-        "302_onb_native_high_f1": {
-            "type": "native",
-            "unit": "302_onb_native_high_f1"
-        },
-        "303_onb_native": {
-            "type": "native",
-            "unit": "303_onb_native"
-        },
-        "303_onb_native_high_f1": {
-            "type": "native",
-            "unit": "303_onb_native_high_f1"
-        },
-        "304_onb_native": {
-            "type": "native",
-            "unit": "304_onb_native"
-        },
-        "304_onb_native_high_f1": {
-            "type": "native",
-            "unit": "304_onb_native_high_f1"
-        },
-        "306_onb_inter": {
-            "type": "interstitial",
-            "unit": "306_onb_inter"
-        },
-        "306_onb_inter_high_f1": {
-            "type": "interstitial",
-            "unit": "306_onb_inter_high_f1"
-        },
-        "401_home_native": {
-            "type": "native",
-            "unit": "401_home_native"
-        },
-        "401_home_native_high_f1": {
-            "type": "native",
-            "unit": "401_home_native_high_f1"
-        },
-        "404_home_nabanner": {
-            "type": "native",
-            "unit": "404_home_nabanner"
-        },
-        "404_home_nabanner_high_f1": {
-            "type": "native",
-            "unit": "404_home_nabanner_high_f1"
-        },
-        "402_click_inter_high_f1": {
-            "type": "interstitial",
-            "unit": "402_click_inter_high_f1"
-        },
-        "402_click_inter": {
-            "type": "interstitial",
-            "unit": "402_click_inter"
+        "onboarding": {
+          "number_screen": 4,
+          "enable": true
         }
+      },
+      "ad_placements": {
+        "fs_splash": {
+          "type": "full_screen_ad",
+          "enable": true,
+          "ordered_priority_ads": "101_spl_inter_high_f1;101_spl_inter",
+          "session_cap": -1,
+          "max_attempt": 1,
+          "native_config": {
+            "layout_res": "custom_native_fsn_layout",
+            "meta_layout_res": "custom_native_fsn_layout",
+            "delay_time": 5
+          }
+        },
+        "splash_ad_view": {
+          "type": "banner",
+          "enable": true,
+          "ordered_priority_ads": "103_spl_banner_high_f1;103_spl_banner",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 10
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "language_1_ad_view": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "201_lfo_native_high_f1;201_lfo_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "language_2_ad_view": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "202_lfo_native_high_f1;202_lfo_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "onboarding_1": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "301_onb_native_high_f1;301_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "onboarding_2": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "302_onb_native_high_f1;302_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "onboarding_3": {
+          "type": "native_fsn",
+          "enable": true,
+          "ordered_priority_ads": "303_onb_native_high_f1;303_onb_native",
+          "native_config": {
+            "layout_res": "custom_native_fsn_layout",
+            "meta_layout_res": "custom_native_fsn_layout",
+            "delay_time": 3
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "onboarding_4": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "304_onb_native_high_f1;304_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium_2",
+            "meta_layout_res": "native_admob_medium_2",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "onboarding_5": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "304_onb_native_high_f1;304_onb_native",
+          "native_config": {
+            "layout_res": "native_admob_medium",
+            "meta_layout_res": "native_admob_medium",
+            "reload_time": 0
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "onboarding_inter": {
+          "type": "interstitial",
+          "enable": false,
+          "ordered_priority_ads": "306_onb_inter_high_f1;306_onb_inter",
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "fs_click": {
+          "type": "full_screen_ad",
+          "enable": true,
+          "ordered_priority_ads": "402_click_inter_high_f1;402_click_inter",
+          "session_cap": -1,
+          "max_attempt": 1,
+          "native_config": {
+            "layout_res": "custom_native_fsn_layout",
+            "meta_layout_res": "custom_native_fsn_layout",
+            "delay_time": 5
+          }
+        },
+        "home_nabanner": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "404_home_nabanner_high_f1;404_home_nabanner",
+          "native_config": {
+            "layout_res": "native_admob_banner",
+            "meta_layout_res": "native_admob_banner",
+            "reload_time": 15
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        },
+        "home_native": {
+          "type": "native_view",
+          "enable": true,
+          "ordered_priority_ads": "401_home_native_high_f1;401_home_native",
+          "native_config": {
+            "layout_res": "native_admob_medium",
+            "meta_layout_res": "native_admob_medium",
+            "reload_time": 15
+          },
+          "session_cap": -1,
+          "max_attempt": 1
+        }
+      }
     }
+  ],
+  "ad_item": {
+    "101_spl_inter": {
+      "type": "interstitial",
+      "unit": "101_spl_inter"
+    },
+    "101_spl_inter_high_f1": {
+      "type": "interstitial",
+      "unit": "101_spl_inter_high_f1"
+    },
+    "101_spl_inter_medium": {
+      "type": "interstitial",
+      "unit": "101_spl_inter_medium"
+    },
+    "102_spl_native": {
+      "type": "native",
+      "unit": "102_spl_native"
+    },
+    "102_spl_native_high_f1": {
+      "type": "native",
+      "unit": "102_spl_native_high_f1"
+    },
+    "103_spl_banner": {
+      "type": "banner_view",
+      "unit": "103_spl_banner"
+    },
+    "103_spl_banner_high_f1": {
+      "type": "banner_view",
+      "unit": "103_spl_banner_high_f1"
+    },
+    "201_lfo_native": {
+      "type": "native",
+      "unit": "201_lfo_native"
+    },
+    "201_lfo_native_high_f1": {
+      "type": "native",
+      "unit": "201_lfo_native_high_f1"
+    },
+    "202_lfo_native": {
+      "type": "native",
+      "unit": "202_lfo_native"
+    },
+    "202_lfo_native_high_f1": {
+      "type": "native",
+      "unit": "202_lfo_native_high_f1"
+    },
+    "301_onb_native": {
+      "type": "native",
+      "unit": "301_onb_native"
+    },
+    "301_onb_native_high_f1": {
+      "type": "native",
+      "unit": "301_onb_native_high_f1"
+    },
+    "302_onb_native": {
+      "type": "native",
+      "unit": "302_onb_native"
+    },
+    "302_onb_native_high_f1": {
+      "type": "native",
+      "unit": "302_onb_native_high_f1"
+    },
+    "303_onb_native": {
+      "type": "native",
+      "unit": "303_onb_native"
+    },
+    "303_onb_native_high_f1": {
+      "type": "native",
+      "unit": "303_onb_native_high_f1"
+    },
+    "304_onb_native": {
+      "type": "native",
+      "unit": "304_onb_native"
+    },
+    "304_onb_native_high_f1": {
+      "type": "native",
+      "unit": "304_onb_native_high_f1"
+    },
+    "306_onb_inter": {
+      "type": "interstitial",
+      "unit": "306_onb_inter"
+    },
+    "306_onb_inter_high_f1": {
+      "type": "interstitial",
+      "unit": "306_onb_inter_high_f1"
+    },
+    "401_home_native": {
+      "type": "native",
+      "unit": "401_home_native"
+    },
+    "401_home_native_high_f1": {
+      "type": "native",
+      "unit": "401_home_native_high_f1"
+    },
+    "404_home_nabanner": {
+      "type": "native",
+      "unit": "404_home_nabanner"
+    },
+    "404_home_nabanner_high_f1": {
+      "type": "native",
+      "unit": "404_home_nabanner_high_f1"
+    },
+    "402_click_inter_high_f1": {
+      "type": "interstitial",
+      "unit": "402_click_inter_high_f1"
+    },
+    "402_click_inter": {
+      "type": "interstitial",
+      "unit": "402_click_inter"
+    }
+  }
 }

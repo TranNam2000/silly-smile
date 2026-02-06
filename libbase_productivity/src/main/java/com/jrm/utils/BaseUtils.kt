@@ -8,7 +8,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.jrm.base.BaseEventLogger
 import com.jrm.utils.remote_config.RemoteConfigManager
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object BaseUtils {
     @JvmStatic
@@ -44,7 +45,6 @@ object BaseUtils {
     @JvmStatic
     fun setFinishObd(isFinish: Boolean) {
         if (!BaseUtils.checkFinish) {
-            BaseUtils.checkFinish = true
             var numberFinish = SharedPref.readLong("number_finish_obd", 0)
             numberFinish++
             SharedPref.saveLong("number_finish_obd", numberFinish)
@@ -73,18 +73,23 @@ object BaseUtils {
             else -> "return_obd"
         }
     }
-    
+
+    /**
+     * Session index for config (1 = first open, 2+ = returning).
+     * Only incremented when user reaches MainActivity (in setFinishObd).
+     */
     @JvmStatic
     fun getSessionNumber(): Int {
-        var sessionNumber = SharedPref.readInteger("session_number", 0)
-        if (firstOpen) {
-            firstOpen = false
-            sessionNumber++
-            SharedPref.saveInteger("session_number", sessionNumber)
-            return sessionNumber
-        }
-        return sessionNumber
+     return SharedPref.readInteger("session_number", 1)
     }
+
+    @JvmStatic
+    fun setSessionNumber() {
+        var sessionNumber = SharedPref.readInteger("session_number", 1)
+        sessionNumber++
+        SharedPref.saveInteger("session_number", sessionNumber)
+    }
+
 
     /**
      * Initialize install date if not already set

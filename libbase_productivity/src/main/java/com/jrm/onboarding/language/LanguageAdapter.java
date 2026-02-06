@@ -111,7 +111,7 @@ public class LanguageAdapter extends ArrayAdapter<LanguageModel> {
             }
         } catch (Exception e) {
             // Log error and use default flag
-            android.util.Log.e("LanguageAdapter", "Error setting flag image for: " + languageData.getLangCode(), e);
+            com.jrm.utils.Logger.e("Error setting flag image for: " + languageData.getLangCode(), e);
             holder.langImage.setImageResource(R.drawable.flag_us);
         }
         

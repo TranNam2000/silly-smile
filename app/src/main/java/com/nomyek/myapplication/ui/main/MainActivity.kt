@@ -55,7 +55,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onResumeAfterInter() {
         super.onResumeAfterInter()
-        showRefreshNativeBanner()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

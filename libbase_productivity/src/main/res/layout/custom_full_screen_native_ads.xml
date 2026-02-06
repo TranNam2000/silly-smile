@@ -112,5 +112,15 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+        <ImageView
+            android:id="@+id/btn_close_native"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/_10sdp"
+            android:src="@drawable/ic_close"
+            android:visibility="gone"
+            app:tint="@color/white" />
     </RelativeLayout>
 </com.google.android.gms.ads.nativead.NativeAdView>

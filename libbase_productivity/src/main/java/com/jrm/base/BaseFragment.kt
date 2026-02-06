@@ -102,7 +102,6 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
             logScreenViewEvent()
         }
     }
-
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
 
@@ -118,7 +117,7 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
     }
     private fun logScreenViewEvent() {
         // Log screen view event using BaseEventLogger
-        fragmentName?.let { screenName ->
+        fragmentName.let { screenName ->
             BaseEventLogger.logScreenView(screenName)
             BaseEventLogger.logScreenViewResume(screenName)
         }

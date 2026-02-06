@@ -1,26 +1,22 @@
 package com.jrm.onboarding.onboarding
 
-import android.util.Log
-import android.view.View
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import com.jrm.utils.Logger
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.widget.ViewPager2
 import com.ads.nomyek_admob.ads_components.YNMAds
-import com.ads.nomyek_admob.ads_components.YNMAdsCallbacks
-import com.ads.nomyek_admob.ads_components.wrappers.AdsError
 import com.ads.nomyek_admob.event.YNMAirBridge
 import com.ads.nomyek_admob.event.YNMAirBridgeDefaultEvent
-import com.ads.nomyek_admob.utils.AdsInterMultiPreload
-import com.jrm.utils.remote_config.RemoteConfigManager
-import com.jrm.utils.BaseConstants
-import com.jrm.base.ViewPagerAddFragmentsAdapter
-import com.jrm.base.BaseActivity
 import com.jrm.R
-import com.jrm.ads.WaterfallNativeAdManager
+import com.jrm.base.BaseActivity
+import com.jrm.base.ViewPagerAddFragmentsAdapter
 import com.jrm.databinding.ActivityOnboardingScreenBinding
+import com.jrm.model.DataPage
 import com.jrm.onboarding.navigation.BaseNavigator
 import com.jrm.utils.BaseUtils
+import com.jrm.utils.remote_config.RemoteConfigManager
 
 class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
     var preload0b4 : Boolean = false
@@ -45,41 +41,31 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
     fun preloadOnboarding2() {
         preloadOb2 = true
 
-        WaterfallNativeAdManager.preload(
-            context = this,
-            activityName = activityName,
-            adPlace = BaseConstants.NATIVE_ONBOARD_2,
-            configString = RemoteConfigManager.instance!!.nativeObd2Ids,
-            layoutAdmob = R.layout.custom_native_admob_large,
-            layoutMax = R.layout.custom_native_admob_large_max
+        preloadAds(
+            placementId = "onboarding_2",
         )
     }
 
     public fun preloadOnboarding3() {
         preloadOb3 = true
         if (!BaseUtils.isFinishObd()) {
-            WaterfallNativeAdManager.preload(
-                context = this,
-                activityName = activityName,
-                adPlace = BaseConstants.NATIVE_ONBOARD_3,
-                configString = RemoteConfigManager.instance!!.nativeObd3Ids,
-                layoutAdmob = R.layout.custom_full_screen_native_ads,
-                layoutMax = R.layout.custom_full_screen_native_ads_max
-            ) { result ->
-                loadingOb3LiveData.postValue(false)
-            }
+            preloadAds(
+                placementId = "onboarding_3",
+                onSuccess = {
+                    loadingOb3LiveData.postValue(false)
+                },
+                onFailure = {
+                    loadingOb3LiveData.postValue(false)
+
+                })
         }
     }
 
     private fun preloadOnboarding4() {
         preload0b4 = true;
-        WaterfallNativeAdManager.preload(
-            context = this,
-            activityName = activityName,
-            adPlace = BaseConstants.NATIVE_ONBOARD_4,
-            configString = RemoteConfigManager.instance!!.nativeObd4Ids,
-            layoutAdmob = R.layout.custom_native_admob_large,
-            layoutMax = R.layout.custom_native_admob_large_max
+
+        preloadAds(
+            placementId = "onboarding_4",
         )
     }
 
@@ -87,39 +73,54 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
     private fun preloadOnboarding6() {
         preloadOb6 = true;
         if (!BaseUtils.isFinishObd()) {
-            val listAdId: List<AdsInterMultiPreload.AdIdModel> = RemoteConfigManager.instance!!.getListAdIdInterFromRemote(BaseConstants.INTER_ONBOARD_6,
-                RemoteConfigManager.instance!!.intersObd6Ids)
-            AdsInterMultiPreload.preloadMultipleInterAds(
-                this@OnboardingActivity,
-                YNMAirBridge.AppData(activityName, "inter_odb6"),
-                listAdId,
-                BaseConstants.INTER_ONBOARD_6,
-                object : YNMAdsCallbacks(
-                    YNMAirBridge.AppData(
-                        activityName,
-                        BaseConstants.INTER_ONBOARD_6
-                    ), YNMAds.INTERSTITIAL
-                ) {
-                }
-            )
+            preloadAds(placementId = "onboarding_inter")
         }
     }
     private fun initViewPager() {
         val adapter = ViewPagerAddFragmentsAdapter(supportFragmentManager, lifecycle)
-        var index: Int = 0;
-        adapter.addFrag( OnboardingFragment(index++, R.drawable.obd1, R.string.obd_title1, R.string.obd_detail1))
-        if (isFiveObd()) {
-            adapter.addFrag(OnboardingFragment(index++, R.drawable.obd1, R.string.obd_title1, R.string.obd_title3))
+        val config = RemoteConfigManager.instance?.adConfig
+        val listAdsPlacement =
+            listOf("onboarding_1", "onboarding_2", "onboarding_3", "onboarding_4", "onboarding_5")
+        var index = 0
+        var indextPage = 0
+        listAdsPlacement.forEach {
+            val onboardingActivity = config?.adPlacements?.get(it)
+            if (onboardingActivity != null) {
+                if (onboardingActivity.type != "native_view")
+                    listDataPage?.get(0)?.let {
+                        adapter.addFrag(
+                            OnboardingFragment(
+                                indextPage++,
+                                it.image,
+                                it.title,
+                                it.detail
+                            )
+                        )
+                    }
+                index++
+                if (index == listDataPage?.size) {
+                    index = 0
+                } else {
+                    adapter.addFrag(
+                        OnboardingFragment(
+                            indextPage++
+                        )
+                    )
+                }
+            }
         }
-        adapter.addFrag(OnboardingFragment(index++, R.drawable.obd2, R.string.obd_title2, R.string.obd_detail2))
-        adapter.addFrag(OnboardingFragment(index++, R.drawable.obd1, R.string.obd_title1, R.string.obd_title3))
-        adapter.addFrag(OnboardingFragment(index++, R.drawable.obd3, R.string.obd_title3, R.string.obd_detail3))
+        // Add fragments from listDataPage
+        val totalPages =
+            RemoteConfigManager.instance?.adConfig?.screenObd?.onboarding?.numberScreen ?: 4
+
+        viewBinding.viewpagerOnboard.setOffscreenPageLimit(totalPages);
+
         viewBinding.viewpagerOnboard.isUserInputEnabled = !RemoteConfigManager.instance!!.boostFNativeObd
         viewBinding.viewpagerOnboard.adapter = adapter
-        if (isFiveObd()) {
-            viewBinding.indicatorView.count = 5
-            viewBinding.indicatorView2.count = 5
-        }
+
+        // Set indicator count based on total pages
+        viewBinding.indicatorView.count = totalPages
+        viewBinding.indicatorView2.count = totalPages
 
         viewBinding.viewpagerOnboard.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -127,7 +128,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
                 viewBinding.indicatorView.selection = position
                 viewBinding.indicatorView2.selection = position
                 showIndicatorView(position)
-                Log.d("Onboarding", "onPageSelected: $position")
+                Logger.d( "onPageSelected: $position")
                 when (position) {
                     0 -> {
                         YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob1", ""))
@@ -185,27 +186,12 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
 
     private fun goToNextActivity() {
         // Show preloaded waterfall ad
-        AdsInterMultiPreload.showPreloadedInterAdWithLoading(
-            this@OnboardingActivity,
-            BaseConstants.INTER_ONBOARD_6,
-            10000,
-            object : YNMAdsCallbacks(YNMAirBridge.AppData(activityName, BaseConstants.INTER_ONBOARD_6), YNMAds.INTERSTITIAL) {
-                override fun onNextAction(isShown: Boolean) {
-                    super.onNextAction(isShown)
-                    goHome()
-                }
-
-                override fun onAdFailedToLoad(adError: AdsError?) {
-                    super.onAdFailedToLoad(adError)
-                    goHome()
-                }
-            }
-        )
+        loadAds("onboarding_inter", onSuccess = { goHome() }, onFailure = { goHome() })
     }
     private fun goHome() {
         YNMAds.getInstance().adConfig.setInterFlow(RemoteConfigManager.instance!!.getStartIndexInter(), RemoteConfigManager.instance!!.getDeltaIndexInter())
         YNMAds.isGoHome = true;
-        BaseNavigator.getInstance()?.navigateToHome(this)
+        BaseNavigator.getInstance().navigateToHome(this)
         finish()
     }
 
@@ -286,4 +272,22 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
         }
     }
 
+    companion object {
+        /**
+         * List of onboarding pages data
+         * Default values are set for 5 pages, can be overridden using setListDataPage()
+         */
+        private var listDataPage: List<DataPage>? = null
+
+        /**
+         * Set custom onboarding pages data
+         * Call this before starting OnboardingActivity if you want to use custom pages
+         *
+         * @param list List of DataPage objects containing image, title, and detail resources
+         */
+        fun setListDataPage(list: List<DataPage>) {
+            listDataPage = list
+        }
+
+    }
 }

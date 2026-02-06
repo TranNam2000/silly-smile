@@ -2,7 +2,7 @@ package com.jrm.ads
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
+import com.jrm.utils.Logger
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -134,24 +134,24 @@ class CollapsibleNativeAdManager(
             screenName: String,
             layoutId: Int
         ) {
-            Log.d(TAG, "[$adPlace] preloadAds() called - adIds: $adIdString")
+            Logger.d( "[$adPlace] preloadAds() called - adIds: $adIdString")
 
             // Check if already preloaded or loading
             val existingData = preloadedAdsCache[adPlace]
             if (existingData != null) {
                 if (existingData.isPreloaded) {
-                    Log.d(TAG, "[$adPlace] Ad already preloaded, skipping")
+                    Logger.d( "[$adPlace] Ad already preloaded, skipping")
                     return
                 }
                 if (existingData.isLoading) {
-                    Log.d(TAG, "[$adPlace] Ad is already loading, skipping")
+                    Logger.d( "[$adPlace] Ad is already loading, skipping")
                     return
                 }
             }
 
             // Check if premium or ads disabled
             if (IAPHelper.isPremium() || AdsHelper.isDisableAllAd()) {
-                Log.d(TAG, "[$adPlace] Premium or ads disabled, skipping preload")
+                Logger.d( "[$adPlace] Premium or ads disabled, skipping preload")
                 notifyPreloadCallbacks(adPlace, false)
                 return
             }
@@ -160,12 +160,12 @@ class CollapsibleNativeAdManager(
 
             // Check if we have any ads to preload
             if (parsedData.maxNativeId == null && parsedData.nativeAdIds.isEmpty()) {
-                Log.e(TAG, "[$adPlace] No valid ad IDs found in: $adIdString")
+                Logger.e( "[$adPlace] No valid ad IDs found in: $adIdString")
                 notifyPreloadCallbacks(adPlace, false)
                 return
             }
 
-            Log.d(TAG, "[$adPlace] Starting preload - MAX: ${parsedData.maxNativeId}, NATIVE count: ${parsedData.nativeAdIds.size}")
+            Logger.d( "[$adPlace] Starting preload - MAX: ${parsedData.maxNativeId}, NATIVE count: ${parsedData.nativeAdIds.size}")
 
             // Store preload data
             val preloadData = PreloadedAdData(
@@ -184,7 +184,7 @@ class CollapsibleNativeAdManager(
             com.ads.nomyek_admob.ads_components.YNMAds.getInstance().setInitCallback {
                 // Check for MAX native first
                 if (parsedData.maxNativeId != null && parsedData.maxNativeId.isNotEmpty()) {
-                    Log.d(TAG, "[$adPlace] Preloading MAX Native ad: ${parsedData.maxNativeId}")
+                    Logger.d( "[$adPlace] Preloading MAX Native ad: ${parsedData.maxNativeId}")
                     // Preload MAX native ad using MaxNativePreload
                     MaxNativePreload.getInstance().preloadNative(
                         context,
@@ -194,7 +194,7 @@ class CollapsibleNativeAdManager(
                         object : AppLovinCallback() {
                             override fun onAdLoaded() {
                                 super.onAdLoaded()
-                                Log.d(TAG, "[$adPlace] ✅ MAX Native ad preloaded successfully")
+                                Logger.d( "[$adPlace] ✅ MAX Native ad preloaded successfully")
                                 preloadData.isPreloaded = true
                                 preloadData.isMaxNative = true
                                 preloadData.isLoading = false
@@ -204,10 +204,10 @@ class CollapsibleNativeAdManager(
 
                             override fun onAdFailedToLoad(error: MaxError?) {
                                 super.onAdFailedToLoad(error)
-                                Log.e(TAG, "[$adPlace] ❌ MAX Native ad failed: ${error?.message}")
+                                Logger.e( "[$adPlace] ❌ MAX Native ad failed: ${error?.message}")
                                 // If MAX native fails and we have regular native IDs, try to preload them
                                 if (parsedData.nativeAdIds.isNotEmpty()) {
-                                    Log.d(TAG, "[$adPlace] Falling back to regular Native ads")
+                                    Logger.d( "[$adPlace] Falling back to regular Native ads")
                                     preloadRegularNativeAds(context, parsedData, preloadData, adPlace, screenName)
                                 } else {
                                     preloadData.isPreloaded = false
@@ -219,7 +219,7 @@ class CollapsibleNativeAdManager(
                         }
                     )
                 } else if (parsedData.nativeAdIds.isNotEmpty()) {
-                    Log.d(TAG, "[$adPlace] Preloading regular Native ads (count: ${parsedData.nativeAdIds.size})")
+                    Logger.d( "[$adPlace] Preloading regular Native ads (count: ${parsedData.nativeAdIds.size})")
                     // Preload regular native ads only
                     preloadRegularNativeAds(context, parsedData, preloadData, adPlace, screenName)
                 }
@@ -244,7 +244,7 @@ class CollapsibleNativeAdManager(
                 object : YNMAdsCallbacks() {
                     override fun onNativeAdLoaded(nativeAd: NativeAd) {
                         super.onNativeAdLoaded(nativeAd)
-                        Log.d(TAG, "[$adPlace] ✅ Regular Native ad preloaded successfully")
+                        Logger.d( "[$adPlace] ✅ Regular Native ad preloaded successfully")
                         preloadData.isPreloaded = true
                         preloadData.isMaxNative = false
                         preloadData.isLoading = false
@@ -254,7 +254,7 @@ class CollapsibleNativeAdManager(
 
                     override fun onAdFailedToLoad(adError: AdsError?) {
                         super.onAdFailedToLoad(adError)
-                        Log.e(TAG, "[$adPlace] ❌ Regular Native ad failed: ${adError?.message}")
+                        Logger.e( "[$adPlace] ❌ Regular Native ad failed: ${adError?.message}")
                         preloadData.isPreloaded = false
                         preloadData.isLoading = false
                         preloadData.hasFailed = true
@@ -274,29 +274,29 @@ class CollapsibleNativeAdManager(
             val preloadData = preloadedAdsCache[adPlace]
 
             if (preloadData == null) {
-                Log.d(TAG, "[$adPlace] waitForPreload: No preload data found")
+                Logger.d( "[$adPlace] waitForPreload: No preload data found")
                 callback(false)
                 return
             }
 
             if (preloadData.isPreloaded) {
-                Log.d(TAG, "[$adPlace] waitForPreload: Already preloaded, returning immediately")
+                Logger.d( "[$adPlace] waitForPreload: Already preloaded, returning immediately")
                 callback(true)
                 return
             }
 
             if (preloadData.hasFailed) {
-                Log.d(TAG, "[$adPlace] waitForPreload: Preload failed, returning immediately")
+                Logger.d( "[$adPlace] waitForPreload: Preload failed, returning immediately")
                 callback(false)
                 return
             }
 
             if (preloadData.isLoading) {
-                Log.d(TAG, "[$adPlace] waitForPreload: Still loading, adding callback to wait list")
+                Logger.d( "[$adPlace] waitForPreload: Still loading, adding callback to wait list")
                 val callbacks = preloadCallbacks.getOrPut(adPlace) { mutableListOf() }
                 callbacks.add(callback)
             } else {
-                Log.d(TAG, "[$adPlace] waitForPreload: Not loading and not loaded")
+                Logger.d( "[$adPlace] waitForPreload: Not loading and not loaded")
                 callback(false)
             }
         }
@@ -307,7 +307,7 @@ class CollapsibleNativeAdManager(
         private fun notifyPreloadCallbacks(adPlace: String, success: Boolean) {
             val callbacks = preloadCallbacks.remove(adPlace)
             if (callbacks != null && callbacks.isNotEmpty()) {
-                Log.d(TAG, "[$adPlace] Notifying ${callbacks.size} waiting callbacks with result: $success")
+                Logger.d( "[$adPlace] Notifying ${callbacks.size} waiting callbacks with result: $success")
                 callbacks.forEach { callback ->
                     callback(success)
                 }
@@ -440,11 +440,11 @@ class CollapsibleNativeAdManager(
      * @param adPlace Ad placement identifier (cache key)
      */
     fun showPreloadedAd(adPlace: String) {
-        Log.d(TAG, "[$adPlace] showPreloadedAd() called")
+        Logger.d( "[$adPlace] showPreloadedAd() called")
 
         // Check if premium or ads disabled
         if (IAPHelper.isPremium() || AdsHelper.isDisableAllAd()) {
-            Log.d(TAG, "[$adPlace] Premium or ads disabled, not showing")
+            Logger.d( "[$adPlace] Premium or ads disabled, not showing")
             collapsibleLayout?.visibility = View.GONE
             clearPreloadedAds(adPlace)
             onAdFailedCallback?.invoke()
@@ -454,7 +454,7 @@ class CollapsibleNativeAdManager(
         // Check if activity is valid
         val act = activity
         if (act == null || act.isFinishing || act.isDestroyed) {
-            Log.e(TAG, "[$adPlace] Activity is null or finishing/destroyed")
+            Logger.e( "[$adPlace] Activity is null or finishing/destroyed")
             collapsibleLayout?.visibility = View.GONE
             clearPreloadedAds(adPlace)
             onAdFailedCallback?.invoke()
@@ -463,7 +463,7 @@ class CollapsibleNativeAdManager(
 
         // Check if interstitial is showing
         if (com.ads.nomyek_admob.admobs.AppOpenManager.getInstance().isInterstitialShowing) {
-            Log.d(TAG, "[$adPlace] Interstitial is showing, not showing collapsible ad")
+            Logger.d( "[$adPlace] Interstitial is showing, not showing collapsible ad")
             collapsibleLayout?.visibility = View.GONE
             onAdFailedCallback?.invoke()
             return
@@ -472,28 +472,28 @@ class CollapsibleNativeAdManager(
         // Get preloaded ad data
         val preloadData = preloadedAdsCache[adPlace]
         if (preloadData == null) {
-            Log.e(TAG, "[$adPlace] No preload data found")
+            Logger.e( "[$adPlace] No preload data found")
             collapsibleLayout?.visibility = View.GONE
             onAdFailedCallback?.invoke()
             return
         }
 
         if (!preloadData.isPreloaded) {
-            Log.e(TAG, "[$adPlace] Ad not preloaded yet (isLoading: ${preloadData.isLoading}, hasFailed: ${preloadData.hasFailed})")
+            Logger.e( "[$adPlace] Ad not preloaded yet (isLoading: ${preloadData.isLoading}, hasFailed: ${preloadData.hasFailed})")
             collapsibleLayout?.visibility = View.GONE
             onAdFailedCallback?.invoke()
             return
         }
 
-        Log.d(TAG, "[$adPlace] Showing preloaded ad (isMaxNative: ${preloadData.isMaxNative})")
+        Logger.d( "[$adPlace] Showing preloaded ad (isMaxNative: ${preloadData.isMaxNative})")
 
         nativeAdView?.let { adView ->
             // Check if it's MAX native ad
             if (preloadData.isMaxNative && preloadData.maxNativeId != null) {
-                Log.d(TAG, "[$adPlace] Showing MAX Native ad")
+                Logger.d( "[$adPlace] Showing MAX Native ad")
                 val currentActivity = activity
                 if (currentActivity == null || currentActivity.isFinishing || currentActivity.isDestroyed) {
-                    Log.e(TAG, "[$adPlace] Activity invalid when showing MAX native")
+                    Logger.e( "[$adPlace] Activity invalid when showing MAX native")
                     clearPreloadedAds(adPlace)
                     onAdFailedCallback?.invoke()
                     return
@@ -511,21 +511,21 @@ class CollapsibleNativeAdManager(
                 )
 
                 showWithAnimation()
-                Log.d(TAG, "[$adPlace] ✅ MAX Native ad shown successfully")
+                Logger.d( "[$adPlace] ✅ MAX Native ad shown successfully")
 
                 // Clear preloaded ad after showing
                 clearPreloadedAds(adPlace)
-                Log.d(TAG, "[$adPlace] Cleared preloaded ad from cache")
+                Logger.d( "[$adPlace] Cleared preloaded ad from cache")
 
                 onAdLoadedCallback?.invoke()
             } else {
-                Log.d(TAG, "[$adPlace] Showing regular Native ad")
+                Logger.d( "[$adPlace] Showing regular Native ad")
                 // Show regular native ad
                 showRegularNativeAd(act, preloadData, adView)
 
                 // Clear preloaded ad after showing
                 clearPreloadedAds(adPlace)
-                Log.d(TAG, "[$adPlace] Cleared preloaded ad from cache")
+                Logger.d( "[$adPlace] Cleared preloaded ad from cache")
             }
         }
     }
@@ -540,7 +540,7 @@ class CollapsibleNativeAdManager(
     ) {
         val currentActivity = activity
         if (currentActivity == null || currentActivity.isFinishing || currentActivity.isDestroyed) {
-            Log.e(TAG, "[${preloadData.adPlace}] Activity invalid when showing regular native")
+            Logger.e( "[${preloadData.adPlace}] Activity invalid when showing regular native")
             collapsibleLayout?.visibility = View.GONE
             onAdFailedCallback?.invoke()
             return
@@ -560,7 +560,7 @@ class CollapsibleNativeAdManager(
         )
 
         showWithAnimation()
-        Log.d(TAG, "[${preloadData.adPlace}] ✅ Regular Native ad shown successfully")
+        Logger.d( "[${preloadData.adPlace}] ✅ Regular Native ad shown successfully")
         onAdLoadedCallback?.invoke()
     }
 

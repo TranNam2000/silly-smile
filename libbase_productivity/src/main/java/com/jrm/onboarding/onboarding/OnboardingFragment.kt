@@ -1,13 +1,11 @@
 package com.jrm.onboarding.onboarding
 
-import android.util.Log
 import android.view.View
+import com.jrm.utils.Logger
 import androidx.lifecycle.Observer
 import kotlinx.coroutines.*
 import com.bumptech.glide.Glide
 import com.jrm.R
-import com.jrm.ads.WaterfallNativeAdManager
-import com.jrm.utils.BaseConstants
 import com.jrm.base.BaseFragment
 import com.jrm.databinding.FragmentObdSlideBinding
 import com.jrm.utils.purchase.IAPHelper
@@ -49,7 +47,7 @@ class OnboardingFragment(
                 } else {
                     binding?.nativeOnboarding?.visibility = View.GONE
                 }
-                Log.d("nativeOB", "ob2NativeHigh")
+                Logger.d( "ob2NativeHigh")
             }
 
             1 -> {
@@ -91,54 +89,42 @@ class OnboardingFragment(
     override fun onResume() {
         super.onResume()
         if (isFirstResume) {
-            Log.d("Onboarding Fragment", "onResume: " + position)
+            Logger.d( "onResume: " + position)
             when (position) {
                 0 -> {
                     if (!IAPHelper.isPremium()) {
-                        context?.let {
-                            WaterfallNativeAdManager.show(
-                                activity,
-                                adView = binding!!.nativeOnboarding,
-                                adPlace = BaseConstants.NATIVE_ONBOARD_1,
-                                waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-                            ) { success ->
-                                if (success) {
-                                }
-                            }
-                        }
+                        activity.loadAds(
+                            "onboarding_1",
+                            adView = binding!!.nativeOnboarding,
+                            onSuccess = { },
+                            onFailure = { },
+                            lifecycleOwner = this
+                        )
                     } else {
                         binding?.nativeOnboarding?.visibility = View.GONE
                     }
-                    Log.d("nativeOB", "ob2NativeHigh")
+                    Logger.d( "ob2NativeHigh")
                 }
 
                 1 -> {
-                    context?.let {
-                        WaterfallNativeAdManager.show(
-                            activity,
+                    if (!IAPHelper.isPremium()) {
+                        activity.loadAds(
+                            "onboarding_2",
                             adView = binding!!.nativeOnboarding,
-                            adPlace = BaseConstants.NATIVE_ONBOARD_2,
-                            waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-                        ) { success ->
-                            if (success) {
-                            }
-                        }
-//                        AdsNativeMultiPreload.showPreloadedNativeAd(
-//                            it,
-//                            binding!!.nativeOnboarding,
-//                            BaseConstants.NATIVE_ONBOARD_2,
-//                            R.layout.custom_native_admob_large,
-//                            R.layout.custom_native_admob_large,
-//                            null,
-//                            null
-//                        )
+                            onSuccess = { },
+                            onFailure = { },
+                            lifecycleOwner = this
+                        )
                     }
+                    else {
+                        binding?.nativeOnboarding?.visibility = View.GONE
+                    }
+                    Logger.d( "ob3NativeHigh")
                 }
 
                 2 -> {
                     if (activity.isFiveObd()) {
                         binding?.clFrad?.visibility = View.VISIBLE
-//                    binding?.lottie?.setVisibility(View.VISIBLE)
                         binding?.nativeOnboarding?.visibility = View.GONE
                     } else {
                         binding?.nativeOnboarding?.visibility = View.GONE
@@ -152,81 +138,29 @@ class OnboardingFragment(
                         binding?.nativeOnboarding?.visibility = View.GONE
                         binding?.nativeOnboardingFull?.visibility = View.VISIBLE
                         context?.let {
-                            WaterfallNativeAdManager.show(
-                                activity,
+                            activity.loadAds(
                                 adView = binding!!.nativeOnboardingFull,
-                                adPlace = BaseConstants.NATIVE_ONBOARD_4,
-                                waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-                            ) { success ->
-                                if (success) {
-                                }
-                            }
-//                            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                                it,
-//                                binding!!.nativeOnboardingFull,
-//                                BaseConstants.NATIVE_ONBOARD_4,
-//                                R.layout.custom_full_screen_native_ads,
-//                                R.layout.custom_full_screen_native_ads,
-//                                object : YNMAdsCallbacks() {
-//                                    override fun onAdFailedToLoad(adError: AdsError?) {
-//                                        super.onAdFailedToLoad(adError)
-//                                        binding?.nativeOnboardingFull?.visibility = View.GONE
-//                                        showDefaultScreen()
-//                                    }
-//
-//                                    override fun onAdClicked() {
-//                                        super.onAdClicked()
-//                                        isClickNativeFull = true;
-//                                    }
-//                                },
-//                                null
-//                            )
+                                placementId = "onboarding_4",
+                                lifecycleOwner = this
+                            )
+
                         }
                     } else {
-                        context?.let {
-                            WaterfallNativeAdManager.show(
-                                activity,
+                            activity.loadAds(
                                 adView = binding!!.nativeOnboarding,
-                                adPlace = BaseConstants.NATIVE_ONBOARD_4,
-                                waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-                            ) { success ->
-                                if (success) {
-                                }
-                            }
-//                            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                                it,
-//                                binding!!.nativeOnboarding,
-//                                BaseConstants.NATIVE_ONBOARD_4,
-//                                R.layout.custom_native_admob_large,
-//                                R.layout.custom_native_admob_large,
-//                                null,
-//                                null
-//                            )
-                        }
+                                placementId = "onboarding_4",
+                                lifecycleOwner = this
+                            )
                     }
                 }
                 4 -> {
                     if (activity.isFiveObd()) {
-                        context?.let {
-                            WaterfallNativeAdManager.show(
-                                activity,
+                                activity.loadAds(
                                 adView = binding!!.nativeOnboarding,
-                                adPlace = BaseConstants.NATIVE_ONBOARD_5,
-                                waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-                            ) { success ->
-                                if (success) {
-                                }
-                            }
-//                            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                                it,
-//                                binding!!.nativeOnboarding,
-//                                BaseConstants.NATIVE_ONBOARD_5,
-//                                R.layout.custom_native_admob_large,
-//                                R.layout.custom_native_admob_large,
-//                                null,
-//                                null
-//                            )
-                        }
+                                placementId = "onboarding_5",
+                                lifecycleOwner = this
+                            )
+
                     }
                 }
             }
@@ -246,15 +180,12 @@ class OnboardingFragment(
     }
 
     private fun showNativeObd3() {
-        WaterfallNativeAdManager.show(
-            activity,
+        activity.loadAds(
             adView = binding!!.nativeOnboardingFull,
-            adPlace = BaseConstants.NATIVE_ONBOARD_3,
-            waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-        ) { success ->
-            if (success) {
-            }
-        }
+            placementId = "onboarding_3",
+            isShow = true,
+            lifecycleOwner = this
+        )
     }
 
     private fun reShowNativeOnboarding(position: Int) {
@@ -291,7 +222,7 @@ class OnboardingFragment(
                 }
             } catch (e: CancellationException) {
                 // Job was cancelled, do nothing
-                Log.d("OnboardingFragment", "Auto next job cancelled")
+                Logger.d( "Auto next job cancelled")
             }
         }
     }

@@ -1,8 +1,5 @@
 package com.jrm.utils.purchase
 
-import android.content.Context
-import android.util.Log
-import com.jrm.base.BaseEventLogger
 import com.jrm.utils.BaseConstants
 import com.jrm.utils.SharedPref
 

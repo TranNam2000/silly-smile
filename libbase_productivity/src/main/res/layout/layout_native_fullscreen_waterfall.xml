@@ -18,6 +18,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
+    <!-- Countdown text (shown when timeDelay > 0, hidden when 0) -->
+    <TextView
+        android:id="@+id/tv_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_dialog_rounded"
+        android:minWidth="48dp"
+        android:gravity="center"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="5"
+        tools:visibility="visible" />
+
     <com.jrm.base.tracking.TrackableImageView
         android:id="@+id/btn_next"
         android:visibility="visible"

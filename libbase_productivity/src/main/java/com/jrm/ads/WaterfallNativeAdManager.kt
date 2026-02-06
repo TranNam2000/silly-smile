@@ -2,7 +2,7 @@ package com.jrm.ads
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
+import com.jrm.utils.Logger
 import com.ads.nomyek_admob.ads_components.YNMAdsCallbacks
 import com.ads.nomyek_admob.ads_components.wrappers.AdsError
 import com.ads.nomyek_admob.event.YNMAirBridge
@@ -143,11 +143,11 @@ object WaterfallNativeAdManager {
         layoutMax: Int,
         callback: ((WaterfallNativeResult) -> Unit)? = null
     ) {
-        Log.d(TAG, "[$adPlace] preload() called - config: $configString")
+        Logger.d( "[$adPlace] preload() called - config: $configString")
         
         // Check if premium or ads disabled
         if (IAPHelper.isPremium() || AdsHelper.isDisableAllAd()) {
-            Log.d(TAG, "[$adPlace] Premium or ads disabled, skipping preload")
+            Logger.d( "[$adPlace] Premium or ads disabled, skipping preload")
             callback?.invoke(WaterfallNativeResult(false, "", adPlace))
             return
         }
@@ -156,7 +156,7 @@ object WaterfallNativeAdManager {
         val existingData = preloadedAdsCache[adPlace]
         if (existingData != null) {
             if (existingData.isPreloaded) {
-                Log.d(TAG, "[$adPlace] Already preloaded with type: ${existingData.loadedAdType}")
+                Logger.d( "[$adPlace] Already preloaded with type: ${existingData.loadedAdType}")
                 callback?.invoke(
                     WaterfallNativeResult(
                         true,
@@ -168,7 +168,7 @@ object WaterfallNativeAdManager {
                 return
             }
             if (existingData.isLoading) {
-                Log.d(TAG, "[$adPlace] Already loading, adding callback to queue")
+                Logger.d( "[$adPlace] Already loading, adding callback to queue")
                 callback?.let { addPreloadCallback(adPlace, it) }
                 return
             }
@@ -177,12 +177,12 @@ object WaterfallNativeAdManager {
         // Parse config
         val adItems = parseConfigString(configString)
         if (adItems.isEmpty()) {
-            Log.e(TAG, "[$adPlace] No valid ad items found in config: $configString")
+            Logger.e( "[$adPlace] No valid ad items found in config: $configString")
             callback?.invoke(WaterfallNativeResult(false, "", adPlace))
             return
         }
         
-        Log.d(TAG, "[$adPlace] Starting waterfall with ${adItems.size} items")
+        Logger.d( "[$adPlace] Starting waterfall with ${adItems.size} items")
         
         // Store preload data
         val preloadData = PreloadedAdData(
@@ -218,7 +218,7 @@ object WaterfallNativeAdManager {
         
         // Check if we've exhausted all items
         if (preloadData.currentIndex >= preloadData.adItems.size) {
-            Log.e(TAG, "[$adPlace] All waterfall items failed")
+            Logger.e( "[$adPlace] All waterfall items failed")
             preloadData.isLoading = false
             preloadData.isPreloaded = false
             notifyPreloadCallbacks(adPlace, WaterfallNativeResult(false, "", adPlace))
@@ -226,13 +226,13 @@ object WaterfallNativeAdManager {
         }
         
         val currentItem = preloadData.adItems[preloadData.currentIndex]
-        Log.d(TAG, "[$adPlace] Trying item ${preloadData.currentIndex + 1}/${preloadData.adItems.size} - Type: ${currentItem.type}, ID: ${currentItem.adId}")
+        Logger.d( "[$adPlace] Trying item ${preloadData.currentIndex + 1}/${preloadData.adItems.size} - Type: ${currentItem.type}, ID: ${currentItem.adId}")
         
         when (currentItem.type) {
             "MAX_NATIVE" -> preloadMaxNative(context, activityName, preloadData, currentItem)
             "NATIVE" -> preloadAdmobNative(context, activityName, preloadData, currentItem)
             else -> {
-                Log.e(TAG, "[$adPlace] Unknown ad type: ${currentItem.type}")
+                Logger.e( "[$adPlace] Unknown ad type: ${currentItem.type}")
                 preloadData.currentIndex++
                 preloadNextInWaterfall(context, activityName, preloadData)
             }
@@ -249,7 +249,7 @@ object WaterfallNativeAdManager {
         adItem: AdItem
     ) {
         val adPlace = preloadData.adPlace
-        Log.d(TAG, "[$adPlace] Preloading MAX Native: ${adItem.adId}")
+        Logger.d( "[$adPlace] Preloading MAX Native: ${adItem.adId}")
         
         MaxNativePreload.getInstance().preloadNative(
             context,
@@ -259,7 +259,7 @@ object WaterfallNativeAdManager {
             object : AppLovinCallback() {
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    Log.d(TAG, "[$adPlace] ✅ MAX Native loaded successfully")
+                    Logger.d( "[$adPlace] ✅ MAX Native loaded successfully")
                     preloadData.isPreloaded = true
                     preloadData.isLoading = false
                     preloadData.loadedAdType = "max_native"
@@ -271,7 +271,7 @@ object WaterfallNativeAdManager {
                 
                 override fun onAdFailedToLoad(error: MaxError?) {
                     super.onAdFailedToLoad(error)
-                    Log.w(TAG, "[$adPlace] ❌ MAX Native failed: ${error?.message}, trying next")
+                    Logger.w( "[$adPlace] ❌ MAX Native failed: ${error?.message}, trying next")
                     preloadData.currentIndex++
                     preloadNextInWaterfall(context, activityName, preloadData)
                 }
@@ -289,7 +289,7 @@ object WaterfallNativeAdManager {
         adItem: AdItem
     ) {
         val adPlace = preloadData.adPlace
-        Log.d(TAG, "[$adPlace] Preloading Admob Native: ${adItem.adId}")
+        Logger.d( "[$adPlace] Preloading Admob Native: ${adItem.adId}")
         
         val listAdId = listOf(
             AdsNativeMultiPreload.AdIdModel().apply {
@@ -300,7 +300,7 @@ object WaterfallNativeAdManager {
         
         AdsNativeMultiPreload.preloadMultipleNativeAds(
             context as? Activity ?: run {
-                Log.e(TAG, "[$adPlace] Context is not an Activity, skipping")
+                Logger.e( "[$adPlace] Context is not an Activity, skipping")
                 preloadData.currentIndex++
                 preloadNextInWaterfall(context, activityName, preloadData)
                 return
@@ -311,7 +311,7 @@ object WaterfallNativeAdManager {
             object : YNMAdsCallbacks() {
                 override fun onNativeAdLoaded(nativeAd: NativeAd) {
                     super.onNativeAdLoaded(nativeAd)
-                    Log.d(TAG, "[$adPlace] ✅ Admob Native loaded successfully")
+                    Logger.d( "[$adPlace] ✅ Admob Native loaded successfully")
                     preloadData.isPreloaded = true
                     preloadData.isLoading = false
                     preloadData.loadedAdType = "admob_native"
@@ -324,7 +324,7 @@ object WaterfallNativeAdManager {
                 
                 override fun onAdFailedToLoad(adError: AdsError?) {
                     super.onAdFailedToLoad(adError)
-                    Log.w(TAG, "[$adPlace] ❌ Admob Native failed: ${adError?.message}, trying next")
+                    Logger.w( "[$adPlace] ❌ Admob Native failed: ${adError?.message}, trying next")
                     preloadData.currentIndex++
                     preloadNextInWaterfall(context, activityName, preloadData)
                 }
@@ -388,20 +388,20 @@ object WaterfallNativeAdManager {
         waitForLoad: Boolean = true,
         callback: ((Boolean) -> Unit)? = null
     ) {
-        Log.d(TAG, "[$adPlace] show() called")
+        Logger.d( "[$adPlace] show() called")
         
         val preloadData = preloadedAdsCache[adPlace]
         
         // Case 1: No preload data at all
         if (preloadData == null) {
-            Log.e(TAG, "[$adPlace] No preload data found")
+            Logger.e( "[$adPlace] No preload data found")
             callback?.invoke(false)
             return
         }
         
         // Case 2: Ad is already loaded
         if (preloadData.isPreloaded) {
-            Log.d(TAG, "[$adPlace] Ad already loaded, showing now")
+            Logger.d( "[$adPlace] Ad already loaded, showing now")
             showLoadedAd(activity, adView, adPlace, preloadData, callback)
             return
         }
@@ -409,7 +409,7 @@ object WaterfallNativeAdManager {
         // Case 3: Ad is still loading
         if (preloadData.isLoading) {
             if (waitForLoad) {
-                Log.d(TAG, "[$adPlace] Ad is loading, waiting for completion...")
+                Logger.d( "[$adPlace] Ad is loading, waiting for completion...")
                 
                 // Use WeakReference to avoid memory leak
                 val weakActivity = WeakReference(activity)
@@ -423,34 +423,34 @@ object WaterfallNativeAdManager {
                     
                     // Check if activity and view are still valid
                     if (act == null || act.isFinishing || act.isDestroyed) {
-                        Log.w(TAG, "[$adPlace] Activity is null/finishing/destroyed, skipping show")
+                        Logger.w( "[$adPlace] Activity is null/finishing/destroyed, skipping show")
                         callback?.invoke(false)
                         return@addPreloadCallback
                     }
                     
                     if (view == null) {
-                        Log.w(TAG, "[$adPlace] AdView is null, skipping show")
+                        Logger.w( "[$adPlace] AdView is null, skipping show")
                         callback?.invoke(false)
                         return@addPreloadCallback
                     }
                     
                 if (result.success) {
-                    Log.d(TAG, "[$adPlace] Load completed, showing ad")
+                    Logger.d( "[$adPlace] Load completed, showing ad")
                     showLoadedAd(act, view, adPlace, preloadData, callback)
                 } else {
-                    Log.e(TAG, "[$adPlace] Load failed")
+                    Logger.e( "[$adPlace] Load failed")
                     callback?.invoke(false)
                 }
                 }
             } else {
-                Log.w(TAG, "[$adPlace] Ad is still loading and waitForLoad=false")
+                Logger.w( "[$adPlace] Ad is still loading and waitForLoad=false")
                 callback?.invoke(false)
             }
             return
         }
         
         // Case 4: Preload failed or not started
-        Log.e(TAG, "[$adPlace] Ad not loaded and not loading")
+        Logger.e( "[$adPlace] Ad not loaded and not loading")
         callback?.invoke(false)
     }
     
@@ -466,7 +466,7 @@ object WaterfallNativeAdManager {
     ) {
         when (preloadData.loadedAdType) {
             "max_native" -> {
-                Log.d(TAG, "[$adPlace] Showing MAX Native ad with layout: ${preloadData.layoutMax}")
+                Logger.d( "[$adPlace] Showing MAX Native ad with layout: ${preloadData.layoutMax}")
                 MaxNativePreload.getInstance().showNative(
                     adPlace,
                     adView,
@@ -475,7 +475,7 @@ object WaterfallNativeAdManager {
                 callback?.invoke(true)
             }
             "admob_native" -> {
-                Log.d(TAG, "[$adPlace] Showing Admob Native ad with layout: ${preloadData.layoutAdmob}")
+                Logger.d( "[$adPlace] Showing Admob Native ad with layout: ${preloadData.layoutAdmob}")
                 AdsNativeMultiPreload.showPreloadedNativeAd(
                     activity,
                     adView,
@@ -486,7 +486,7 @@ object WaterfallNativeAdManager {
                 callback?.invoke(true)
             }
             else -> {
-                Log.e(TAG, "[$adPlace] Unknown ad type: ${preloadData.loadedAdType}")
+                Logger.e( "[$adPlace] Unknown ad type: ${preloadData.loadedAdType}")
                 callback?.invoke(false)
             }
         }
@@ -498,7 +498,7 @@ object WaterfallNativeAdManager {
      */
     @JvmStatic
     fun cancelCallbacks(adPlace: String) {
-        Log.d(TAG, "[$adPlace] cancelCallbacks() called")
+        Logger.d( "[$adPlace] cancelCallbacks() called")
         preloadCallbacks.remove(adPlace)
     }
     
@@ -508,17 +508,17 @@ object WaterfallNativeAdManager {
      */
     @JvmStatic
     fun destroy(adPlace: String) {
-        Log.d(TAG, "[$adPlace] destroy() called")
+        Logger.d( "[$adPlace] destroy() called")
         
         val preloadData = preloadedAdsCache[adPlace]
         if (preloadData != null) {
             when (preloadData.loadedAdType) {
                 "max_native" -> {
                     // MAX native cleanup is handled internally by MaxNativePreload
-                    Log.d(TAG, "[$adPlace] Destroying MAX Native ad")
+                    Logger.d( "[$adPlace] Destroying MAX Native ad")
                 }
                 "admob_native" -> {
-                    Log.d(TAG, "[$adPlace] Destroying Admob Native ad")
+                    Logger.d( "[$adPlace] Destroying Admob Native ad")
                     AdsNativeMultiPreload.destroyPreloadedAd(adPlace)
                 }
             }
@@ -533,7 +533,7 @@ object WaterfallNativeAdManager {
      */
     @JvmStatic
     fun clearAll() {
-        Log.d(TAG, "clearAll() called")
+        Logger.d( "clearAll() called")
         preloadedAdsCache.keys.toList().forEach { adPlace ->
             destroy(adPlace)
         }

@@ -7,7 +7,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import com.jrm.utils.Logger;
 
 import com.jrm.base.BaseEventLogger;
 
@@ -47,10 +47,10 @@ public class BaseExtension {
             Resources resources = configContext.getResources(); // Get resources from the config context
             return resources.getString(stringId);
         } catch (Resources.NotFoundException e) {
-            Log.e("LocalizationError", "String resource not found for locale: " + localeId + ", ID: " + stringId, e);
+            Logger.e("String resource not found for locale: " + localeId + ", ID: " + stringId, e);
             return context.getString(stringId); // Fallback to default locale
         } catch (IllegalArgumentException e) {
-            Log.e("LocalizationError", "Invalid locale ID: " + localeId, e);
+            Logger.e("Invalid locale ID: " + localeId, e);
             return context.getString(stringId); // Fallback to default locale
         }
     }

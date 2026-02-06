@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <!-- Add data variables here if needed -->
+        <!-- Example:
+        <variable
+            name="viewModel"
+            type="com.nomyek.myapplication.ui.splash.SplashViewModel" />
+        -->
+    </data>     <!-- ImageView for GIF -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <com.jrm.view.gradient.GradientTextView
+            android:id="@+id/appNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/wix_madefor_display_bold"
+            android:gravity="center"
+            android:text="@string/app_name"
+            style="@style/textGradientApp"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_detail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="hello" />
+
+        <com.jrm.base.tracking.TrackableImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lottie_animation"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            android:layout_weight="1"
+            android:src="@drawable/icon_splash"
+            app:lottie_loop="true"/>
+    </LinearLayout>
+</layout>

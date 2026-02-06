@@ -2,7 +2,7 @@ package com.jrm.base
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import com.jrm.utils.Logger
 import com.ads.nomyek_admob.ads_components.YNMAds
 import com.ads.nomyek_admob.event.YNMAirBridge
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -24,9 +24,9 @@ class BaseEventLogger {
         fun initialize(context: Context) {
             try {
                 firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-                Log.d(TAG, "BaseEventLogger initialized successfully")
+                Logger.d( "BaseEventLogger initialized successfully")
             } catch (e: Exception) {
-                Log.e(TAG, "Error initializing BaseEventLogger: ${e.message}", e)
+                Logger.e( "Error initializing BaseEventLogger: ${e.message}", e)
             }
         }
         
@@ -47,7 +47,7 @@ class BaseEventLogger {
                     custom?.let { putAll(it) }
                 }
                 
-                Log.d(TAG, "Custom Event: $eventData")
+                Logger.d( "Custom Event: $eventData")
                 
                 // Push to Firebase Analytics
                 pushToFirebase(eventName, action, label, value, custom)
@@ -56,7 +56,7 @@ class BaseEventLogger {
                 pushToAirBridge(eventName, action, label, value, custom)
                 
             } catch (e: Exception) {
-                Log.e(TAG, "Error logging custom event: ${e.message}", e)
+                Logger.e( "Error logging custom event: ${e.message}", e)
             }
         }
         
@@ -153,10 +153,10 @@ class BaseEventLogger {
                     }
                     
                     analytics.logEvent(eventName, bundle)
-                    Log.d(TAG, "Event pushed to Firebase: $eventName")
+                    Logger.d( "Event pushed to Firebase: $eventName")
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error pushing to Firebase: ${e.message}", e)
+                Logger.e( "Error pushing to Firebase: ${e.message}", e)
             }
         }
         
@@ -182,10 +182,10 @@ class BaseEventLogger {
                     }
                     // Use YNMAirBridge logCustomEvent method
                     bridge.logCustomEvent(eventName, action?: "", label?: "", value?: 0, customMap)
-                    Log.d(TAG, "Event pushed to AirBridge: $eventName")
+                    Logger.d( "Event pushed to AirBridge: $eventName")
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error pushing to AirBridge: ${e.message}", e)
+                Logger.e( "Error pushing to AirBridge: ${e.message}", e)
             }
         }
         
@@ -215,7 +215,7 @@ class BaseEventLogger {
                     
                     // Log the screen_view_complete event for previous screen
                     logCustomEventInternal("screen_view_complete", null, currentScreen!!, currentScreenDuration, completeCustomParams)
-                    Log.d(TAG, "Auto screen view complete logged: $currentScreen, duration: ${currentScreenDuration}s")
+                    Logger.d( "Auto screen view complete logged: $currentScreen, duration: ${currentScreenDuration}s")
                     
                     // Update previous screen info for the new screen_view event
                     previousScreenDuration = currentScreenDuration
@@ -241,10 +241,10 @@ class BaseEventLogger {
                 // Log the screen_view event for new screen
                 logCustomEventInternal("screen_view", null, screenName, null, customParams)
                 
-                Log.d(TAG, "Screen view logged: $screenName, previous: $previousScreen, duration: ${previousScreenDuration}s")
+                Logger.d( "Screen view logged: $screenName, previous: $previousScreen, duration: ${previousScreenDuration}s")
                 
             } catch (e: Exception) {
-                Log.e(TAG, "Error logging screen view: ${e.message}", e)
+                Logger.e( "Error logging screen view: ${e.message}", e)
             }
         }
         
@@ -277,10 +277,10 @@ class BaseEventLogger {
                 // Log the screen_view_complete event with current screen duration as value
                 logCustomEventInternal("screen_view_complete", null, screenName, currentScreenDuration, customParams)
                 
-                Log.d(TAG, "Manual screen view complete logged: $screenName, duration: ${currentScreenDuration}s")
+                Logger.d( "Manual screen view complete logged: $screenName, duration: ${currentScreenDuration}s")
                 
             } catch (e: Exception) {
-                Log.e(TAG, "Error logging screen view complete: ${e.message}", e)
+                Logger.e( "Error logging screen view complete: ${e.message}", e)
             }
         }
         
@@ -301,7 +301,7 @@ class BaseEventLogger {
                     previousScreenDuration = 0
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error logging final screen complete: ${e.message}", e)
+                Logger.e( "Error logging final screen complete: ${e.message}", e)
             }
         }
         
@@ -314,7 +314,7 @@ class BaseEventLogger {
             currentScreenStartTime = 0
             previousScreen = null
             previousScreenDuration = 0
-            Log.d(TAG, "Screen tracking state reset")
+            Logger.d( "Screen tracking state reset")
         }
         
         /**
@@ -367,10 +367,10 @@ class BaseEventLogger {
                 
                 // Log the screen_view event for new screen
                 logCustomEventInternal("screen_view_fix", null, screenName, null, customParams)
-                Log.d(TAG, "Screen view logged: $screenName, previous: $previousScreen, duration: ${previousScreenDuration}s")
+                Logger.d( "Screen view logged: $screenName, previous: $previousScreen, duration: ${previousScreenDuration}s")
                 
             } catch (e: Exception) {
-                Log.e(TAG, "Error logging screen view: ${e.message}", e)
+                Logger.e( "Error logging screen view: ${e.message}", e)
             }
         }
     }

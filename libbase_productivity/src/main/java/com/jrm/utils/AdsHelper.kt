@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -17,14 +16,11 @@ import com.ads.nomyek_admob.ads_components.wrappers.AdsError
 import com.ads.nomyek_admob.ads_components.wrappers.AdsRewardItem
 import com.ads.nomyek_admob.event.YNMAirBridge
 import com.ads.nomyek_admob.event.YNMLogEventManager
-import com.ads.nomyek_admob.max.AppLovinCallback
-import com.ads.nomyek_admob.max.MaxNativePreload
 import com.ads.nomyek_admob.utils.AdsCallback
 import com.ads.nomyek_admob.utils.AdsInterMultiPreload
 import com.ads.nomyek_admob.utils.AdsNativeMultiPreload
 import com.ads.nomyek_admob.utils.AdsRewardMultiPreload
 import com.ads.nomyek_admob.utils.TypeAds
-import com.applovin.mediation.MaxError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdValue
@@ -297,9 +293,9 @@ object AdsHelper {
                 callback.run()
             }
 
-            Log.d(TAG, "Native full screen ad shown for $adPlaceConstant")
+            Logger.d("Native full screen ad shown for $adPlaceConstant")
         } catch (e: Exception) {
-            Log.e(TAG, "Error showing native full screen ad", e)
+            Logger.e("Error showing native full screen ad", e)
             callback.run()
         }
     }
@@ -347,28 +343,6 @@ object AdsHelper {
     @JvmStatic
     fun setUpSplashApp() {
         // Empty implementation
-    }
-    
-    /**
-     * Check if inter splash should be disabled based on remote config
-     * Format: "ss1,2,3" for session 1,2,3 or "d1,2,3" for day 1,2,3
-     * @return true if should be disabled, false otherwise
-     */
-    @JvmStatic
-    fun isDisableInterSplash(): Boolean {
-        val configValue = RemoteConfigManager.instance?.disableInterSplash ?: ""
-        return shouldDisableBasedOnConfig(configValue)
-    }
-    
-    /**
-     * Check if ads splash should be disabled based on remote config
-     * Format: "ss1,2,3" for session 1,2,3 or "d1,2,3" for day 1,2,3
-     * @return true if should be disabled, false otherwise
-     */
-    @JvmStatic
-    fun isDisableAdsSplash(): Boolean {
-        val configValue = RemoteConfigManager.instance?.disableAdsSplash ?: ""
-        return shouldDisableBasedOnConfig(configValue)
     }
     
     /**
@@ -524,7 +498,7 @@ object AdsHelper {
     ) {
         YNMAds.getInstance().setInitCallback {
             try {
-                android.util.Log.d("AdsHelper", "Starting to load inline adaptive banner: $adId")
+                Logger.d("Starting to load inline adaptive banner: $adId")
                 
                 // Get the ad size for inline adaptive banner
                 val adSize = getInlineAdaptiveBannerAdSize(activity, fixedHeightDp)
@@ -539,7 +513,7 @@ object AdsHelper {
                 adView.adListener = object : com.google.android.gms.ads.AdListener() {
                     override fun onAdLoaded() {
                         super.onAdLoaded()
-                        android.util.Log.d("AdsHelper", "Inline adaptive banner loaded successfully")
+                        Logger.d("Inline adaptive banner loaded successfully")
                         
                         // Clear container and add ad view
                         container.removeAllViews()
@@ -547,7 +521,7 @@ object AdsHelper {
                         container.visibility = View.VISIBLE
                         if (adView != null) {
                             adView.onPaidEventListener = OnPaidEventListener { adValue: AdValue? ->
-                                Log.d("", "OnPaidEvent banner:" + adValue!!.getValueMicros())
+                                Logger.d("OnPaidEvent banner:" + adValue!!.getValueMicros())
                                 YNMLogEventManager.logPaidAdImpression(
                                     activity,
                                     adValue,
@@ -561,29 +535,29 @@ object AdsHelper {
 
                     override fun onAdFailedToLoad(adError: LoadAdError) {
                         super.onAdFailedToLoad(adError)
-                        android.util.Log.e("AdsHelper", "Inline adaptive banner failed to load: ${adError.message} (code: ${adError.code})")
+                        Logger.e("Inline adaptive banner failed to load: ${adError.message} (code: ${adError.code})")
                         container.visibility = View.GONE
                         fallback.run()
                     }
 
                     override fun onAdClicked() {
                         super.onAdClicked()
-                        android.util.Log.d("AdsHelper", "Inline adaptive banner clicked")
+                        Logger.d("Inline adaptive banner clicked")
                     }
 
                     override fun onAdImpression() {
                         super.onAdImpression()
-                        android.util.Log.d("AdsHelper", "Inline adaptive banner impression")
+                        Logger.d("Inline adaptive banner impression")
                     }
 
                     override fun onAdOpened() {
                         super.onAdOpened()
-                        android.util.Log.d("AdsHelper", "Inline adaptive banner opened")
+                        Logger.d("Inline adaptive banner opened")
                     }
 
                     override fun onAdClosed() {
                         super.onAdClosed()
-                        android.util.Log.d("AdsHelper", "Inline adaptive banner closed")
+                        Logger.d("Inline adaptive banner closed")
                     }
                 }
                 
@@ -592,7 +566,7 @@ object AdsHelper {
                 adView.loadAd(adRequest)
                 
             } catch (e: Exception) {
-                android.util.Log.e("AdsHelper", "Error loading inline adaptive banner", e)
+                Logger.e("Error loading inline adaptive banner", e)
                 container.visibility = View.GONE
                 fallback.run()
             }
@@ -631,7 +605,7 @@ object AdsHelper {
             "Facebook",
             ignoreCase = true
         ) || adapterClassName.contains("Meta", ignoreCase = true))
-        Log.d("AdsHelper", "getLayoutForMetaNativeAd(NativeAd, admobResId, metaResId): adapterClassName=$adapterClassName, isMeta=$isMeta")
+        Logger.d("getLayoutForMetaNativeAd(NativeAd, admobResId, metaResId): adapterClassName=$adapterClassName, isMeta=$isMeta")
         return if (isMeta) {
             metaResId
         } else {
@@ -642,7 +616,7 @@ object AdsHelper {
     //for splash and language
     @JvmStatic
     fun getLayoutForMetaNativeAd(nativeAd: NativeAd?): Int {
-        Log.d("AdsHelper", "getLayoutForMetaNativeAd(NativeAd)")
+        Logger.d("getLayoutForMetaNativeAd(NativeAd)")
         return getLayoutForMetaNativeAd(
             nativeAd,
             R.layout.custom_native_admob_large,
@@ -653,7 +627,7 @@ object AdsHelper {
     //for a specific target
     @JvmStatic
     fun getLayoutForMetaNativeAd(placeName: String): Int {
-        Log.d("AdsHelper", "getLayoutForMetaNativeAd(placeName=$placeName)")
+        Logger.d("getLayoutForMetaNativeAd(placeName=$placeName)")
         return getLayoutForMetaNativeAd(
             AdsNativeMultiPreload.getPreloadedAd(placeName),
             R.layout.custom_native_admob_large,
@@ -664,7 +638,7 @@ object AdsHelper {
     //for a specific target
     @JvmStatic
     fun getLayoutForMetaNativeAd(placeName: String, target: String): Int {
-        Log.d("AdsHelper", "getLayoutForMetaNativeAd(placeName=$placeName, target=$target)")
+        Logger.d("getLayoutForMetaNativeAd(placeName=$placeName, target=$target)")
         if (placeName == target)
             return getLayoutForMetaNativeAd(placeName)
         else return R.layout.custom_native_admob_large
@@ -704,13 +678,13 @@ object AdsHelper {
 
         when {
             isAlreadyPreloaded -> {
-                android.util.Log.d("PreviewActivityIntro", "[$adPlace] Ad already preloaded, skipping")
+                Logger.d("[$adPlace] Ad already preloaded, skipping")
             }
             isCurrentlyLoading -> {
-                android.util.Log.d("PreviewActivityIntro", "[$adPlace] Ad is currently loading, skipping")
+                Logger.d("[$adPlace] Ad is currently loading, skipping")
             }
             else -> {
-                android.util.Log.d("PreviewActivityIntro", "[$adPlace] Starting preload")
+                Logger.d("[$adPlace] Starting preload")
                 CollapsibleNativeAdManager.preloadAds(
                     context,
                     RemoteConfigManager.instance?.nativeClDrawIds ?: "",

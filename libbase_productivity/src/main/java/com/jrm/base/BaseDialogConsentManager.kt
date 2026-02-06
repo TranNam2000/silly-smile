@@ -3,7 +3,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.preference.PreferenceManager
-import android.util.Log
+import com.jrm.utils.Logger
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
@@ -69,7 +69,7 @@ abstract class BaseDialogConsentManager {
         consentInformation = getConsentInformation(activity)
         
         val startTime = System.currentTimeMillis()
-        Log.d("ConsentDialog", "requestConsentInfoUpdate started at: ${
+        Logger.d("requestConsentInfoUpdate started at: ${
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(
                 Date(startTime)
             )}")
@@ -80,21 +80,21 @@ abstract class BaseDialogConsentManager {
             {
                 val endTime = System.currentTimeMillis()
                 val duration = endTime - startTime
-                Log.d("ConsentDialog", "requestConsentInfoUpdate completed successfully at: ${
+                Logger.d("requestConsentInfoUpdate completed successfully at: ${
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(
                         Date(endTime)
                     )}")
-                Log.d("ConsentDialog", "requestConsentInfoUpdate duration: ${duration}ms")
+                Logger.d("requestConsentInfoUpdate duration: ${duration}ms")
                 
                 UserMessagingPlatform.loadConsentForm(
                     activity.application,
                     { consentForm: ConsentForm? ->
                         this.consentForm = consentForm
                         isDialogLoading = false
-                        Log.d("ConsentDialog", "Consent form loaded successfully, ready to show popup")
+                        Logger.d("Consent form loaded successfully, ready to show popup")
                     }) { formError: FormError ->
                     if (loadFailListener != null) {
-                        Log.d("LoadConsentForm:", formError.message)
+                        Logger.d(formError.message)
                         retryTimes++
                         if (retryTimes == 3) {
                             retryTimes = 0
@@ -109,12 +109,12 @@ abstract class BaseDialogConsentManager {
             // Consent gathering failed.
             val endTime = System.currentTimeMillis()
             val duration = endTime - startTime
-            Log.d("ConsentDialog", "requestConsentInfoUpdate failed at: ${
+            Logger.d("requestConsentInfoUpdate failed at: ${
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(
                     Date(endTime)
                 )}")
-            Log.d("ConsentDialog", "requestConsentInfoUpdate failed duration: ${duration}ms")
-            Log.e("ConsentDialog", "Error: ${requestConsentError.errorCode} - ${requestConsentError.message}")
+            Logger.d("requestConsentInfoUpdate failed duration: ${duration}ms")
+            Logger.e("Error: ${requestConsentError.errorCode} - ${requestConsentError.message}")
             
             retryTimes++
             if (retryTimes == 3) {
@@ -130,8 +130,8 @@ abstract class BaseDialogConsentManager {
         requestConsentError: FormError,
         listener: UserMessagingPlatform.OnConsentFormLoadFailureListener?
     ) {
-        Log.w(
-            "ConsentTag", String.format(
+        Logger.w(
+            String.format(
                 "%s: %s",
                 requestConsentError.errorCode,
                 requestConsentError.message
@@ -148,7 +148,7 @@ abstract class BaseDialogConsentManager {
         BaseEventLogger.logCustomEvent("show_gdpr")
         val isConsentedPrev = canRequestAds(activity)
         val showTime = System.currentTimeMillis()
-        Log.d("ConsentDialog", "Consent popup shown at: ${
+        Logger.d("Consent popup shown at: ${
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(
                 Date(showTime)
             )}")
@@ -157,16 +157,16 @@ abstract class BaseDialogConsentManager {
             consentForm.show(activity) { formError: FormError? ->
                 val dismissTime = System.currentTimeMillis()
                 val displayDuration = dismissTime - showTime
-                Log.d("ConsentDialog", "Consent popup dismissed at: ${
+                Logger.d("Consent popup dismissed at: ${
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(
                         Date(dismissTime)
                     )}")
-                Log.d("ConsentDialog", "Consent popup display duration: ${displayDuration}ms")
+                Logger.d("Consent popup display duration: ${displayDuration}ms")
                 
                 if (formError != null) {
-                    Log.e("ConsentDialog", "Consent form dismissed with error: ${formError.errorCode} - ${formError.message}")
+                    Logger.e("Consent form dismissed with error: ${formError.errorCode} - ${formError.message}")
                 } else {
-                    Log.d("ConsentDialog", "Consent form dismissed successfully")
+                    Logger.d("Consent form dismissed successfully")
                 }
                 
 //                if (canRequestAds(activity)) {
@@ -178,7 +178,7 @@ abstract class BaseDialogConsentManager {
                 dismissedListener?.onConsentFormDismissed(formError)
             }
         } catch (e: Exception) {
-            Log.e("ConsentDialog", "Exception showing consent form", e)
+            Logger.e("Exception showing consent form", e)
             e.printStackTrace()
         }
     }
@@ -248,8 +248,8 @@ abstract class BaseDialogConsentManager {
             ConsentInformation.OnConsentInfoUpdateFailureListener { requestConsentError: FormError ->
                 // Consent gathering failed.
                 failureListener?.onConsentInfoUpdateFailure(requestConsentError)
-                Log.w(
-                    "ConsentTag", String.format(
+                Logger.w(
+                    String.format(
                         "%s: %s",
                         requestConsentError.errorCode,
                         requestConsentError.message

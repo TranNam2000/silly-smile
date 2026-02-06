@@ -1,7 +1,7 @@
 package com.jrm.onboarding.consent_dialog
 
 import android.app.Activity
-import android.util.Log
+import com.jrm.utils.Logger
 import com.ads.nomyek_admob.event.YNMAirBridge
 import com.applovin.sdk.AppLovinPrivacySettings
 import com.bytedance.sdk.openadsdk.api.PAGConstant
@@ -53,7 +53,7 @@ class ConsentDialogManager : BaseDialogConsentManager() {
                 ) { loadAndShowError ->
                     if (loadAndShowError != null) {
                         // Consent gathering failed.
-                        Log.w("TAG", "${loadAndShowError.errorCode}: ${loadAndShowError.message}")
+                        Logger.w( "${loadAndShowError.errorCode}: ${loadAndShowError.message}")
                     }
 
                     if (isPrivacyOptionsRequired()) {
@@ -92,7 +92,7 @@ class ConsentDialogManager : BaseDialogConsentManager() {
             }
         ) { requestConsentError ->
             // Consent gathering failed.
-            Log.w("TAG", "${requestConsentError.errorCode}: ${requestConsentError.message}")
+            Logger.w( "${requestConsentError.errorCode}: ${requestConsentError.message}")
             YNMAirBridge.getInstance().logCustomEvent("consent", "error")
             listener.onConsentFormDismissed(ConsentDialogState.REJECTED)
         }

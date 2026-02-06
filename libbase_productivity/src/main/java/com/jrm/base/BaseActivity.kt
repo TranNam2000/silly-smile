@@ -1,13 +1,12 @@
 package com.jrm.base
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import com.jrm.utils.Logger
 import android.view.MotionEvent
 import android.view.View
 import android.view.Window
@@ -15,10 +14,12 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.ads.nomyek_admob.admobs.AppOpenManager
 import com.ads.nomyek_admob.ads_components.YNMAds
@@ -29,45 +30,31 @@ import com.ads.nomyek_admob.ads_components.wrappers.AdsError
 import com.ads.nomyek_admob.event.YNMAirBridge
 import com.ads.nomyek_admob.utils.AdsNativeMultiPreload
 import com.google.android.gms.ads.nativead.NativeAd
-import com.jrm.BuildConfig
 import com.jrm.R
 import com.jrm.ads.CollapsibleNativeAdManager
+import com.jrm.service.WaterfallAdHelper
+import com.jrm.utils.AdsHelper
 import com.jrm.utils.BaseConstants
-import com.jrm.utils.remote_config.RemoteConfigManager
+import com.jrm.utils.InternetUtil
 import com.jrm.utils.LocaleHelper
 import com.jrm.utils.SharedPref
-import com.jrm.utils.AdsHelper
+import com.jrm.utils.remote_config.RemoteConfigManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
+
     protected lateinit var viewBinding: VB
     public var activityName: String = this::class.java.simpleName
     private var listBannerId: List<String> = listOf()
     private var refreshBannerTime: Int = 0
     private var refreshNativeBannerTime: Long = 0
     private var refreshNativeTime: Long = 0
-    private var refreshHandler: Handler? = null
-    private var refreshRunnable: Runnable? = null
-    private var refreshNativeHandler: Handler? = null
-    private var refreshNativeRunnable: Runnable? = null
-    private var refreshGeneralNativeHandler: Handler? = null
-    private var refreshGeneralNativeRunnable: Runnable? = null
     public var isInForeground: Boolean = true
     private var typeBanner: String = "normal"
     private var interstitialCheckJob: Job? = null
-
-    // Track current native ad configuration for refresh
-    private var currentNativeAdConfig: NativeAdConfig? = null
-
-    private data class NativeAdConfig(
-        val listAdId: List<AdsNativeMultiPreload.AdIdModel>,
-        val adPlace: String,
-        val nativeAdViewId: String,
-        val layoutResId: Int
-    )
 
     // Flag to disable screen tracking for container activities (activities that only host fragments)
     protected var enableScreenTracking: Boolean = true
@@ -172,6 +159,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         }
     }
 
+
     fun loadBanner(id:String) {
         findViewByName<View>("bannerView")?.let {
             if (!AdsHelper.isDisableAllAd()) {
@@ -245,200 +233,26 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         }
 
     }
+    fun showNoNetworkDialog(onNetworkCheckCompleted: () -> Unit) {
+        val dialogBinding =
+            android.view.LayoutInflater.from(this).inflate(R.layout.dialog_no_internet, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(dialogBinding)
+        builder.setCancelable(false)
 
-    fun showRefreshMultiIdBanner() {
-        // Load banner initially
-        loadMultiIdBanner()
+        val dialog = builder.create()
+        dialog.window?.setBackgroundDrawable(android.graphics.Color.TRANSPARENT.toDrawable())
 
-        // Start refresh timer if refreshBannerTime > 0
-        if (refreshBannerTime > 0) {
-            startBannerRefreshTimer()
-        }
-    }
-
-    private fun startBannerRefreshTimer() {
-        // Cancel existing timer if any
-        stopBannerRefreshTimer()
-
-        refreshHandler = Handler(Looper.getMainLooper())
-        refreshRunnable = object : Runnable {
-            override fun run() {
-                // Only refresh if app is in foreground
-                if (isInForeground) {
-                    loadMultiIdBanner()
-                }
-
-                // Schedule next refresh
-                refreshHandler?.postDelayed(this, (refreshBannerTime * 1000).toLong())
+        val btnRetry = dialogBinding.findViewById<android.view.View>(R.id.btn_retry)
+        btnRetry.setOnClickListener {
+            if (InternetUtil.isNetworkAvailable(this)) {
+                onNetworkCheckCompleted.invoke()
+            } else {
+                showNoNetworkDialog(onNetworkCheckCompleted)
             }
         }
 
-        // Start the timer
-        refreshHandler?.postDelayed(refreshRunnable!!, (refreshBannerTime * 1000).toLong())
-    }
-
-    private fun stopBannerRefreshTimer() {
-        refreshRunnable?.let { runnable ->
-            refreshHandler?.removeCallbacks(runnable)
-        }
-        refreshRunnable = null
-        refreshHandler = null
-    }
-
-    private fun startNativeBannerRefreshTimer() {
-        // Cancel existing timer if any
-        stopNativeBannerRefreshTimer()
-
-        refreshNativeHandler = Handler(Looper.getMainLooper())
-        refreshNativeRunnable = object : Runnable {
-            override fun run() {
-                // Only refresh if app is in foreground
-                loadNativeBanner()
-                // Schedule next refresh
-                refreshNativeHandler?.postDelayed(this, (refreshNativeBannerTime * 1000).toLong())
-            }
-        }
-
-        // Start the timer
-        refreshNativeHandler?.postDelayed(refreshNativeRunnable!!, (refreshNativeBannerTime * 1000).toLong())
-    }
-
-    private fun stopNativeBannerRefreshTimer() {
-        refreshNativeRunnable?.let { runnable ->
-            refreshNativeHandler?.removeCallbacks(runnable)
-        }
-        refreshNativeRunnable = null
-        refreshNativeHandler = null
-    }
-
-    fun showRefreshNativeBanner() {
-        // Load native banner initially
-        loadNativeBanner()
-
-        // Start refresh timer if refreshNativeBannerTime > 0
-        if (refreshNativeBannerTime > 0) {
-            startNativeBannerRefreshTimer()
-        }
-    }
-
-    /**
-     * General native ads methods with customizable parameters
-     */
-    fun showRefreshNative(
-        listAdId: List<AdsNativeMultiPreload.AdIdModel>,
-        adPlace: String,
-        nativeAdViewId: String = "nativeAd",
-        layoutResId: Int = com.jrm.R.layout.custom_native_admob_medium
-    ) {
-        // Save configuration for refresh
-        currentNativeAdConfig = NativeAdConfig(listAdId, adPlace, nativeAdViewId, layoutResId)
-
-        // Load native ad initially
-        loadNative(listAdId, adPlace, nativeAdViewId, layoutResId)
-
-        // Start refresh timer if refreshNativeTime > 0
-        if (refreshNativeTime > 0) {
-            startGeneralNativeRefreshTimer()
-        }
-    }
-
-    fun loadNative(
-        listAdId: List<AdsNativeMultiPreload.AdIdModel>,
-        adPlace: String,
-        nativeAdViewId: String = "nativeAd",
-        layoutResId: Int = com.jrm.R.layout.custom_native_admob_medium
-    ) {
-        if (!isInForeground || AppOpenManager.getInstance().isInterstitialShowing || isDestroyed || isFinishing) {
-            return
-        }
-
-        if (AdsHelper.isDisableAllAd()) {
-            findViewByName<YNMNativeAdView>(nativeAdViewId)?.visibility = View.GONE
-            return
-        }
-
-        YNMAds.getInstance().setInitCallback {
-            ////////
-            YNMAds.getInstance().setInitCallback {
-                var adView: YNMNativeAdView? = findViewByName<YNMNativeAdView>(nativeAdViewId)
-                if (adView != null) {
-                    AdsHelper.checkAndShowNativeMissing(this, layoutResId, listOf(BaseConstants.NATIVE_SPLASH,
-                        BaseConstants.NATIVE_LANGUAGE2, BaseConstants.NATIVE_ONBOARD_1, BaseConstants.NATIVE_ONBOARD_2, BaseConstants.NATIVE_ONBOARD_3, BaseConstants.NATIVE_ONBOARD_4, BaseConstants.NATIVE_ONBOARD_5), adView,
-                        {
-                        }
-                    ) {
-                        AdsNativeMultiPreload.preloadMultipleNativeAds(
-                            this,
-                            YNMAirBridge.AppData(activityName, adPlace),
-                            listAdId,
-                            adPlace,
-                            object : YNMAdsCallbacks() {
-                                override fun onNativeAdLoaded(nativeAd: NativeAd) {
-                                    super.onNativeAdLoaded(nativeAd)
-                                    // Show the native ad in the native ad view if available
-                                    findViewByName<YNMNativeAdView>(nativeAdViewId)?.let { adView ->
-                                        AdsNativeMultiPreload.showPreloadedNativeAd(
-                                            this@BaseActivity,
-                                            adView,
-                                            adPlace,
-                                            layoutResId,
-                                            layoutResId
-                                        )
-                                    }
-                                }
-
-                                override fun onAdClicked() {
-                                    super.onAdClicked()
-                                    // Log ad click event
-                                    BaseEventLogger.logEvent(
-                                        "native_ad_clicked",
-                                        "click",
-                                        adPlace,
-                                        1,
-                                        mapOf(
-                                            "screen_name" to activityName,
-                                            "ad_place" to adPlace
-                                        )
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            ////////
-
-        }
-    }
-
-    private fun startGeneralNativeRefreshTimer() {
-        // Cancel existing timer if any
-        stopGeneralNativeRefreshTimer()
-
-        refreshGeneralNativeHandler = Handler(Looper.getMainLooper())
-        refreshGeneralNativeRunnable = object : Runnable {
-            override fun run() {
-                // Only refresh if app is in foreground and config exists
-                if (isInForeground) {
-                    currentNativeAdConfig?.let { config ->
-                        loadNative(config.listAdId, config.adPlace, config.nativeAdViewId, config.layoutResId)
-                    }
-                }
-                // Schedule next refresh
-                refreshGeneralNativeHandler?.postDelayed(this, (refreshNativeTime * 1000).toLong())
-            }
-        }
-
-        // Start the timer
-        refreshGeneralNativeHandler?.postDelayed(refreshGeneralNativeRunnable!!, (refreshNativeTime * 1000).toLong())
-    }
-
-    private fun stopGeneralNativeRefreshTimer() {
-        refreshGeneralNativeRunnable?.let { runnable ->
-            refreshGeneralNativeHandler?.removeCallbacks(runnable)
-        }
-        refreshGeneralNativeRunnable = null
-        refreshGeneralNativeHandler = null
+        dialog.show()
     }
 
     companion object {
@@ -517,12 +331,12 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
 
         interstitialCheckJob = lifecycleScope.launch {
             // Check every 1 second until interstitial is closed or user exits
-            Log.d(activityName, "waitForInterstitialToClose: ")
+            Logger.d("waitForInterstitialToClose: ")
             while (isActive && isInForeground) {
                 // Wait 1 second before checking
                 delay(500)
 
-                Log.d(activityName, "waitForInterstitialToClose run ")
+                Logger.d("waitForInterstitialToClose run ")
                 if (!AppOpenManager.getInstance().isInterstitialShowing) {
                     // Interstitial closed, log screen view
                     BaseEventLogger.logScreenViewResume(activityName)
@@ -530,7 +344,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
                     break
                 }
             }
-            Log.d(activityName, "waitForInterstitialToClose end ")
+            Logger.d("waitForInterstitialToClose end ")
         }
     }
 
@@ -554,9 +368,6 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopBannerRefreshTimer()
-        stopNativeBannerRefreshTimer()
-        stopGeneralNativeRefreshTimer()
         stopInterstitialCheck()
         destroyCollapsibleNativeAd()
 
@@ -735,12 +546,12 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
 
             // Set ad loaded callback
             manager.setOnAdLoadedCallback {
-                Log.d(activityName, "Preloaded collapsible native ad shown successfully")
+                Logger.d("Preloaded collapsible native ad shown successfully")
             }
 
             // Set ad failed callback
             manager.setOnAdFailedCallback {
-                Log.e(activityName, "Failed to show preloaded collapsible native ad")
+                Logger.e("Failed to show preloaded collapsible native ad")
                 onAdFailed?.invoke()
             }
 
@@ -777,28 +588,62 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         com.jrm.ads.CollapsibleNativeAdManager.waitForPreload(adPlace) { success ->
             if (success) {
                 // Preload succeeded, show the ad
-                Log.d(activityName, "Preload completed successfully, showing ad")
+                Logger.d( "Preload completed successfully, showing ad")
                 showCollapsibleNativeAdWithCallback(adPlace, onCollapse, onAdFailed)
             } else {
                 // Preload failed or doesn't exist
-                Log.e(activityName, "Preload failed or doesn't exist")
+                Logger.e("Preload failed or doesn't exist")
                 onAdFailed?.invoke()
             }
         }
     }
 
     /**
-     * Show preloaded collapsible native ad with smart handling
-     * This method will:
-     * 1. If ad is already preloaded -> show immediately
-     * 2. If ad is loading -> wait for it to complete, then show
-     * 3. If preload failed or doesn't exist -> call onAdFailed
-     *
-     * @param adPlace Ad placement identifier (same as used in preloadAds)
-     * @param adConfigString Config string for preload if not already loading (format: "MAX_NATIVE:id,NATIVE:id")
-     * @param onCollapse Callback when user collapses the ad (e.g., start waterfall ads)
-     * @param onAdFailed Callback when ad fails to show or preload fails
+     * Helper to load and show ads (Native or Interstitial) using WaterfallAdHelper.
+     * When banner is inside a Fragment, pass [lifecycleOwner] = fragment so reload
+     * pauses when fragment is hidden and resumes when fragment is visible.
      */
+    fun loadAds(
+        placementId: String,
+        adView: View? = null,
+        onSuccess: (() -> Unit)? = null,
+        onFailure: (() -> Unit)? = null,
+        isShow: Boolean = true,
+        lifecycleOwner: LifecycleOwner? = null
+    ) {
+        WaterfallAdHelper.loadAd(
+            activity = this,
+            activityName = activityName,
+            placementName = placementId,
+            adView = adView,
+            isShow = isShow,
+            onSuccess = onSuccess,
+            onFailure = onFailure,
+            lifecycleOwner = lifecycleOwner
+        )
+    }
+
+    /**
+     * Helper to preload ads (Native or Interstitial) using WaterfallAdHelper
+     * @param placementId Placement ID from remote config
+     * @param onSuccess Callback on success
+     * @param onFailure Callback on failure
+     */
+    fun preloadAds(
+        placementId: String,
+        onSuccess: (() -> Unit)? = null,
+        onFailure: (() -> Unit)? = null
+    ) {
+        WaterfallAdHelper.loadAd(
+            activity = this,
+            activityName = activityName,
+            placementName = placementId,
+            adView = null,
+            onSuccess = onSuccess,
+            onFailure = onFailure,
+            isShow = false
+        )
+    }
     protected fun showPreloadedCollapsibleNativeAdSmart(
         adPlace: String,
         adConfigString: String = "",
@@ -817,7 +662,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         when {
             // Case 1: Ad is already preloaded - show immediately
             isAlreadyPreloaded -> {
-                Log.d(activityName, "[$adPlace] Ad already preloaded, showing immediately")
+                Logger.d( "[$adPlace] Ad already preloaded, showing immediately")
                 showCollapsibleNativeAdWithCallback(
                     adPlace = adPlace,
                     onCollapse = onCollapse,
@@ -827,15 +672,15 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
 
             // Case 2: Ad is loading - wait for it to complete
             isCurrentlyLoading -> {
-                Log.d(activityName, "[$adPlace] Ad is loading, waiting for completion...")
+                Logger.d( "[$adPlace] Ad is loading, waiting for completion...")
                 waitAndShowCollapsibleNativeAd(
                     adPlace = adPlace,
                     onCollapse = onCollapse,
                     onAdFailed = {
                         // Preload failed after waiting - try load from scratch if config provided
-                        Log.d(activityName, "[$adPlace] Preload failed after waiting")
+                        Logger.d( "[$adPlace] Preload failed after waiting")
                         if (adConfigString.isNotEmpty()) {
-                            Log.d(activityName, "[$adPlace] Loading from scratch with config")
+                            Logger.d( "[$adPlace] Loading from scratch with config")
                             loadCollapsibleNativeAdFromConfig(adPlace, adConfigString, onCollapse)
                         } else {
                             onAdFailed?.invoke()
@@ -846,9 +691,9 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
 
             // Case 3: No preload or preload failed - try load from scratch if config provided
             else -> {
-                Log.d(activityName, "[$adPlace] No preload or preload failed")
+                Logger.d( "[$adPlace] No preload or preload failed")
                 if (adConfigString.isNotEmpty()) {
-                    Log.d(activityName, "[$adPlace] Starting preload with config")
+                    Logger.d( "[$adPlace] Starting preload with config")
                     // Start preload
                     CollapsibleNativeAdManager.preloadAds(
                         this,
@@ -888,14 +733,14 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         // Check retry count to prevent infinite loop
         val retryCount = collapsibleNativeAdRetryCount.getOrDefault(adPlace, 0)
         if (retryCount >= MAX_COLLAPSIBLE_NATIVE_AD_RETRY) {
-            Log.e(activityName, "[$adPlace] Max retry attempts reached ($MAX_COLLAPSIBLE_NATIVE_AD_RETRY), stopping to prevent infinite loop")
+            Logger.e("[$adPlace] Max retry attempts reached ($MAX_COLLAPSIBLE_NATIVE_AD_RETRY), stopping to prevent infinite loop")
             collapsibleNativeAdRetryCount.remove(adPlace)
             return
         }
         
         // Increment retry count
         collapsibleNativeAdRetryCount[adPlace] = retryCount + 1
-        Log.d(activityName, "[$adPlace] Loading from config, retry attempt: ${retryCount + 1}")
+        Logger.d( "[$adPlace] Loading from config, retry attempt: ${retryCount + 1}")
         
         (collapsibleNativeAdManager as? CollapsibleNativeAdManager)?.let { manager ->
             // Clear previous callbacks to prevent stale references
@@ -909,7 +754,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
             
             // Set success callback to reset retry count
             manager.setOnAdLoadedCallback {
-                Log.d(activityName, "[$adPlace] Ad loaded successfully, resetting retry count")
+                Logger.d( "[$adPlace] Ad loaded successfully, resetting retry count")
                 collapsibleNativeAdRetryCount.remove(adPlace)
             }
 

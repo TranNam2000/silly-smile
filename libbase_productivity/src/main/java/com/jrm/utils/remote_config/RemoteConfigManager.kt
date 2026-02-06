@@ -3,66 +3,39 @@ package com.jrm.utils.remote_config
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import android.util.Log
-import android.util.Patterns
 import com.ads.nomyek_admob.utils.AdsInterMultiPreload
 import com.ads.nomyek_admob.utils.AdsNativeMultiPreload
 import com.ads.nomyek_admob.utils.AdsRewardMultiPreload
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.gson.Gson
 import com.jrm.BuildConfig
 import com.jrm.R
-import com.jrm.utils.BaseConstants
-import com.jrm.utils.InternetUtil
+import com.jrm.model.AdConfigModel
+import com.jrm.model.IdRegistryModel
 import com.jrm.utils.BaseUtils
-import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
+import com.jrm.utils.InternetUtil
+import com.jrm.utils.Logger
+import kotlinx.coroutines.delay
 
 class RemoteConfigManager {
     private var remoteConfig: FirebaseRemoteConfig? = null
     private var isLoading = false
-    var numberScreenObd: Long = 5;
-    var timeReloadBanner: Long = 30;
+    var numberScreenObd: Int = 5;
     var timeReloadNative: Long = 30;
     var timeOutSplash: Long = 10000
-    var retryHigh: Boolean = true
     var languageOrder: String = ""
     var disableObdAds: Boolean = false
     var disableAllAds: Boolean = false
-    var adIdsOrder202: String = "Max,High,All"
-    var adIdsOrder302: String = "Max,High,All"
-
     // New remote config flags for ads
-    var interSpl: Boolean = true
-    var interHighSpl: Boolean = true
-    var nativeSpl: Boolean = true
-    var nativeHighSpl: Boolean = true
     var bannerHighSpl: Boolean = true
     var bannerSpl: Boolean = true
-    var lfo1: Boolean = true
-    var lfo1High: Boolean = true
-    var lfo2: Boolean = true
-    var lfo2High: Boolean = true
-    var lfo2Max: Boolean = true
-    var ob1: Boolean = true
-    var ob1High: Boolean = true
-    var ob2: Boolean = true
-    var ob2High: Boolean = true
-    var ob2Max: Boolean = true
-    var ob3: Boolean = true
-    var ob3High: Boolean = true
-    var ob3Max: Boolean = true
-    var ob4: Boolean = true
-    var ob4High: Boolean = true
-    var ob5: Boolean = true
-    var ob5High: Boolean = true
-    var ob6: Boolean = true
-    var ob6High: Boolean = true
     var interstitialRule: String = "1/2"
+    var timeInterstitialCooldown: Long = 30
+    var timeOutFullScreenAd: Long = 3000
+    var timeOutReward: Long = 5
     var formatTypeSplash = "native"
     var preloadInterFinishObdIndex: Long = 3
-    var formatBannerHome = "collab"
     var timeReloadNativeBanner: Long = 30
     var upgradePopup: String = "hide"
     var minTimeSplash: Long = 8000
@@ -87,24 +60,38 @@ class RemoteConfigManager {
     var rewardHighIds :String =""
     var nativeDrawIds:String = ""
     var nativeClDrawIds: String = ""
-    var isSubmiting: Boolean = false
     var boostFNativeObd: Boolean = false
-    var boostCollapHome: Boolean = false
-    var boostCollapDraw: Boolean = false
-    var enableClPreview1: Boolean = false
-    var enableClPreview2: Boolean = false
     var numberFinishObd: Long = 2
     var fsnAfterInter: Boolean = false
     var interClickIds: String = ""
     var fsnClickIds: String = ""
     var homeNativeIds: String = ""
     var homeNabanerIds: String = ""
-    var timeReloadCollapDraw: Long = 60
+    var adConfig: AdConfigModel? = null
+    var idRegistry: IdRegistryModel? = null
+
+    fun init(context: Context) {
+        loadRemote(context) {
+            timeOutSplash = (adConfig?.screenObd?.splash?.timeOutSplash ?: 12) * 1000L
+            minTimeSplash = (adConfig?.screenObd?.splash?.minTimeSplash ?: 8) * 1000L
+            numberScreenObd = adConfig?.screenObd?.onboarding?.numberScreen ?: 5
+            numberFinishObd = adConfig?.configs?.numberFinishObd?.toLong() ?: 2
+            disableAllAds = adConfig?.configs?.disableAllAd ?: false
+            disableObdAds = adConfig?.configs?.disableObdAd ?: false
+            interstitialRule = adConfig?.configs?.interstitialRule ?: "1/2"
+            timeInterstitialCooldown = adConfig?.configs?.timeInterstitialCooldown ?: 30
+            timeOutFullScreenAd = adConfig?.configs?.timeOutFullScreenAd ?: 5
+            timeOutReward = adConfig?.configs?.timeOutReward ?: 5
+            enableBtnContinueSplash = adConfig?.screenObd?.splash?.enableBtnContinue ?: true
+        }
+    }
+
     fun loadRemote(context: Context, onFinishDataJson: (() -> Unit)? = null) {
         if (isLoading) {
             return
         }
         isLoading = true
+
         val config = FirebaseRemoteConfig.getInstance()
         val configSettings =
             FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(0).build()
@@ -114,82 +101,73 @@ class RemoteConfigManager {
             FirebaseRemoteConfig.getInstance().activate().addOnCompleteListener {
                 isLoading = false
                 remoteConfig = FirebaseRemoteConfig.getInstance()
-                numberScreenObd = 4
-                // Load enable ID Session2 for each ad type
-                enableIdSession2 = config.getBoolean("enable_id_session2_new")
-                timeReloadBanner = config.getLong("time_reload_banner")
-                timeReloadNative = config.getLong("time_reload_native")
-                timeOutSplash = config.getLong("time_out_splash")
-                retryHigh = config.getBoolean("retry_high")
-                languageOrder = config.getString("language_order")
-                disableAllAds = config.getBoolean("disable_all_ads")
-                disableObdAds = config.getBoolean("disable_obd_ads")
-                // Load new remote config flags
-                interSpl = config.getBoolean("inter_spl")
-                interHighSpl = config.getBoolean("inter_high_spl")
-                nativeSpl = config.getBoolean("native_spl")
-                nativeHighSpl = config.getBoolean("native_high_spl")
-                bannerSpl = config.getBoolean("banner_spl")
-                bannerHighSpl = config.getBoolean("banner_high_spl")
-                lfo1 = config.getBoolean("lfo1")
-                lfo1High = config.getBoolean("lfo1_high")
-                lfo2 = config.getBoolean("lfo2")
-                lfo2High = config.getBoolean("lfo2_high")
-                lfo2Max = config.getBoolean("lfo2_max")
-                ob1 = config.getBoolean("ob1")
-                ob1High = config.getBoolean("ob1_high")
-                ob2 = config.getBoolean("ob2")
-                ob2High = config.getBoolean("ob2_high")
-                ob2Max = config.getBoolean("ob2_max")
-                ob3 = config.getBoolean("ob3")
-                ob3High = config.getBoolean("ob3_high")
-                ob3Max = config.getBoolean("ob3_max")
-                ob4 = config.getBoolean("ob4")
-                ob4High = config.getBoolean("ob4_high")
-                ob5 = config.getBoolean("ob5")
-                ob5High = config.getBoolean("ob5_high")
-                ob6 = config.getBoolean("ob6")
-                ob6High = config.getBoolean("ob6_high")
-                adIdsOrder202 = config.getString("ad_ids_order_202")
-                adIdsOrder302 = config.getString("ad_ids_order_302")
-                interstitialRule = config.getString("interstitial_rule")
-                formatTypeSplash = config.getString("format_splash")
-                preloadInterFinishObdIndex = config.getLong("preload_inter_obd_index")
-                formatBannerHome = config.getString("format_banner_home")
-                timeReloadNativeBanner = config.getLong("time_reload_native_banner")
-                upgradePopup = config.getString("upgrade_popup")
-                minTimeSplash = config.getLong("min_time_splash")
+                try {
+                    var adConfigJson = config.getString("ad_config")
+                    if (adConfigJson.isEmpty()) {
+                        Logger.d("ad_config empty, loading from raw")
+                        try {
+                            val inputStream =
+                                context.resources.openRawResource(R.raw.ad_config_quran_android_1)
+                            adConfigJson = inputStream.bufferedReader().use { it.readText() }
+                        } catch (e: Exception) {
+                            Logger.e("Error reading local ad config", e)
+                        }
+                    }
 
+                    if (adConfigJson.isNotEmpty()) {
+                        adConfig = Gson().fromJson(adConfigJson, AdConfigModel::class.java)
+                        if (adConfig?.sessionConfigs.isNullOrEmpty()) {
+                            Logger.d("ad_config has no session_configs (old format?), loading from raw")
+                            try {
+                                adConfigJson =
+                                    context.resources.openRawResource(R.raw.ad_config_quran_android_1)
+                                        .bufferedReader().use { it.readText() }
+                                adConfig = Gson().fromJson(adConfigJson, AdConfigModel::class.java)
+                            } catch (e2: Exception) {
+                                Logger.e("Error loading ad config from raw fallback", e2)
+                            }
+                        }
+                        val sessions = adConfig?.sessionConfigs?.size ?: 0
+                        val placements = adConfig?.adPlacements?.size ?: 0
+                        Logger.d("Ad config loaded: sessionConfigs=$sessions, adPlacements=$placements")
+                    }
+                } catch (e: Exception) {
+                    Logger.e("Error parsing ad config", e)
+                    try {
+                        val rawJson =
+                            context.resources.openRawResource(R.raw.ad_config_quran_android_1)
+                                .bufferedReader().use { it.readText() }
+                        adConfig = Gson().fromJson(rawJson, AdConfigModel::class.java)
+                        Logger.d("Ad config loaded from raw after parse error")
+                    } catch (e2: Exception) {
+                        Logger.e("Error loading ad config from raw", e2)
+                    }
+                }
 
-                enableBtnContinueSplash = config.getBoolean("enable_btn_continue_splash")
-                disableAdsSplash = config.getString("disable_ads_splash")
-                disableInterSplash = config.getString("disable_inter_splash")
-                interObd = config.getBoolean("inter_obd")
-                isSubmiting = config.getBoolean("is_submit")
+                try {
+                    var idRegistryJson = config.getString("id_registry")
+                    if (idRegistryJson.isEmpty()) {
+                        Logger.d("id_registry empty, loading from raw")
+                        try {
+                            val inputStream =
+                                context.resources.openRawResource(R.raw.id_registry_quran_android_1)
+                            idRegistryJson = inputStream.bufferedReader().use { it.readText() }
+                        } catch (e: Exception) {
+                            Logger.e("Error reading local id registry", e)
+                        }
+                    }
 
-                // Load waterfall configs
-                fullScreenSplashWaterfall = config.getS2AdsKeys("full_screen_splash_waterfall") //101
-                nativeSplIds = config.getS2AdsKeys("native_spl_ids") // 102
-                nativeL1Ids = config.getS2AdsKeys("native_l1_ids") // 201
-                nativeL2Ids = config.getS2AdsKeys("native_l2_ids")  // 202
-                nativeObd1Ids = config.getS2AdsKeys("native_obd1_ids") //301
-                nativeObd2Ids = config.getS2AdsKeys("native_obd2_ids") //302
-                nativeObd3Ids = config.getS2AdsKeys("native_obd3_ids") //303
-                nativeObd4Ids = config.getS2AdsKeys("native_obd4_ids") //304
-//                nativeObd5Ids = config.getS2AdsKeys("native_obd5_ids") //305
-                intersObd6Ids = config.getS2AdsKeys("inter_obd6_ids") //306
-                rewardHighIds = config.getS2AdsKeys("reward_high_ids") //406 TODO
-                nativeClDrawIds = config.getS2AdsKeys("native_collapsible") //509
-                numberFinishObd = config.getLong("number_finish_obd")
-                fsnAfterInter = config.getBoolean("fsn_after_inter")
-                interClickIds = config.getS2AdsKeys("inter_click_ids")
-                fsnClickIds = config.getS2AdsKeys("fsn_click_ids")
-                homeNativeIds = config.getS2AdsKeys("home_native_ids")
-                homeNabanerIds = config.getS2AdsKeys("home_native_banner_ids")
-                timeReloadCollapDraw = config.getLong("time_reload_collap_draw")
-                Log.d("RemoteConfigManager", "Remote config loaded")
+                    if (idRegistryJson.isNotEmpty()) {
+                        idRegistry = Gson().fromJson(idRegistryJson, IdRegistryModel::class.java)
+                        Logger.d("Id registry loaded successfully")
+                    }
+                } catch (e: Exception) {
+                    Logger.e("Error parsing id registry", e)
+                }
+
                 if (BuildConfig.FLAVOR == "appDev") {
-                    fullScreenSplashWaterfall = "INTER:ca-app-pub-3940256099942544/1033173712,FULL_NATIVE:ca-app-pub-3940256099942544/2247696110,OPEN:ca-app-pub-3940256099942544/9257395921"
+                    fullScreenSplashWaterfall =
+                        "OPEN:ca-app-pub-3940256099942544/9257395921,INTER:ca-app-pub-3940256099942544/1033173712,FULL_NATIVE:ca-app-pub-3940256099942544/2247696110"
                     nativeSplIds =  "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     nativeL1Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     nativeL2Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
@@ -197,7 +175,6 @@ class RemoteConfigManager {
                     nativeObd2Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     nativeObd3Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     nativeObd4Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-//                    nativeObd5Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     intersObd6Ids = "ca-app-pub-3940256099942544/1033173712"
                     rewardHighIds = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     nativeDrawIds = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
@@ -209,17 +186,14 @@ class RemoteConfigManager {
                     enableBtnContinueSplash = true
                     interClickIds = "ca-app-pub-3940256099942544/1033173712,ca-app-pub-3940256099942544/1033173712"
                     fsnClickIds = "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
-                    timeReloadCollapDraw = 15
                 }
-
-                boostFNativeObd = config.getBoolean("boost_fnative_obd")
-                boostCollapHome = config.getBoolean("boost_collap_home")
-                boostCollapDraw = config.getBoolean("boost_collap_draw")
-                enableClPreview1 = config.getBoolean("enable_cl_preview1")
-                enableClPreview2 = config.getBoolean("enable_cl_preview2")
+                adConfig?.currentSession = BaseUtils.getSessionNumber()
+                Logger.d("Ad config currentSession=${adConfig?.currentSession} (session_configs resolved by session)")
+                onFinishDataJson?.invoke()
             }
         }
     }
+
 
     fun getListAdIdRewardFromRemote(adPlace: String, ids: String): List<AdsRewardMultiPreload.AdIdModel> {
         val listAdIds = ids.split(",").map { it.trim() }.filter { it.isNotEmpty() }
@@ -360,7 +334,7 @@ class RemoteConfigManager {
             try {
                 languageOrder.split(",").map { it.trim() }
             } catch (e: Exception) {
-                Log.e("RemoteConfigManager", "Error parsing language order: ${e.message}")
+                Logger.e("Error parsing language order: ${e.message}")
                 emptyList()
             }
         } else {
@@ -368,62 +342,17 @@ class RemoteConfigManager {
         }
     }
 
-    fun loadTimeOutSplash(activity: Activity, callback: NumberCallback) {
+    suspend fun loadConfigCallback(context: Context): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!InternetUtil.isNetworkAvailable(activity)) {
-                callback.onResult(10000)
-                return
+            if (!InternetUtil.isNetworkAvailable(context)) {
+                return false
             }
         }
-        if (isLoading && remoteConfig == null) {
-            Thread {
-                while (isLoading || remoteConfig == null) {
-                    try {
-                        Thread.sleep(100)
-                    } catch (e: InterruptedException) {
-                        e.printStackTrace()
-                    }
-                }
-                activity.runOnUiThread {
-                    if (remoteConfig != null) {
-                        callback.onResult(remoteConfig!!.getLong("time_out_splash"))
-                    }
-                }
-            }.start()
-        } else {
-            if (remoteConfig != null) {
-                callback.onResult(remoteConfig!!.getLong("time_out_splash"))
-            }
+        while (isLoading) {
+            delay(100)
         }
-    }
 
-    fun loadConfigCallback(activity: Activity, callback: BooleanCallback) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!InternetUtil.isNetworkAvailable(activity)) {
-                callback.onResult(false)
-                return
-            }
-        }
-        if (isLoading && remoteConfig == null) {
-            Thread {
-                while (isLoading || remoteConfig == null) {
-                    try {
-                        Thread.sleep(100)
-                    } catch (e: InterruptedException) {
-                        e.printStackTrace()
-                    }
-                }
-                activity.runOnUiThread {
-                    if (remoteConfig != null) {
-                        callback.onResult(true)
-                    }
-                }
-            }.start()
-        } else {
-            if (remoteConfig != null) {
-                callback.onResult(true)
-            }
-        }
+        return remoteConfig != null
     }
 
     interface BooleanCallback {

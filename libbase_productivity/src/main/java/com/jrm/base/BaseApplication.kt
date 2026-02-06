@@ -1,8 +1,10 @@
 package com.jrm.base
 
-import android.content.ContentValues.TAG
+import android.app.Activity
+import android.app.Application
 import android.content.Context
-import android.util.Log
+import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import co.ab180.airbridge.Airbridge
 import com.ads.nomyek_admob.admobs.Admob
 import com.ads.nomyek_admob.admobs.AppOpenManager
@@ -10,123 +12,391 @@ import com.ads.nomyek_admob.ads_components.YNMAds
 import com.ads.nomyek_admob.application.AdsApplication
 import com.ads.nomyek_admob.config.AirBridgeConfig
 import com.ads.nomyek_admob.config.YNMAdsConfig
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
+import com.jrm.BuildConfig
 import com.jrm.onboarding.language.Language2Activity
 import com.jrm.onboarding.language.LanguageActivity
 import com.jrm.onboarding.onboarding.OnboardingActivity
-import com.jrm.onboarding.splash.SplashActivity
+import com.jrm.onboarding.splash.BaseSplashActivity
 import com.jrm.utils.BaseConstants
 import com.jrm.utils.BaseUtils
+import com.jrm.utils.Logger
 import com.jrm.utils.SharedPref
 import com.jrm.utils.remote_config.RemoteConfigManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
-abstract class BaseApplication: AdsApplication() {
+/**
+ * Base Application class that provides core functionality for the app including:
+ * - Firebase initialization and analytics
+ * - Ad network configuration (Admob, YNMAds)
+ * - Airbridge integration for attribution
+ * - FCM token management
+ * - Activity lifecycle tracking
+ *
+ * Subclasses must implement [tokenAirBridge] and [appNameAirBridge] to provide
+ * app-specific Airbridge configuration.
+ */
+abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycleCallbacks {
+
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    @Volatile
+    private var pendingYnmInit = false
+
+    // region Properties
+    @VisibleForTesting
+    internal var activeActivitiesCount = 0
+        private set
+
+    private val isInForeground: Boolean
+        get() = activeActivitiesCount > 0
+    // endregion
+
+    // region Lifecycle Methods
     override fun onCreate() {
         super.onCreate()
+        registerActivityLifecycleCallbacks(this)
+        applicationScope.launch {
+            runCatching {
+                initializeCore()
+                initializeFirebase()
+                initializeAds()
+                runOnMainThread { tryRunYnmInitIfReady() }
+            }.onFailure { exception ->
+                Logger.e("Error during application initialization", exception)
+            }
+        }
+    }
+
+    /**
+     * Called only in emulator or when process is explicitly killed; not called on real devices.
+     * Cancel application scope so pending coroutines are cleaned up when we do get this callback.
+     * On real devices the process can be killed anytime without callback; the scope is then
+     * reclaimed with the process.
+     */
+    override fun onTerminate() {
+        applicationScope.cancel()
+        unregisterActivityLifecycleCallbacks(this)
+        super.onTerminate()
+    }
+    // endregion
+
+    // region Activity Lifecycle Callbacks
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        activeActivitiesCount++
+        if (activeActivitiesCount == 1) {
+            onAppMovedToForeground()
+            tryRunYnmInitIfReady()
+        }
+    }
+
+    override fun onActivityStarted(activity: Activity) {
+        // No-op: Can be overridden by subclasses if needed
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+        // No-op: Can be overridden by subclasses if needed
+    }
+
+    override fun onActivityPaused(activity: Activity) {
+        // No-op: Can be overridden by subclasses if needed
+    }
+
+    override fun onActivityStopped(activity: Activity) {
+        activeActivitiesCount--
+        if (activeActivitiesCount == 0) {
+            onAppMovedToBackground()
+        }
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+        // No-op: Can be overridden by subclasses if needed
+    }
+
+    override fun onActivityDestroyed(activity: Activity) {
+        // No-op: Can be overridden by subclasses if needed
+    }
+    // endregion
+
+    // region Initialization Methods
+    /**
+     * Initialize core dependencies like SharedPreferences and RemoteConfig
+     */
+    private fun initializeCore() {
         SharedPref.init(this)
+        RemoteConfigManager.instance?.init(context = this)
+        BaseEventLogger.initialize(this)
+    }
+
+    /**
+     * Initialize Firebase services including FirebaseApp, Analytics, and FCM
+     */
+    private fun initializeFirebase() {
         FirebaseApp.initializeApp(this)
-        fcmTestGetKey()
         initializeContext(this)
         initFirebaseAnalytics(this)
+        fetchFcmToken()
+    }
+
+    /**
+     * Initialize and configure the ads SDK (config only). YNMAds.init() is deferred to
+     * [tryRunYnmInitIfReady] when the first Activity exists, to avoid NPE in AppOpenManager lifecycle.
+     */
+    private suspend fun initializeAds() {
         SharedPref.saveBoolean(BaseConstants.ENABLE_ADS, true)
-        BaseEventLogger.initialize(this)
-        RemoteConfigManager.instance?.loadRemote(this)
+        if (RemoteConfigManager.instance?.loadConfigCallback(this) == true) {
+            val adsConfig = createAdsConfig()
+            this.ynmAdsConfig = adsConfig
+            configureAdTracking()
+            adsConfig.intervalInterstitialAd =
+                (RemoteConfigManager.instance?.adConfig?.configs?.timeInterstitialCooldown ?: 30L).toInt()
+            adsConfig.intervalRewardAd =
+                (RemoteConfigManager.instance?.adConfig?.configs?.timeOutReward ?: 5L).toInt()
+            pendingYnmInit = true
+        }
+    }
 
-        val environment =
-            if (com.jrm.BuildConfig.env_dev) YNMAdsConfig.ENVIRONMENT_DEVELOP else YNMAdsConfig.ENVIRONMENT_PRODUCTION
-        this.ynmAdsConfig = YNMAdsConfig(this, YNMAdsConfig.PROVIDER_ADMOB, environment)
+    /**
+     * Runs on Main thread. Calls YNMAds.init() + Airbridge + configureAdBehavior only when
+     * we have at least one Activity, so AppOpenManager's lifecycle observer does not NPE.
+     */
+    private fun tryRunYnmInitIfReady() {
+        if (!pendingYnmInit || activeActivitiesCount < 1) return
+        val config = this.ynmAdsConfig ?: return
+        pendingYnmInit = false
+        runCatching {
+            YNMAds.getInstance().init(null, this, config)
+            initializeAirbridge()
+            configureAdBehavior()
+        }.onFailure { exception ->
+            Logger.e("Error during YNMAds init", exception)
+        }
+    }
 
-        // Optional: setup Airbridge
-        val airBridgeConfig = AirBridgeConfig()
-        airBridgeConfig.isEnableAirBridge = true
-        airBridgeConfig.appNameAirBridge = "sillysmilewallpaper"
-        airBridgeConfig.tokenAirBridge = "2b74009ef07e4449a23a95ea1b981f32"
-        airBridgeConfig.userState = BaseUtils.getUserState();
-        BaseUtils.setFirstOpenApp(false);
-        this.ynmAdsConfig.airBridgeConfig = airBridgeConfig
+    private fun runOnMainThread(block: () -> Unit) {
+        android.os.Handler(android.os.Looper.getMainLooper()).post(block)
+    }
 
-        // Optional: enable ads resume
-        this.ynmAdsConfig.idAdResume = com.jrm.BuildConfig._403_resume_open
+    /**
+     * Create and configure YNMAds configuration
+     */
+    private fun createAdsConfig(): YNMAdsConfig {
+        val environment = if (BuildConfig.env_dev) {
+            YNMAdsConfig.ENVIRONMENT_DEVELOP
+        } else {
+            YNMAdsConfig.ENVIRONMENT_PRODUCTION
+        }
 
-        // Optional: setup list device test - recommended to use
-        this.listTestDevice.add("6E865A9E874E712EADB42A6D03ACC501")
-        this.ynmAdsConfig.listDeviceTest = this.listTestDevice
-        this.ynmAdsConfig.intervalInterstitialAd = 25
-        this.ynmAdsConfig.maxKey = com.jrm.BuildConfig.key_max
-        this.ynmAdsConfig.setAdTrackingList(
-            listOf(
-                YNMAdsConfig.AdItem(com.jrm.BuildConfig._102_spl_native, "inter_splash_highfloor"),
+        return YNMAdsConfig(this, YNMAdsConfig.PROVIDER_ADMOB, environment).apply {
+            idAdResume = BuildConfig._403_resume_open
+            listDeviceTest = mutableListOf(TEST_DEVICE_ID).also {
+                listTestDevice.addAll(it)
+            }
+            intervalInterstitialAd = INTERSTITIAL_AD_INTERVAL
+            maxKey = BuildConfig.key_max
+            setAdTrackingList(
+                listOf(
+                    YNMAdsConfig.AdItem(BuildConfig._102_spl_native, AD_TRACKING_ITEM_KEY)
+                )
             )
-        )
+        }
+    }
 
+    /**
+     * Configure ad tracking groups for analytics
+     */
+    private fun configureAdTracking() {
         YNMAdsConfig.AD_TRACKING_GROUPS = mapOf(
-            "splash_highfloor_pass" to listOf(
+            SPLASH_HIGHFLOOR_PASS to listOf(
                 BaseConstants.INTER_SPLASH_HIGHFLOOR,
                 BaseConstants.NATIVE_SPLASH_HIGHFLOOR
-            ),
-            "language_highfloor_pass" to listOf(
+            ), LANGUAGE_HIGHFLOOR_PASS to listOf(
                 BaseConstants.NATIVE_LANGUAGE2_HIGHFLOOR
-            ),
-            "onboard_highfloor_pass" to listOf(
+            ), ONBOARD_HIGHFLOOR_PASS to listOf(
                 BaseConstants.NATIVE_OB1_HIGHFLOOR
             )
         )
-        YNMAds.getInstance().init(null, this, this.ynmAdsConfig)
-
-        // Auto disable ad resume after user click ads and back to app
-        Admob.getInstance().setDisableAdResumeWhenClickAds(true)
-        // If true -> onNextAction() is called right after Ad Interstitial showed
-        Admob.getInstance().setOpenActivityAfterShowInterAds(true)
-        AppOpenManager.getInstance().disableAppResumeWithActivity(SplashActivity::class.java)
-        AppOpenManager.getInstance().disableAppResumeWithActivity(LanguageActivity::class.java)
-        AppOpenManager.getInstance().disableAppResumeWithActivity(Language2Activity::class.java)
-        AppOpenManager.getInstance().disableAppResumeWithActivity(OnboardingActivity::class.java)
     }
 
+    /**
+     * Initialize Airbridge for attribution tracking
+     */
+    private fun initializeAirbridge() {
+        val airBridgeConfig = AirBridgeConfig().apply {
+            isEnableAirBridge = true
+            appNameAirBridge = this@BaseApplication.appNameAirBridge()
+            tokenAirBridge = this@BaseApplication.tokenAirBridge()
+            userState = BaseUtils.getUserState()
+        }
+
+        this.ynmAdsConfig.airBridgeConfig = airBridgeConfig
+        BaseUtils.setFirstOpenApp(false)
+    }
+
+    /**
+     * Configure ad behavior and exclusions for specific activities
+     */
+    private fun configureAdBehavior() {
+        with(Admob.getInstance()) {
+            isDisableAdResumeWhenClickAds = true
+            setOpenActivityAfterShowInterAds(true)
+        }
+
+        with(AppOpenManager.getInstance()) {
+            disableAppResumeWithActivity(BaseSplashActivity::class.java)
+            disableAppResumeWithActivity(LanguageActivity::class.java)
+            disableAppResumeWithActivity(Language2Activity::class.java)
+            disableAppResumeWithActivity(OnboardingActivity::class.java)
+        }
+    }
+
+    // endregion
+
+    // region App State Callbacks
+    /**
+     * Called when app moves to foreground (first activity created)
+     */
+    protected open fun onAppMovedToForeground() {
+        Logger.d("App moved to foreground")
+        // Subclasses can override to add custom behavior
+    }
+
+    /**
+     * Called when app moves to background (all activities stopped)
+     */
+    protected open fun onAppMovedToBackground() {
+        Logger.d("App moved to background")
+        YNMAds.getInstance().setInitCallback {
+            BaseEventLogger.logCustomEvent(EVENT_LEAVE_APP)
+        }
+    }
+    // endregion
+
+    // region Abstract Methods
+    /**
+     * Provide the Airbridge token for this app
+     * @return Airbridge token string
+     */
+    abstract fun tokenAirBridge(): String
+
+    /**
+     * Provide the Airbridge app name for this app
+     * @return Airbridge app name
+     */
+    abstract fun appNameAirBridge(): String
+    // endregion
+
+    // region Companion Object
     companion object {
-        private lateinit var firebaseAnalytics: FirebaseAnalytics
-        private lateinit var contextApp: AdsApplication
 
+        private const val TAG = "BaseApplication"
+        private const val FCM_TOKEN_KEY = "pushedFCM"
+        private const val TEST_DEVICE_ID = "6E865A9E874E712EADB42A6D03ACC501"
+        private const val INTERSTITIAL_AD_INTERVAL = 25
+        private const val AD_TRACKING_ITEM_KEY = "inter_splash_highfloor"
+
+        // Tracking group keys
+        private const val SPLASH_HIGHFLOOR_PASS = "splash_highfloor_pass"
+        private const val LANGUAGE_HIGHFLOOR_PASS = "language_highfloor_pass"
+        private const val ONBOARD_HIGHFLOOR_PASS = "onboard_highfloor_pass"
+
+        // Event names
+        private const val EVENT_LEAVE_APP = "leave_app"
+        private val firebaseAnalytics: FirebaseAnalytics by lazy {
+            throw IllegalStateException("Firebase Analytics not initialized. Call initFirebaseAnalytics() first.")
+        }
+
+        @Volatile
+        private var firebaseAnalyticsInstance: FirebaseAnalytics? = null
+
+        @Volatile
+        private var contextApp: AdsApplication? = null
+
+        /**
+         * Get Firebase Analytics instance
+         * @return FirebaseAnalytics instance
+         * @throws IllegalStateException if not initialized
+         */
+        @JvmStatic
         fun getFireBaseAnalytic(): FirebaseAnalytics {
-            return firebaseAnalytics
+            return firebaseAnalyticsInstance
+                ?: throw IllegalStateException("Firebase Analytics not initialized")
         }
 
+        /**
+         * Get application context
+         * @return AdsApplication context
+         * @throws IllegalStateException if not initialized
+         */
+        @JvmStatic
         fun getContext(): AdsApplication {
-            return contextApp
+            return contextApp ?: throw IllegalStateException("Application context not initialized")
         }
 
+        /**
+         * Initialize application context
+         * @param context The application context to store
+         */
+        @JvmStatic
         private fun initializeContext(context: AdsApplication) {
             contextApp = context
         }
 
+        /**
+         * Initialize Firebase Analytics
+         * @param context Application context
+         * @return FirebaseAnalytics instance
+         */
         private fun initFirebaseAnalytics(context: Context): FirebaseAnalytics {
-            if (!::firebaseAnalytics.isInitialized) {
-                firebaseAnalytics = FirebaseAnalytics.getInstance(context)
+            if (firebaseAnalyticsInstance == null) {
+                synchronized(this) {
+                    if (firebaseAnalyticsInstance == null) {
+                        firebaseAnalyticsInstance = FirebaseAnalytics.getInstance(context)
+                    }
+                }
             }
-            return firebaseAnalytics
+            return firebaseAnalyticsInstance!!
         }
 
-        private fun fcmTestGetKey() {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        /**
+         * Fetch FCM token and register with Airbridge
+         * Handles token persistence to avoid duplicate API calls
+         */
+        @JvmStatic
+        private fun fetchFcmToken() {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                    return@OnCompleteListener
+                    Logger.w("Fetching FCM registration token failed", task.exception)
+                    return@addOnCompleteListener
                 }
 
-                // Get new FCM registration token
-                val token = task.result
-                Log.d(TAG, "FCM Token: $token")
-                Airbridge.registerPushToken(token)
-                if (!SharedPref.readBoolean("pushedFCM", false)) {
-                    SharedPref.saveBoolean("pushedFCM", true)
-//                    FcmApiClient.saveFcmToken(contextApp, token)
-                }
-                // Log and toast
-                Log.d("Fcm :", token);
-            })
+                task.result?.let { token ->
+                    Logger.d("FCM Token retrieved: $token")
+
+                    // Register token with Airbridge
+                    runCatching {
+                        Airbridge.registerPushToken(token)
+                    }.onFailure { exception ->
+                        Logger.e("Failed to register push token with Airbridge", exception)
+                    }
+
+                    // Save token if not already saved
+                    val context = contextApp
+                    if (context != null && !SharedPref.readBoolean(FCM_TOKEN_KEY, false)) {
+                        SharedPref.saveBoolean(FCM_TOKEN_KEY, true)
+
+                    }
+                } ?: Logger.w("FCM token is null")
+            }
         }
+
     }
+    // endregion
+
 }

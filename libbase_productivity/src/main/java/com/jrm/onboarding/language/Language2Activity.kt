@@ -12,21 +12,21 @@ import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.ads.nomyek_admob.admobs.AppOpenManager
-import com.jrm.utils.BaseConstants
-import com.jrm.base.BaseActivity
-import com.jrm.onboarding.onboarding.OnboardingActivity
-import com.jrm.utils.remote_config.RemoteConfigManager
+import com.ironsource.sdk.IronSourceNetwork.showAd
 import com.jrm.R
-import com.jrm.ads.WaterfallNativeAdManager
+import com.jrm.base.BaseActivity
 import com.jrm.base.BaseEventLogger
 import com.jrm.base.tracking.TrackableButton
 import com.jrm.databinding.ActivityLanguagesBinding
 import com.jrm.onboarding.navigation.BaseNavigator
+import com.jrm.onboarding.onboarding.OnboardingActivity
 import com.jrm.utils.AdsHelper
+import com.jrm.utils.BaseConstants
 import com.jrm.utils.BaseExtension
-import com.jrm.utils.SharedPref
 import com.jrm.utils.BaseUtils
+import com.jrm.utils.SharedPref
 import com.jrm.utils.purchase.IAPHelper
+import com.jrm.utils.remote_config.RemoteConfigManager
 
 class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
     
@@ -198,143 +198,22 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
     private fun goToNextActivity() {
         // Restart all activities in the stack
         if (!BaseUtils.isFinishObd()) {
-            BaseExtension.showActivity(this, OnboardingActivity::class.java, null)
+            if(RemoteConfigManager.instance?.adConfig?.screenObd?.onboarding?.enable == true) {
+                BaseExtension.showActivity(this, OnboardingActivity::class.java, null)
+            }else {
+                BaseNavigator.getInstance().navigateToHome(this)
+            }
         } else {
-            BaseNavigator.getInstance()?.navigateToHome(this)
+            BaseNavigator.getInstance().navigateToHome(this)
         }
         finishAffinity()
     }
 
     private fun showAd() {
-        WaterfallNativeAdManager.show(
-            activity = this,
-            adView = viewBinding.nativeAd,
-            adPlace = BaseConstants.NATIVE_LANGUAGE2,
-            waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-        ) { success ->
-            if (success) {
-            }
-        }
-//        if (MaxNativePreload.getInstance().getAdStatus(BaseConstants.PRELOAD_NATIVE_202_1) == MaxNativePreload.AdStatus.LOADED) {
-//            MaxNativePreload.getInstance().showNative(
-//                BaseConstants.PRELOAD_NATIVE_202_1,
-//                viewBinding.nativeAd,
-//                null)
-//            return;
-//        }
-//
-//        if (MaxNativePreload.getInstance().getAdStatus(BaseConstants.PRELOAD_NATIVE_202_2) == MaxNativePreload.AdStatus.LOADED) {
-//            MaxNativePreload.getInstance().showNative(
-//                BaseConstants.PRELOAD_NATIVE_202_2,
-//                viewBinding.nativeAd,
-//                null)
-//            return;
-//        }
-//
-//        if (AdsNativeMultiPreload.getPreloadState(BaseConstants.PRELOAD_NATIVE_202_1) == AdsNativeMultiPreload.PreloadState.LOADED) {
-//            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                this,
-//                viewBinding.nativeAd,
-//                BaseConstants.PRELOAD_NATIVE_202_1,
-//                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_1),
-//                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_1),
-//                null,null
-//            )
-//            return;
-//        }
-//
-//        if (AdsNativeMultiPreload.getPreloadState(BaseConstants.PRELOAD_NATIVE_202_2) == AdsNativeMultiPreload.PreloadState.LOADED) {
-//            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                this,
-//                viewBinding.nativeAd,
-//                BaseConstants.PRELOAD_NATIVE_202_2,
-//                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_2),
-//                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_2),
-//                null,null
-//            )
-//            return;
-//        }
-//
-//        if (RemoteConfigManager.instance!!.getListAdIsOrder202()[2].equals("Max")) {
-//            MaxNew.getInstance().loadNativeAdNew(
-//                this,
-//                viewBinding.nativeAd,
-//                RemoteConfigManager.instance!!.getLfo2MaxAdId(),
-//                R.layout.custom_native_admob_large_splash
-//            )
-//            return
-//        }
-//        if (BaseConstants.TEST_1_ONBOARDING) {
-//            val listAdId: List<AdsNativeMultiPreload.AdIdModel> =
-//                RemoteConfigManager.instance?.getListAdIdNativeFromRemote(
-//                    BaseConstants.NATIVE_LANGUAGE2,
-//                    RemoteConfigManager.instance?.nativeL2Ids ?: ""
-//                ) ?: listOf()
-//            AdsNativeMultiPreload.preloadMultipleNativeAds(
-//                this@Language2Activity,
-//                YNMAirBridge.AppData(activityName, BaseConstants.PRELOAD_NATIVE_202_3),
-//                listAdId,
-//                BaseConstants.PRELOAD_NATIVE_202_3,
-//                object : YNMAdsCallbacks() {
-//                    override fun onNativeAdLoaded(nativeAd: NativeAd) {
-//                        super.onNativeAdLoaded(nativeAd)
-//                        viewBinding?.nativeAd?.let { adView ->
-//                            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                                this@Language2Activity,
-//                                adView,
-//                                BaseConstants.PRELOAD_NATIVE_202_3,
-//                                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_3),
-//                                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_3),
-//                            )
-//                        }
-//                    }
-//                    override fun onAdClicked() {
-//                        super.onAdClicked()
-//                        Language2Activity.clickNative = true;
-//                    }
-//                }
-//            )
-//        } else {
-//            var listAdId: List<AdsNativeMultiPreload.AdIdModel> = listOf(
-//                AdsNativeMultiPreload.AdIdModel().apply {
-//                    adId = RemoteConfigManager.instance!!.getLfo2HighAdId()
-//                    adName = "native_language_2_high"
-//                }
-//            )
-//            if (RemoteConfigManager.instance!!.getListAdIsOrder202()[2].equals("All")) {
-//                listAdId = listOf(
-//                    AdsNativeMultiPreload.AdIdModel().apply {
-//                        adId = RemoteConfigManager.instance!!.getLfo2AdId()
-//                        adName = "native_language_2"
-//                    }
-//                )
-//            }
-//
-//            AdsNativeMultiPreload.preloadMultipleNativeAds(
-//                this@Language2Activity,
-//                YNMAirBridge.AppData(activityName, BaseConstants.PRELOAD_NATIVE_202_3),
-//                listAdId,
-//                BaseConstants.PRELOAD_NATIVE_202_3,
-//                object : YNMAdsCallbacks() {
-//                    override fun onNativeAdLoaded(nativeAd: NativeAd) {
-//                        super.onNativeAdLoaded(nativeAd)
-//                        viewBinding?.nativeAd?.let { adView ->
-//                            AdsNativeMultiPreload.showPreloadedNativeAd(
-//                                this@Language2Activity,
-//                                adView,
-//                                BaseConstants.PRELOAD_NATIVE_202_3,
-//                                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_3),
-//                                AdsHelper.getLayoutForMetaNativeAd(BaseConstants.PRELOAD_NATIVE_202_3),
-//                            )
-//                        }
-//                    }
-//                    override fun onAdClicked() {
-//                        super.onAdClicked()
-//                        Language2Activity.clickNative = true;
-//                    }
-//                }
-//            )
-//        }
+        loadAds(
+            placementId = "language_2_ad_view",
+            adView = viewBinding.nativeAd
+        )
     }
     
     private fun initAction() {
@@ -390,7 +269,6 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
             }
             
             val selectedLang = (view.findViewById<TextView>(R.id.lang_code)).text.toString()
-            val selectedLangName = (view.findViewById<TextView>(R.id.lang_name)).text.toString()
             savedLangCode = selectedLang
             languageAdapter.setActiveButton(view)
             lastChosenItem = view
@@ -423,59 +301,10 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
     }
 
     private fun reShowNativeLanguageAds() {
-        WaterfallNativeAdManager.preload(
-            context = this,
-            activityName = activityName,
-            adPlace = BaseConstants.NATIVE_LANGUAGE2,
-            configString = RemoteConfigManager.instance!!.nativeL2Ids,
-            layoutAdmob = R.layout.custom_native_admob_large_language,
-            layoutMax = R.layout.custom_native_admob_large_language_max
-        ) { result ->
-            if (result.success) {
-                WaterfallNativeAdManager.show(
-                    activity = this,
-                    adView = viewBinding.nativeAd,
-                    adPlace = BaseConstants.NATIVE_LANGUAGE2,
-                    waitForLoad = true // true: chờ nếu đang loading, false: fail ngay
-                ) { success ->
-                    if (success) {
-                    }
-                }
-            } else {
-            }
-        }
-//        val listAdId: List<AdsNativeMultiPreload.AdIdModel> =
-//            RemoteConfigManager.instance?.getListAdIdNativeFromRemote(
-//                BaseConstants.NATIVE_LANGUAGE2,
-//                RemoteConfigManager.instance?.nativeL2Ids ?: ""
-//            ) ?: listOf()
-//
-//        AdsNativeMultiPreload.preloadMultipleNativeAds(
-//            this@Language2Activity,
-//            YNMAirBridge.AppData(activityName, BaseConstants.NATIVE_LANGUAGE2),
-//            listAdId,
-//            BaseConstants.NATIVE_LANGUAGE2,
-//            object : YNMAdsCallbacks() {
-//                override fun onNativeAdLoaded(nativeAd: NativeAd) {
-//                    super.onNativeAdLoaded(nativeAd)
-//                    // Show the native ad in the native ad view if available
-//                    viewBinding?.nativeAd?.let { adView ->
-//                        AdsNativeMultiPreload.showPreloadedNativeAd(
-//                            this@Language2Activity,
-//                            adView,
-//                            BaseConstants.NATIVE_LANGUAGE2,
-//                            AdsHelper.getLayoutForMetaNativeAd(BaseConstants.NATIVE_LANGUAGE2),
-//                            AdsHelper.getLayoutForMetaNativeAd(BaseConstants.NATIVE_LANGUAGE2),
-//                        )
-//                    }
-//                }
-//
-//                override fun onAdClicked() {
-//                    super.onAdClicked()
-//                    clickNative = true;
-//                }
-//            }
-//        )
+        loadAds(
+            placementId = "language_2_ad_view",
+            adView = viewBinding.nativeAd,
+        )
     }
     var preloadAd = false
     override fun onResume() {
@@ -510,41 +339,9 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
     
     private fun preloadOnboarding1() {
         if (!BaseUtils.isFinishObd()) {
-            WaterfallNativeAdManager.preload(
-                context = this,
-                activityName = activityName,
-                adPlace = BaseConstants.NATIVE_ONBOARD_1,
-                configString = RemoteConfigManager.instance!!.nativeObd1Ids,
-                layoutAdmob = R.layout.custom_native_admob_large,
-                layoutMax = R.layout.custom_native_admob_large_max
-            ) { result ->
-                if (result.success) {
-                    isOb1HighLoaded = true
-                } else {
-                }
-            }
-//            val listAdId: List<AdsNativeMultiPreload.AdIdModel> =
-//                RemoteConfigManager.instance?.getListAdIdNativeFromRemote(
-//                    BaseConstants.NATIVE_ONBOARD_1,
-//                    RemoteConfigManager.instance?.nativeObd1Ids ?: ""
-//                ) ?: listOf()
-//
-//            AdsNativeMultiPreload.preloadMultipleNativeAds(
-//                this@Language2Activity,
-//                YNMAirBridge.AppData(activityName, BaseConstants.NATIVE_ONBOARD_1),
-//                listAdId,
-//                BaseConstants.NATIVE_ONBOARD_1,
-//                object : YNMAdsCallbacks() {
-//                    override fun onNativeAdLoaded(nativeAd: NativeAd) {
-//                        super.onNativeAdLoaded(nativeAd)
-//                        isOb1HighLoaded = true
-//                    }
-//                    override fun onAdClicked() {
-//                        super.onAdClicked()
-//                        OnboardingFragmentNew.clickNative = true;
-//                    }
-//                }
-//            )
+            preloadAds(BaseConstants.NATIVE_ONBOARD_1,{
+                isOb1HighLoaded = true
+            })
         }
     }
 }
