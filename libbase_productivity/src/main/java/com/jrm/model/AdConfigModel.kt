@@ -1,6 +1,7 @@
 package com.jrm.model
 
 import com.google.gson.annotations.SerializedName
+import com.jrm.utils.BaseUtils.getSessionNumber
 
 /**
  * Root model for ad_config JSON (e.g. ad_config_quran_android_1.json).
@@ -26,8 +27,8 @@ data class AdConfigModel(
     }
 
     /** Session number used for backward-compat; default 1 (first open). */
-    var currentSession: Int = 1
-        internal set
+    var currentSession: Int = getSessionNumber()
+
 
     /** Backward-compat: configs for current session; fallback to session 1 if no match. */
     val configs: Configs?

@@ -35,49 +35,7 @@ import com.jrm.utils.purchase.IAPHelper
 import com.jrm.utils.remote_config.RemoteConfigManager
 
 object AdsHelper {
-    
-    val adIdToNameMap: Map<String, String> by lazy {
-        buildMap {
-            // Splash screen ads
-            put(BuildConfig._101_spl_inter, "_101_spl_inter")
-            put(BuildConfig._101_spl_inter_high, "_101_spl_inter_high")
-            put(BuildConfig._102_spl_native, "_102_spl_native")
-            put(BuildConfig._102_spl_native_high, "_102_spl_native_high")
-            put(BuildConfig._103_spl_banner, "_103_spl_banner")
-            put(BuildConfig._103_spl_banner_high, "_103_spl_banner_high")
-            
-            // Splash screen ads session 2
-            put(BuildConfig._101_v2_spl_inter, "_101_v2_spl_inter")
-            put(BuildConfig._101_v2_spl_inter_high, "_101_v2_spl_inter_high")
-            put(BuildConfig._102_v2_spl_native, "_102_v2_spl_native")
-            put(BuildConfig._102_v2_spl_native_high, "_102_v2_spl_native_high")
-            put(BuildConfig._103_v2_spl_banner, "_103_v2_spl_banner")
-            put(BuildConfig._103_v2_spl_banner_high, "_103_v2_spl_banner_high")
-            
-            // Language/onboarding flow ads
-            put(BuildConfig._201_lfo_native, "_201_lfo_native")
-            put(BuildConfig._201_lfo_native_high, "_201_lfo_native_high")
-            put(BuildConfig._202_lfo_native, "_202_lfo_native")
-            put(BuildConfig._202_lfo_native_high, "_202_lfo_native_high")
-            put(BuildConfig._202_lfo_native_max, "_202_lfo_native_max")
-            
-            // Onboarding ads
-            put(BuildConfig._301_onb_native, "_301_onb_native")
-            put(BuildConfig._301_onb_native_high, "_301_onb_native_high")
-            put(BuildConfig._304_onb_native, "_304_onb_native")
-            put(BuildConfig._304_onb_native_high, "_304_onb_native_high")
-            put(BuildConfig._305_onb_native, "_305_onb_native")
-            put(BuildConfig._305_onb_native_high, "_305_onb_native_high")
-            put(BuildConfig._306_onb_inter, "_306_onb_inter")
-            put(BuildConfig._306_onb_inter_high, "_306_onb_inter_high")
-        }
-    }
-    
-    @JvmStatic
-    fun getAdIdName(adId: String): String? {
-        return adIdToNameMap[adId]
-    }
-    
+
     @JvmStatic
     fun isDisableObdAd(): Boolean {
         return IAPHelper.isPremium() || 

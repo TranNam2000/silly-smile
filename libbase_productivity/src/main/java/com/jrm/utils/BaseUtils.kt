@@ -6,6 +6,8 @@ import android.os.Bundle
 import com.ads.nomyek_admob.event.YNMAirBridge
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.jrm.base.BaseEventLogger
+import com.jrm.utils.BaseUtils.isFinishObd
+import com.jrm.utils.BaseUtils.isFirstOpenUser
 import com.jrm.utils.remote_config.RemoteConfigManager
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -59,7 +61,8 @@ object BaseUtils {
     
     @JvmStatic
     fun isFinishObd(): Boolean {
-        return SharedPref.readBoolean(BaseConstants.FINISH_OBD, false)
+        return getSessionNumber() > (RemoteConfigManager.instance?.adConfig?.sessionConfigs?.size
+            ?: 1) && SharedPref.readBoolean(BaseConstants.FINISH_OBD, false)
     }
 
     @JvmStatic

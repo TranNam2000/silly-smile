@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.nomyek.myapplication" />
-                  <option name="mobileSdkAppId" value="1:454552486118:android:aec78a67698a7fc43efb27" />
-                  <option name="projectId" value="myapplication-e88f1439" />
-                  <option name="projectNumber" value="454552486118" />
+                  <option name="appId" value="silly.smile.wallpaper.live" />
+                  <option name="mobileSdkAppId" value="1:772060492246:android:eb27ad3fb2c5e42c9f3477" />
+                  <option name="projectId" value="silly-smile-f5402" />
+                  <option name="projectNumber" value="772060492246" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

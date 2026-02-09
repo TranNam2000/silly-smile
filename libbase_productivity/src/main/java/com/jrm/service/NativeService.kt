@@ -254,7 +254,7 @@ object NativeService {
             initialDelayMs = initialDelayMs,
             placeLabel = placeName,
             onReload = { act, owner ->
-                if (AppOpenManager.getInstance().isInterstitialShowing) return@schedule false
+                if (FullScreenService.isFullScreenAdShowing) return@schedule false
                 Logger.d("[$placeName] Reload native ad tại Activity: ${act.javaClass.simpleName}($activityName)")
                 AdsNativeMultiPreload.destroyPreloadedAd(placeName)
                 loadNativeAd(act, placeName, activityName, adView, waitForLoad, onSuccess, onFailure, owner)

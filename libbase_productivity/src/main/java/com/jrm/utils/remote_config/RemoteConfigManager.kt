@@ -27,6 +27,7 @@ class RemoteConfigManager {
     var languageOrder: String = ""
     var disableObdAds: Boolean = false
     var disableAllAds: Boolean = false
+
     // New remote config flags for ads
     var bannerHighSpl: Boolean = true
     var bannerSpl: Boolean = true
@@ -57,8 +58,8 @@ class RemoteConfigManager {
     var nativeObd4Ids: String = ""
     var intersObd6Ids: String = ""
     var nativeSplIds: String = ""
-    var rewardHighIds :String =""
-    var nativeDrawIds:String = ""
+    var rewardHighIds: String = ""
+    var nativeDrawIds: String = ""
     var nativeClDrawIds: String = ""
     var boostFNativeObd: Boolean = false
     var numberFinishObd: Long = 2
@@ -72,8 +73,11 @@ class RemoteConfigManager {
 
     fun init(context: Context) {
         loadRemote(context) {
-            timeOutSplash = (adConfig?.screenObd?.splash?.timeOutSplash ?: 12) * 1000L
-            minTimeSplash = (adConfig?.screenObd?.splash?.minTimeSplash ?: 8) * 1000L
+            val rawMinTime = adConfig?.screenObd?.splash?.minTimeSplash ?: 8
+            val rawTimeOut = adConfig?.screenObd?.splash?.timeOutSplash ?: 12
+
+            timeOutSplash = rawTimeOut * 1000L
+            minTimeSplash = rawMinTime * 1000L
             numberScreenObd = adConfig?.screenObd?.onboarding?.numberScreen ?: 5
             numberFinishObd = adConfig?.configs?.numberFinishObd?.toLong() ?: 2
             disableAllAds = adConfig?.configs?.disableAllAd ?: false
@@ -81,8 +85,8 @@ class RemoteConfigManager {
             interstitialRule = adConfig?.configs?.interstitialRule ?: "1/2"
             timeInterstitialCooldown = adConfig?.configs?.timeInterstitialCooldown ?: 30
             timeOutFullScreenAd = adConfig?.configs?.timeOutFullScreenAd ?: 5
-            timeOutReward = adConfig?.configs?.timeOutReward ?: 5
-            enableBtnContinueSplash = adConfig?.screenObd?.splash?.enableBtnContinue ?: true
+            timeOutReward = (adConfig?.configs?.timeOutReward ?: 5) * 1000L
+            enableBtnContinueSplash = adConfig?.screenObd?.splash?.enableBtnContinue ?: false
         }
     }
 
@@ -104,7 +108,6 @@ class RemoteConfigManager {
                 try {
                     var adConfigJson = config.getString("ad_config")
                     if (adConfigJson.isEmpty()) {
-                        Logger.d("ad_config empty, loading from raw")
                         try {
                             val inputStream =
                                 context.resources.openRawResource(R.raw.ad_config_quran_android_1)
@@ -116,8 +119,8 @@ class RemoteConfigManager {
 
                     if (adConfigJson.isNotEmpty()) {
                         adConfig = Gson().fromJson(adConfigJson, AdConfigModel::class.java)
+
                         if (adConfig?.sessionConfigs.isNullOrEmpty()) {
-                            Logger.d("ad_config has no session_configs (old format?), loading from raw")
                             try {
                                 adConfigJson =
                                     context.resources.openRawResource(R.raw.ad_config_quran_android_1)
@@ -127,9 +130,6 @@ class RemoteConfigManager {
                                 Logger.e("Error loading ad config from raw fallback", e2)
                             }
                         }
-                        val sessions = adConfig?.sessionConfigs?.size ?: 0
-                        val placements = adConfig?.adPlacements?.size ?: 0
-                        Logger.d("Ad config loaded: sessionConfigs=$sessions, adPlacements=$placements")
                     }
                 } catch (e: Exception) {
                     Logger.e("Error parsing ad config", e)
@@ -138,7 +138,6 @@ class RemoteConfigManager {
                             context.resources.openRawResource(R.raw.ad_config_quran_android_1)
                                 .bufferedReader().use { it.readText() }
                         adConfig = Gson().fromJson(rawJson, AdConfigModel::class.java)
-                        Logger.d("Ad config loaded from raw after parse error")
                     } catch (e2: Exception) {
                         Logger.e("Error loading ad config from raw", e2)
                     }
@@ -147,7 +146,6 @@ class RemoteConfigManager {
                 try {
                     var idRegistryJson = config.getString("id_registry")
                     if (idRegistryJson.isEmpty()) {
-                        Logger.d("id_registry empty, loading from raw")
                         try {
                             val inputStream =
                                 context.resources.openRawResource(R.raw.id_registry_quran_android_1)
@@ -159,7 +157,6 @@ class RemoteConfigManager {
 
                     if (idRegistryJson.isNotEmpty()) {
                         idRegistry = Gson().fromJson(idRegistryJson, IdRegistryModel::class.java)
-                        Logger.d("Id registry loaded successfully")
                     }
                 } catch (e: Exception) {
                     Logger.e("Error parsing id registry", e)
@@ -168,34 +165,50 @@ class RemoteConfigManager {
                 if (BuildConfig.FLAVOR == "appDev") {
                     fullScreenSplashWaterfall =
                         "OPEN:ca-app-pub-3940256099942544/9257395921,INTER:ca-app-pub-3940256099942544/1033173712,FULL_NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeSplIds =  "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeL1Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeL2Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeObd1Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeObd2Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeObd3Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeObd4Ids = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeSplIds =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeL1Ids =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeL2Ids =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeObd1Ids =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeObd2Ids =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeObd3Ids =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeObd4Ids =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
                     intersObd6Ids = "ca-app-pub-3940256099942544/1033173712"
-                    rewardHighIds = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeDrawIds = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    nativeClDrawIds = "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
-                    homeNabanerIds = "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
-                    homeNativeIds = "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
+                    rewardHighIds =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeDrawIds =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    nativeClDrawIds =
+                        "MAX_NATIVE:,NATIVE:ca-app-pub-3940256099942544/2247696110,NATIVE:ca-app-pub-3940256099942544/2247696110"
+                    homeNabanerIds =
+                        "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
+                    homeNativeIds =
+                        "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
                     disableObdAds = false
                     disableAllAds = false
                     enableBtnContinueSplash = true
-                    interClickIds = "ca-app-pub-3940256099942544/1033173712,ca-app-pub-3940256099942544/1033173712"
-                    fsnClickIds = "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
+                    interClickIds =
+                        "ca-app-pub-3940256099942544/1033173712,ca-app-pub-3940256099942544/1033173712"
+                    fsnClickIds =
+                        "ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696110"
                 }
                 adConfig?.currentSession = BaseUtils.getSessionNumber()
-                Logger.d("Ad config currentSession=${adConfig?.currentSession} (session_configs resolved by session)")
                 onFinishDataJson?.invoke()
             }
         }
     }
 
 
-    fun getListAdIdRewardFromRemote(adPlace: String, ids: String): List<AdsRewardMultiPreload.AdIdModel> {
+    fun getListAdIdRewardFromRemote(
+        adPlace: String,
+        ids: String
+    ): List<AdsRewardMultiPreload.AdIdModel> {
         val listAdIds = ids.split(",").map { it.trim() }.filter { it.isNotEmpty() }
 
         return listAdIds.mapIndexed { index, adId ->
@@ -205,9 +218,11 @@ class RemoteConfigManager {
             }
         }
     }
+
     fun FirebaseRemoteConfig.getS2AdsKeys(base: String): String {
-        val result = if (enableIdSession2 && BaseUtils.getSessionNumber() > 1) getString(base + "_v2")
-        else getString(base)
+        val result =
+            if (enableIdSession2 && BaseUtils.getSessionNumber() > 1) getString(base + "_v2")
+            else getString(base)
         return result
     }
 
@@ -225,7 +240,10 @@ class RemoteConfigManager {
         }
     }
 
-    fun getListAdIdInterFromRemote(adPlace: String, ids: String): List<AdsInterMultiPreload.AdIdModel> {
+    fun getListAdIdInterFromRemote(
+        adPlace: String,
+        ids: String
+    ): List<AdsInterMultiPreload.AdIdModel> {
         val listAdIds = ids.split(",").map { it.trim() }.filter { it.isNotEmpty() }
 
         return listAdIds.mapIndexed { index, adId ->
@@ -236,13 +254,6 @@ class RemoteConfigManager {
         }
     }
 
-    fun getBannerSplAdId(): String {
-        return if (bannerSpl) (if (BaseUtils.getSessionNumber() > 1 && enableIdSession2) BuildConfig._103_v2_spl_banner else BuildConfig._103_spl_banner) else ""
-    }
-
-    fun getBannerHighSplAdId(): String {
-        return if (bannerHighSpl) (if (BaseUtils.getSessionNumber() > 1 && enableIdSession2) BuildConfig._103_v2_spl_banner_high else BuildConfig._103_spl_banner_high) else ""
-    }
 
     fun getStartIndexInter(): Int {
         return try {

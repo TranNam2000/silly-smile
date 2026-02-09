@@ -80,40 +80,57 @@ object WaterfallAdHelper {
         isShow: Boolean = true,
         lifecycleOwner: LifecycleOwner? = null
     ) {
-        if (AdsHelper.isDisableObdAd())
+        Logger.d("🔵 [SPLASH] loadAd() called - placement: $placementName, isShow: $isShow, adView: ${if (adView != null) "provided" else "null"}")
+        
+        val isDisableObd = AdsHelper.isDisableObdAd()
+        val isDisableAll = AdsHelper.isDisableAllAd()
+        Logger.d("🔵 [SPLASH] Ads status - isDisableObdAd: $isDisableObd, isDisableAllAd: $isDisableAll")
+        
+        if (isDisableObd){
+            Logger.w("🔴 [SPLASH] Ads disabled (isDisableObdAd), returning early")
+            return
+        }
+        
         YNMAds.getInstance().setInitCallback {
-            Logger.d( "===== loadAd START =====")
-            Logger.d( "placementId: $placementName")
+            Logger.d("🟢 [SPLASH] ===== loadAd START =====")
+            Logger.d("🟢 [SPLASH] placementId: $placementName, activityName: $activityName")
+            
             val config = RemoteConfigManager.instance?.adConfig
             if (config == null) {
-                Logger.e( "AdConfig is null")
+                Logger.e("🔴 [SPLASH] AdConfig is null")
                 onFailure?.invoke()
                 return@setInitCallback
             }
+            
+            Logger.d("🟢 [SPLASH] AdConfig loaded, placements count: ${config.adPlacements?.size ?: 0}")
 
             // Get placement and detect ad type
             val placement = config.adPlacements?.get(placementName)
             if (placement == null) {
-                Logger.e( "Placement not found: $placementName")
+                Logger.e("🔴 [SPLASH] Placement not found: $placementName")
+                Logger.d("🟡 [SPLASH] Available placements: ${config.adPlacements?.keys?.joinToString()}")
                 onFailure?.invoke()
                 return@setInitCallback
             }
 
             val adType = placement.type
-            Logger.d( "Detected ad type: $adType")
+            val placementEnable = placement.enable
+            Logger.d("🟢 [SPLASH] Placement found - type: $adType, enable: $placementEnable")
+            Logger.d("🟢 [SPLASH] Placement config: ${placement.toString()}")
 
             // Check if enabled
-            if (!placement.enable) {
-                Logger.d( "Placement $placementName is disabled")
+            if (!placementEnable) {
+                Logger.w("🔴 [SPLASH] Placement $placementName is disabled in config")
                 onFailure?.invoke()
                 return@setInitCallback
             }
 
             // Route to appropriate loader based on ad type
+            Logger.d("🟢 [SPLASH] Routing to ad loader - adType: $adType")
             adView?.visibility = View.VISIBLE
             when (adType) {
                 AdType.NATIVE_VIEW -> {
-                    Logger.d( "Loading as NATIVE ad")
+                    Logger.d("🟡 [SPLASH] Loading as NATIVE_VIEW ad")
                     NativeService.loadNativeAd(
                         activity,
                         placementName,
@@ -127,26 +144,64 @@ object WaterfallAdHelper {
                 }
 
                 AdType.FULL_SCREEN, AdType.NATIVE_FULL -> {
-                    Logger.d( "Loading FULL_SCREEN ad for $placementName (isShow=$isShow)")
+                    Logger.d("🟡 [SPLASH] Loading FULL_SCREEN ad for $placementName (isShow=$isShow)")
+                    val isPreloaded = FullScreenService.isPreloaded(placementName)
+                    Logger.d("🟡 [SPLASH] Interstitial preloaded status: $isPreloaded")
+                    
                     if (isShow) {
                         val onShowResult: (Boolean) -> Unit = { shown ->
-                            if (shown) onSuccess?.invoke() else onFailure?.invoke()
+                            Logger.d("🟡 [SPLASH] Interstitial show result: $shown")
+                            if (shown) {
+                                Logger.d("✅ [SPLASH] Interstitial shown successfully")
+                                onSuccess?.invoke()
+                            } else {
+                                Logger.w("❌ [SPLASH] Interstitial show failed")
+                                onFailure?.invoke()
+                            }
                         }
-                        if (FullScreenService.isPreloaded(placementName)) {
-                            Logger.d( "Ad already preloaded, showing for $placementName")
+                        if (isPreloaded) {
+                            Logger.d("🟡 [SPLASH] Interstitial already preloaded, showing for $placementName")
                             FullScreenService.showPreload(
                                 activity = activity,
                                 activityName = activityName,
                                 adPlace = placementName,
-                                callback = onShowResult
+                                callback = { shown ->
+                                    if (!shown) {
+                                        // If show failed, try to load and show again
+                                        Logger.w("🟡 [SPLASH] Preloaded ad show failed, loading fresh ad...")
+                                        FullScreenService.loadAdsFullScreen(
+                                            context = activity,
+                                            activityName = activityName,
+                                            adPlace = placementName,
+                                            callback = { result ->
+                                                Logger.d("🟡 [SPLASH] Fresh load result: success=${result.success}, format=${result.format}")
+                                                if (result.success) {
+                                                    FullScreenService.showPreload(
+                                                        activity = activity,
+                                                        activityName = activityName,
+                                                        adPlace = placementName,
+                                                        callback = onShowResult
+                                                    )
+                                                } else {
+                                                    onShowResult(false)
+                                                }
+                                            }
+                                        )
+                                    } else {
+                                        onShowResult(true)
+                                    }
+                                }
                             )
                         } else {
+                            Logger.d("🟡 [SPLASH] Interstitial not preloaded, loading now...")
                             FullScreenService.loadAdsFullScreen(
                                 context = activity,
                                 activityName = activityName,
                                 adPlace = placementName,
                                 callback = { result ->
+                                    Logger.d("🟡 [SPLASH] Interstitial load result: success=${result.success}, format=${result.format}, error=${result.error}")
                                     if (result.success) {
+                                        Logger.d("🟡 [SPLASH] Interstitial loaded, now showing...")
                                         FullScreenService.showPreload(
                                             activity = activity,
                                             activityName = activityName,
@@ -154,6 +209,7 @@ object WaterfallAdHelper {
                                             callback = onShowResult
                                         )
                                     } else {
+                                        Logger.w("❌ [SPLASH] Interstitial load failed: ${result.error}")
                                         onFailure?.invoke()
                                     }
                                 }
@@ -161,7 +217,9 @@ object WaterfallAdHelper {
                         }
                     } else {
                         // isShow = false: chỉ preload, không hiển thị
-                        if (FullScreenService.isPreloaded(placementName)) {
+                        Logger.d("🟡 [SPLASH] Preloading interstitial (isShow=false)")
+                        if (isPreloaded) {
+                            Logger.d("✅ [SPLASH] Interstitial already preloaded")
                             onSuccess?.invoke()
                         } else {
                             FullScreenService.loadAdsFullScreen(
@@ -169,6 +227,7 @@ object WaterfallAdHelper {
                                 activityName = activityName,
                                 adPlace = placementName,
                                 callback = { result ->
+                                    Logger.d("🟡 [SPLASH] Interstitial preload result: success=${result.success}")
                                     if (result.success) onSuccess?.invoke() else onFailure?.invoke()
                                 }
                             )
@@ -177,21 +236,28 @@ object WaterfallAdHelper {
                 }
 
                 AdType.BANNER -> {
-                    Logger.d( "Loading as BANNER ad")
+                    Logger.d("🟡 [SPLASH] Loading as BANNER ad")
                     adView?.visibility = View.GONE
                     BannerService.loadAndShowBanner(
                         activity = activity,
                         activityName = activityName,
                         placementName = placementName,
                         callback = { success ->
-                            if (success) onSuccess?.invoke() else onFailure?.invoke()
+                            Logger.d("🟡 [SPLASH] Banner callback - success: $success")
+                            if (success) {
+                                Logger.d("✅ [SPLASH] Banner loaded and shown successfully")
+                                onSuccess?.invoke()
+                            } else {
+                                Logger.w("❌ [SPLASH] Banner failed to load/show")
+                                onFailure?.invoke()
+                            }
                         },
                         lifecycleOwner = lifecycleOwner
                     )
                 }
 
                 else -> {
-                    Logger.w( "Unknown ad type: $adType")
+                    Logger.w("🔴 [SPLASH] Unknown ad type: $adType")
                     adView?.visibility = View.GONE
                     onFailure?.invoke()
                 }

@@ -55,104 +55,13 @@ android {
         create("appDev") {
             // Development Ad IDs (test IDs)
             buildConfigField("String", "key_max", "\"pmaJXAUhzJmbd_UelyvIXNuTfnk5SrmGRbENaSg47iJv8ETOKgTGVbrihsAOVaIF8csgk6LbGUf51PA5HuMpBO\"")
-            // Splash ads
-            buildConfigField("String", "_101_spl_inter", "\"ca-app-pub-3940256099942544/1033173712\"")
-            buildConfigField("String", "_101_spl_inter_high", "\"ca-app-pub-3940256099942544/1033173712\"")
-            buildConfigField("String", "_101_spl_inter_medium", "\"ca-app-pub-3940256099942544/1033173712\"")
             buildConfigField("String", "_102_spl_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_102_spl_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_103_spl_banner", "\"ca-app-pub-3940256099942544/6300978111\"")
-            buildConfigField("String", "_103_spl_banner_high", "\"ca-app-pub-3940256099942544/6300978111\"")
-
-// Language/onboarding flow ads
-            buildConfigField("String", "_201_lfo_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_201_lfo_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_202_lfo_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_202_lfo_native_max", "\"\"")
-            buildConfigField("String", "_202_lfo_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-
-// Onboarding ads
-            buildConfigField("String", "_301_onb_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_301_onb_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_302_onb_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_302_onb_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_302_onb_native_max", "\"\"")
-            buildConfigField("String", "_303_onb_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_303_onb_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_304_onb_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_304_onb_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_305_onb_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_305_onb_native_high", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_306_onb_inter", "\"ca-app-pub-3940256099942544/1033173712\"")
-            buildConfigField("String", "_306_onb_inter_high", "\"ca-app-pub-3940256099942544/1033173712\"")
-
-// Home and general ads
-            buildConfigField("String", "_401_home_native", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_402_click_inter", "\"ca-app-pub-3940256099942544/1033173712\"")
-            buildConfigField("String", "_403_resume_open", "\"ca-app-pub-3940256099942544/5354046379\"")
-            buildConfigField("String", "_404_home_native_banner", "\"ca-app-pub-3940256099942544/2247696110\"")
-            buildConfigField("String", "_405_premium_reward", "\"ca-app-pub-3940256099942544/5224354917\"")
-            buildConfigField("String", "_406_unlock_reward", "\"ca-app-pub-3940256099942544/5224354917\"")
-
-            // ss2 splash
-            buildConfigField("String", "_101_v2_spl_inter", "\"\"")
-            buildConfigField("String", "_102_v2_spl_native", "\"\"")
-            buildConfigField("String", "_103_v2_spl_banner", "\"\"")
-            buildConfigField("String", "_101_v2_spl_inter_high", "\"\"")
-            buildConfigField("String", "_102_v2_spl_native_high", "\"\"")
-            buildConfigField("String", "_103_v2_spl_banner_high", "\"\"")
-
             buildConfigField("Boolean", "env_dev", "true")
         }
 
         create("appProd") {
             buildConfigField("String", "key_max", "\"pmaJXAUhzJmbd_UelyvIXNuTfnk5SrmGRbENaSg47iJv8ETOKgTGVbrihsAOVaIF8csgk6LbGUf51PA5HuMpBO\"")
-// Splash ads
-            buildConfigField("String", "_101_spl_inter", "\"ca-app-pub-3886186147480382/3956285785\"")
-            buildConfigField("String", "_101_spl_inter_high", "\"ca-app-pub-3886186147480382/5779846806\"")
-            buildConfigField("String", "_101_spl_inter_medium", "\"ca-app-pub-3886186147480382/4275193442\"")
             buildConfigField("String", "_102_spl_native", "\"ca-app-pub-3886186147480382/2643204110\"")
-            buildConfigField("String", "_102_spl_native_high", "\"ca-app-pub-3886186147480382/8329988520\"")
-            buildConfigField("String", "_103_spl_banner", "\"\"")
-            buildConfigField("String", "_103_spl_banner_high", "\"\"")
-
-// Language/onboarding flow ads
-            buildConfigField("String", "_201_lfo_native", "\"ca-app-pub-3886186147480382/9998949951\"")
-            buildConfigField("String", "_201_lfo_native_high", "\"ca-app-pub-3886186147480382/5703825181\"")
-            buildConfigField("String", "_202_lfo_native", "\"ca-app-pub-3886186147480382/1649030101\"")
-            buildConfigField("String", "_202_lfo_native_max", "\"\"")
-            buildConfigField("String", "_202_lfo_native_high", "\"ca-app-pub-3886186147480382/9527520124\"")
-
-// Onboarding ads
-            buildConfigField("String", "_301_onb_native", "\"ca-app-pub-3886186147480382/7398489734\"")
-            buildConfigField("String", "_301_onb_native_high", "\"ca-app-pub-3886186147480382/7703959105\"")
-            buildConfigField("String", "_302_onb_native", "\"ca-app-pub-3886186147480382/4493124794\"")
-            buildConfigField("String", "_302_onb_native_high", "\"ca-app-pub-3886186147480382/3507346184\"")
-            buildConfigField("String", "_302_onb_native_max", "\"\"")
-            buildConfigField("String", "_303_onb_native", "\"\"")
-            buildConfigField("String", "_303_onb_native_high", "\"\"")
-            buildConfigField("String", "_304_onb_native", "\"ca-app-pub-3886186147480382/7372786617\"")
-            buildConfigField("String", "_304_onb_native_high", "\"ca-app-pub-3886186147480382/5965988565\"")
-            buildConfigField("String", "_305_onb_native", "\"ca-app-pub-3886186147480382/7007607490\"")
-            buildConfigField("String", "_305_onb_native_high", "\"ca-app-pub-3886186147480382/6825335168\"")
-            buildConfigField("String", "_306_onb_inter", "\"ca-app-pub-3886186147480382/3180043126\"")
-            buildConfigField("String", "_306_onb_inter_high", "\"ca-app-pub-3886186147480382/8550136918\"")
-
-// Home and general ads
-            buildConfigField("String", "_401_home_native", "\"ca-app-pub-3886186147480382/7255019506\"")
-            buildConfigField("String", "_402_click_inter", "\"ca-app-pub-3886186147480382/2770540084\"")
-            buildConfigField("String", "_403_resume_open", "\"ca-app-pub-3886186147480382/9553879783\"")
-            buildConfigField("String", "_404_home_native_banner", "\"ca-app-pub-3886186147480382/4743881518\"")
-            buildConfigField("String", "_405_premium_reward", "\"ca-app-pub-3886186147480382/1124378313\"")
-            buildConfigField("String", "_406_unlock_reward", "\"ca-app-pub-3886186147480382/8251881682\"")
-
-// ss2 splash
-            buildConfigField("String", "_101_v2_spl_inter", "\"\"")
-            buildConfigField("String", "_102_v2_spl_native", "\"\"")
-            buildConfigField("String", "_103_v2_spl_banner", "\"\"")
-            buildConfigField("String", "_101_v2_spl_inter_high", "\"\"")
-            buildConfigField("String", "_102_v2_spl_native_high", "\"\"")
-            buildConfigField("String", "_103_v2_spl_banner_high", "\"\"")
 
             buildConfigField("Boolean", "env_dev", "false")
         }

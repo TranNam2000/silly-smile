@@ -11,7 +11,6 @@ import android.os.Looper
 import android.view.View
 import com.jrm.utils.Logger
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import com.ads.nomyek_admob.event.YNMAirBridge
@@ -22,14 +21,10 @@ import com.jrm.base.BaseEventLogger
 import com.jrm.databinding.ActivitySplashScreenBinding
 import com.jrm.model.DataPage
 import com.jrm.onboarding.consent_dialog.ConsentDialogManager
-import com.jrm.onboarding.language.Language2Activity
-import com.jrm.onboarding.language.LanguageActivity
 import com.jrm.onboarding.navigation.BaseNavigator
 import com.jrm.onboarding.onboarding.OnboardingActivity
-import com.jrm.utils.AdsHelper
 import com.jrm.utils.AnimationUtils
 import com.jrm.utils.BaseConstants
-import com.jrm.utils.BaseExtension
 import com.jrm.utils.BaseUtils
 import com.jrm.utils.LocaleHelper
 import com.jrm.utils.SharedPref
@@ -42,15 +37,13 @@ import java.util.Locale
 abstract class BaseSplashActivity<VB : ViewDataBinding> :
     BaseActivity<ActivitySplashScreenBinding>() {
 
-    companion object {
-        private const val TAG = "BaseSplashActivity"
-
-        // Event names
-        private const val EVENT_APP_OPEN = "app_open"
-    }
-
     // ========== ViewModel (MVVM) ==========
     private val viewModel: SplashViewModel by viewModels()
+
+    // ========== Helper Classes ==========
+    private val adLoader: SplashAdLoader by lazy { SplashAdLoader(this, viewModel) }
+    private val adLoadingChain: SplashAdLoadingChain by lazy { SplashAdLoadingChain(adLoader) }
+    private val navigator: SplashNavigator by lazy { SplashNavigator(this) }
 
     protected lateinit var viewBindingContent: VB
 
@@ -75,7 +68,8 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
                 val contentView =
                     layoutInflater.inflate(contentLayoutId, viewBinding.contentContainer, false)
                 viewBinding.contentContainer.addView(contentView)
-                viewBindingContent = androidx.databinding.DataBindingUtil.bind(contentView)!!
+                viewBindingContent = androidx.databinding.DataBindingUtil.bind(contentView)
+                    ?: throw IllegalStateException("Failed to bind content view")
             } catch (e: Exception) {
             }
         }
@@ -83,7 +77,7 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
             initAction()
         }
 
-        BaseEventLogger.logCustomEvent(EVENT_APP_OPEN)
+        BaseEventLogger.logCustomEvent(SplashConstants.EVENT_APP_OPEN)
 
         // Set default language based on device locale if first time opening
         if (!BaseUtils.isFinishObd()) {
@@ -104,38 +98,30 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
         viewModel.uiEvent.observe(this) { event ->
             when (event) {
                 is SplashViewModel.SplashUiEvent.LoadL1NativeAd -> {
-                    preloadL1NativeAds()
+                    adLoadingChain.executeL1Chain()
                 }
                 is SplashViewModel.SplashUiEvent.LoadL2NativeAd -> {
-                    preloadL2NativeAds()
+                    adLoadingChain.executeL2Chain()
                 }
                 is SplashViewModel.SplashUiEvent.LoadObAds -> {
-                    preloadObd1()
+                    adLoadingChain.executeOb1Chain()
                 }
-
                 is SplashViewModel.SplashUiEvent.PreLoadSplashInterstitial -> {
-                    preloadSplashInterstial()
+                    adLoader.preloadSplashInterstitial()
                 }
-
                 is SplashViewModel.SplashUiEvent.LoadNativeOrBanner -> {
-                    showSplashNativeOrBannerAds()
+                    adLoader.loadSplashNativeOrBanner(viewBinding.nativeOnboarding)
                 }
-
                 is SplashViewModel.SplashUiEvent.ShowInterstitialSplash -> {
-                    showSplashInterstitialAd()
+                    adLoader.showSplashInterstitial { startNextActivity() }
                 }
-
                 is SplashViewModel.SplashUiEvent.ShowNotNetwork -> {
-                    showNoNetworkDialog {
-                        initAction()
-                    }
+                    showNoNetworkDialog { initAction() }
                 }
-
                 is SplashViewModel.SplashUiEvent.ShowButtonContinue -> {
                     showContinueButton()
                 }
-
-                is SplashViewModel.SplashUiEvent.ProgressTime ->
+                is SplashViewModel.SplashUiEvent.ProgressTime -> {
                     viewBinding.splashProgressBar.start(
                         viewModel.maxSplashTime,
                         object : SplashProgressBar.ProgressCallback {
@@ -143,15 +129,16 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
                                 viewModel.isProgressCompleted = true
                                 viewModel.checkAndShowContinueButton()
                             }
-                        })
-
+                        }
+                    )
+                }
                 is SplashViewModel.SplashUiEvent.AutoOpen -> startNextActivity()
             }
         }
     }
 
     private fun initAction() {
-        ConsentDialogManager.instance!!.showDialogConsentMonkey(
+        ConsentDialogManager.instance?.showDialogConsentMonkey(
             activity = this@BaseSplashActivity,
             object : ConsentDialogManager.ConsentDialogListener {
                 override fun onConsentFormDismissed(state: ConsentDialogManager.ConsentDialogState) {
@@ -170,72 +157,8 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
         viewModel.initLoadAds(this)
     }
 
-    private fun showSplashNativeOrBannerAds() {
-        Logger.d( "showSplashNativeOrBannerAds: ")
-        loadAds(
-            placementId = "splash_ad_view",
-            adView = viewBinding.nativeOnboarding,
-            onSuccess = {
-                Logger.d( "✅ Splash Native Loaded")
-                viewModel.onSplashNativeLoaded(true)
-            },
-            onFailure = {
-                viewModel.onSplashNativeLoaded(false)
-            }
-        )
-    }
-
-    private fun preloadL1NativeAds() {
-        preloadAds(
-            placementId = "language_1_ad_view",
-            onSuccess = {
-                viewModel.onL1Loaded(true)
-            },
-            onFailure = {
-                preloadL2NativeAds()
-            }
-        )
-    }
-
-
-    private fun preloadL2NativeAds() {
-        preloadAds(
-            placementId = "language_2_ad_view",
-            onSuccess = {
-                viewModel.onL2Loaded(true)
-            },
-            onFailure = {
-                preloadObd1()
-            }
-        )
-    }
-
-    private fun preloadObd1() {
-        preloadAds(
-            BaseConstants.NATIVE_ONBOARD_1,
-            { viewModel.onOb1Loaded() },
-            { viewModel.onOb1Loaded() })
-    }
-
-    private fun preloadSplashInterstial() {
-        preloadAds(
-            placementId = "fs_splash",
-            onSuccess = {
-                Logger.d( "✅ Splash interstitial preloaded")
-                viewModel.onSplashInterPreloaded()
-            },
-            onFailure = {
-                Logger.w( "❌ Splash interstitial preload failed")
-                viewModel.onSplashInterPreloaded()
-            }
-        )
-    }
-
-    // checkAndShowContinueButton removed - logic moved to ViewModel
 
     private fun showContinueButton() {
-        Logger.d( "Showing continue button")
-
         val enableBtnContinue = RemoteConfigManager.instance?.enableBtnContinueSplash ?: true
 
         if (enableBtnContinue) {
@@ -258,7 +181,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
                     if (!viewModel.isProgressCompleted) {
                         viewBinding.splashProgressBar.forceComplete()
                     }
-                    Logger.d( "Min time passed, auto proceed")
                     onContinueButtonClicked()
                     viewModel.canNextScreenEvent.removeObservers(this)
                 }
@@ -267,7 +189,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
     }
 
     private fun onContinueButtonClicked() {
-        Logger.d( "Continue button clicked")
 
         // Hide continue button
         viewBinding.btnContinue.visibility = View.GONE
@@ -276,46 +197,9 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
         viewModel.onContinueClicked()
     }
 
-    // No parameters needed, decision made by VM
-    private fun showSplashInterstitialAd() {
-        loadAds(
-            placementId = "fs_splash",
-            onSuccess = {
-                startNextActivity()
-            },
-            isShow = true,
-            onFailure = {
-                startNextActivity()
-            }
-        )
-    }
-
     private fun startNextActivity() {
-
         viewBinding.splashProgressBar.end()
-
-        when (viewModel.getNavTarget()) {
-            SplashViewModel.NavigationTarget.Language1 -> {
-                val mainIntent =
-                    Intent(this@BaseSplashActivity, LanguageActivity::class.java)
-                        startActivity(mainIntent)
-            }
-
-            SplashViewModel.NavigationTarget.Language2 -> {
-                val mainIntent =
-                    Intent(this@BaseSplashActivity, Language2Activity::class.java)
-                startActivity(mainIntent)
-            }
-
-            SplashViewModel.NavigationTarget.Onboarding -> BaseExtension.showActivity(
-                this@BaseSplashActivity,
-                OnboardingActivity::class.java,
-                null
-            )
-
-            SplashViewModel.NavigationTarget.Home ->
-                BaseNavigator.getInstance().navigateToHome(this@BaseSplashActivity)
-        }
+        navigator.navigateTo(viewModel.getNavTarget())
     }
 
     private fun handleNotificationClick(intent: Intent?) {
@@ -350,9 +234,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
         if (currentSavedLang.isEmpty()) {
             SharedPref.saveString(BaseConstants.LANG_CODE_STORE, defaultLang)
 
-            Logger.d(
-                "Default language set to: $defaultLang based on device locale: ${Locale.getDefault().language}"
-            )
 
             // Update locale and text immediately without recreating activity
             updateLocaleAndText(defaultLang)
@@ -365,8 +246,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
 
         // Update button text using localized context
         viewBinding.btnContinue.text = localizedContext.getString(R.string.continue_btn)
-
-        Logger.d( "Updated locale and text to language: $language")
     }
 
     /**
@@ -374,25 +253,21 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
      * Animation repeats periodically to draw attention
      */
     fun startAppNameAnimation(view: GradientTextView) {
-            // Initial delay before first animation
-            Handler(Looper.getMainLooper()).postDelayed({
-                animateAppName(view)
-            }, 500) // Start after 500ms
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            animateAppName(view)
+        }, SplashConstants.ANIMATION_INITIAL_DELAY_MS)
+    }
 
     /**
      * Animate app name with shake effect and schedule next animation
      */
     private fun animateAppName(view: View) {
-        // Apply shake animation
         AnimationUtils.bounceView(view) {
-            // Schedule next animation after a delay
             Handler(Looper.getMainLooper()).postDelayed({
-                // Only continue animation if activity is not finishing
                 if (!isFinishing && !isDestroyed) {
                     animateAppName(view)
                 }
-            }, 3000) // Repeat every 3 seconds
+            }, SplashConstants.ANIMATION_REPEAT_INTERVAL_MS)
         }
     }
 
@@ -409,9 +284,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isNativeSplashClicked) {
-            showSplashNativeOrBannerAds();
-        }
     }
 
     fun getDeviceLanguage(): String {
@@ -475,7 +347,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
                     // Set background from drawable resource
                     resourceId?.let {
                         targetView.setBackgroundResource(it)
-                        Logger.d( "Background set to drawable resource: $it")
                     } ?: run {
                         Logger.w( "Drawable resource ID is null")
                     }
@@ -485,7 +356,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
                     // Set solid color background
                     colorStart?.let {
                         targetView.setBackgroundColor(it)
-                        Logger.d( "Background set to color: $it")
                     } ?: run {
                         Logger.w( "Color value is null")
                     }
@@ -499,9 +369,6 @@ abstract class BaseSplashActivity<VB : ViewDataBinding> :
                             intArrayOf(colorStart, colorEnd)
                         )
                         targetView.background = gradientDrawable
-                        Logger.d(
-                            "Background set to gradient: $colorStart -> $colorEnd"
-                        )
                     } else {
                         Logger.w("Gradient colors are null")
                     }

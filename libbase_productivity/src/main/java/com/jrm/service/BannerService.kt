@@ -205,7 +205,7 @@ object BannerService {
             initialDelayMs = initialDelayMs,
             placeLabel = placeName,
             onReload = { act, owner ->
-                if (AppOpenManager.getInstance().isInterstitialShowing) return@schedule false
+                if (FullScreenService.isFullScreenAdShowing) return@schedule false
                 loadAndShowBanner(act, activityName, placeName, onResult, lifecycleOwner = owner)
                 true
             }

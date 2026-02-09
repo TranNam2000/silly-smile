@@ -22,7 +22,7 @@
           "enable": true,
           "min_time_splash": 5,
           "time_out_splash": 12,
-          "enable_btn_continue": true
+          "enable_btn_continue": false
         },
         "paywall": {
           "enable": true,
@@ -34,11 +34,11 @@
           "show_session_finish_obd": true
         },
         "language": {
-          "is_two_screen": true,
+          "is_two_screen": false,
           "enable": true
         },
         "onboarding": {
-          "number_screen": 4,
+          "number_screen": 7,
           "enable": true
         }
       },
@@ -68,11 +68,11 @@
         "splash_ad_view": {
           "type": "native_view",
           "enable": true,
-          "ordered_priority_ads": "102_spl_native_high_f1;102_spl_banner_high_f1",
+          "ordered_priority_ads": "102_spl_native_high_f1;102_spl_native",
           "native_config": {
             "layout_res": "native_admob_medium_2",
             "meta_layout_res": "native_admob_medium_2",
-            "reload_time": 0
+            "reload_time": 5
           },
           "session_cap": -1,
           "max_attempt": 1
@@ -225,7 +225,7 @@
           "enable": true,
           "min_time_splash": 5,
           "time_out_splash": 12,
-          "enable_btn_continue": false
+          "enable_btn_continue": true
         },
         "paywall": {
           "enable": true,
@@ -508,6 +508,10 @@
     "402_click_inter": {
       "type": "interstitial",
       "unit": "402_click_inter"
+    },
+    "403_resume_open": {
+      "type": "app_open",
+      "unit": "403_resume_open"
     }
   }
 }

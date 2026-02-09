@@ -339,7 +339,7 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
     
     private fun preloadOnboarding1() {
         if (!BaseUtils.isFinishObd()) {
-            preloadAds(BaseConstants.NATIVE_ONBOARD_1,{
+            preloadAds("onboard_1",{
                 isOb1HighLoaded = true
             })
         }

@@ -15,6 +15,7 @@ import com.jrm.base.ViewPagerAddFragmentsAdapter
 import com.jrm.databinding.ActivityOnboardingScreenBinding
 import com.jrm.model.DataPage
 import com.jrm.onboarding.navigation.BaseNavigator
+import com.jrm.utils.BaseConstants
 import com.jrm.utils.BaseUtils
 import com.jrm.utils.remote_config.RemoteConfigManager
 
@@ -26,23 +27,47 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
     var preloadOb2 : Boolean = false
     // MutableLiveData to observe loadingOb3 state changes
     val loadingOb3LiveData = MutableLiveData<Boolean>().apply { value = true }
+    // Map to store ad type for each position (position -> ad type)
+    private val positionAdTypeMap = mutableMapOf<Int, String>()
     override fun getLayoutActivity(): Int {
         return R.layout.activity_onboarding_screen
     }
 
     override fun initViews() {
-        initViewPager()
+        try {
+            initViewPager()
+        } catch (e: Exception) {
+            Logger.e("OnboardingActivity - Error in initViewPager(): ${e.message}")
+            e.printStackTrace()
+        }
+    }
+
+    private fun getTotalPages(): Int {
+        return RemoteConfigManager.instance?.adConfig?.screenObd?.onboarding?.numberScreen 
+            ?: RemoteConfigManager.instance?.numberScreenObd 
+            ?: 4
+    }
+
+    private fun getOnboardingPlacementId(index: Int): String {
+        return when (index) {
+            1 -> BaseConstants.PLACEMENT_ONBOARDING_1
+            2 -> BaseConstants.PLACEMENT_ONBOARDING_2
+            3 -> BaseConstants.PLACEMENT_ONBOARDING_3
+            4 -> BaseConstants.PLACEMENT_ONBOARDING_4
+            5 -> BaseConstants.PLACEMENT_ONBOARDING_5
+            else -> "onboarding_$index"
+        }
     }
 
     public fun isFiveObd() : Boolean {
-        return RemoteConfigManager.instance!!.numberScreenObd.toInt() == 5;
+        return getTotalPages() == 5;
     }
 
     fun preloadOnboarding2() {
         preloadOb2 = true
 
         preloadAds(
-            placementId = "onboarding_2",
+            placementId = BaseConstants.PLACEMENT_ONBOARDING_2,
         )
     }
 
@@ -50,7 +75,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
         preloadOb3 = true
         if (!BaseUtils.isFinishObd()) {
             preloadAds(
-                placementId = "onboarding_3",
+                placementId = BaseConstants.PLACEMENT_ONBOARDING_3,
                 onSuccess = {
                     loadingOb3LiveData.postValue(false)
                 },
@@ -65,7 +90,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
         preload0b4 = true;
 
         preloadAds(
-            placementId = "onboarding_4",
+            placementId = BaseConstants.PLACEMENT_ONBOARDING_4,
         )
     }
 
@@ -73,45 +98,89 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
     private fun preloadOnboarding6() {
         preloadOb6 = true;
         if (!BaseUtils.isFinishObd()) {
-            preloadAds(placementId = "onboarding_inter")
+            preloadAds(placementId = BaseConstants.PLACEMENT_ONBOARDING_INTER)
         }
     }
     private fun initViewPager() {
         val adapter = ViewPagerAddFragmentsAdapter(supportFragmentManager, lifecycle)
         val config = RemoteConfigManager.instance?.adConfig
-        val listAdsPlacement =
-            listOf("onboarding_1", "onboarding_2", "onboarding_3", "onboarding_4", "onboarding_5")
-        var index = 0
-        var indextPage = 0
-        listAdsPlacement.forEach {
-            val onboardingActivity = config?.adPlacements?.get(it)
-            if (onboardingActivity != null) {
-                if (onboardingActivity.type != "native_view")
-                    listDataPage?.get(0)?.let {
-                        adapter.addFrag(
-                            OnboardingFragment(
-                                indextPage++,
-                                it.image,
-                                it.title,
-                                it.detail
-                            )
-                        )
+        val totalPages = getTotalPages()
+        
+        // Clear previous mapping
+        positionAdTypeMap.clear()
+        
+        // Generate placement IDs based on totalPages from config
+        val listAdsPlacement = (1..totalPages).map { getOnboardingPlacementId(it) }
+        
+        var fragmentPosition = 0
+        var dataPageIndex = 0
+        
+        // Count total fragments to determine last position
+        val totalFragments = listAdsPlacement.count { config?.adPlacements?.get(it) != null }
+        val lastFragmentPosition = totalFragments - 1
+        
+        listAdsPlacement.forEach { placementId ->
+            val placement = config?.adPlacements?.get(placementId)
+            if (placement != null) {
+                val adType = placement.type
+                
+                // Store ad type for this fragment position
+                positionAdTypeMap[fragmentPosition] = adType
+                
+                // Check ad type to determine if data page is needed
+                val isNativeAd = adType == "native_view" || adType == "native_fsn"
+                
+                // All screens (both native and non-native) can have data pages
+                val dataPage: DataPage? = if (listDataPage != null && listDataPage.isNotEmpty()) {
+                    if (fragmentPosition == lastFragmentPosition) {
+                        // Last screen always uses the last data page (even if data is less than total screens)
+                        listDataPage.last()
+                    } else {
+                        // Priority: use data in order first, then cycle if not enough
+                        // If dataPageIndex < listDataPage.size: use data[dataPageIndex]
+                        // If dataPageIndex >= listDataPage.size: cycle from beginning
+                        val selectedIndex = if (dataPageIndex < listDataPage.size) {
+                            // Use data in order (priority)
+                            dataPageIndex
+                        } else {
+                            // Cycle from beginning if not enough data
+                            val cycledIndex = (dataPageIndex - listDataPage.size) % listDataPage.size
+                            cycledIndex
+                        }
+                        listDataPage[selectedIndex]
                     }
-                index++
-                if (index == listDataPage?.size) {
-                    index = 0
                 } else {
+                    null
+                }
+                
+                if (isNativeAd) {
+                    // For native ads (native_view, native_fsn), add fragment with or without data page
                     adapter.addFrag(
                         OnboardingFragment(
-                            indextPage++
+                            fragmentPosition,
+                            dataPage?.image ?: 0,
+                            dataPage?.title ?: 0,
+                            dataPage?.detail ?: 0
+                        )
+                    )
+                } else {
+                    // For non-native ads, add fragment with data page
+                    adapter.addFrag(
+                        OnboardingFragment(
+                            fragmentPosition,
+                            dataPage?.image ?: 0,
+                            dataPage?.title ?: 0,
+                            dataPage?.detail ?: 0
                         )
                     )
                 }
+                
+                // Increment data page index for all screens (both native and non-native)
+                dataPageIndex++
+                
+                fragmentPosition++
             }
         }
-        // Add fragments from listDataPage
-        val totalPages =
-            RemoteConfigManager.instance?.adConfig?.screenObd?.onboarding?.numberScreen ?: 4
 
         viewBinding.viewpagerOnboard.setOffscreenPageLimit(totalPages);
 
@@ -128,39 +197,49 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
                 viewBinding.indicatorView.selection = position
                 viewBinding.indicatorView2.selection = position
                 showIndicatorView(position)
-                Logger.d( "onPageSelected: $position")
+                
+                val totalPages = getTotalPages()
+                val lastPos = totalPages - 1
+                
+                // Track screen view
+                YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob${position + 1}", ""))
+                
+                // Preload logic based on position and total pages
                 when (position) {
                     0 -> {
-                        YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob1", ""))
-                        if (!preloadOb3) {
-                            preloadOnboarding3()
-                        }
+                        // First screen: preload screens 2 and 3
                         if (!preloadOb2) {
                             preloadOnboarding2()
                         }
+                        if (!preloadOb3) {
+                            preloadOnboarding3()
+                        }
                     }
                     1 -> {
-                        YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob2", ""))
-                        if (!preload0b4 && !isFiveObd()) {
+                        // Second screen: preload screen 4 if exists
+                        if (totalPages >= 4 && !preload0b4) {
                             preloadOnboarding4()
                         }
                     }
                     2 -> {
-                        YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob3", ""))
-                        if (!preload0b4 && isFiveObd()) {
+                        // Third screen: preload screen 4 if 5 screens, or preload inter if 4 screens
+                        if (totalPages == 5 && !preload0b4) {
                             preloadOnboarding4()
+                        } else if (totalPages == 4 && !preloadOb6) {
+                            preloadOnboarding6()
                         }
                     }
-                    3 -> {
-                        YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob4", ""))
-                        preloadOnboarding6();
-                    }
-                    4 -> {
-                        YNMAirBridgeDefaultEvent.pushEventScreenView(YNMAirBridge.AppData("Ob5", ""))
-                        if (isFiveObd() && !preloadOb6 && RemoteConfigManager.instance!!.preloadInterFinishObdIndex.toInt() == 4) {
-                            preloadOnboarding6();
-                        }
-                    }
+                }
+                
+                // Preload interstitial before last screen
+                if (position == lastPos - 1 && !preloadOb6) {
+                    preloadOnboarding6()
+                }
+                
+                // Preload interstitial on last screen if condition matches
+                if (position == lastPos && totalPages == 5 && !preloadOb6 
+                    && RemoteConfigManager.instance!!.preloadInterFinishObdIndex.toInt() == 4) {
+                    preloadOnboarding6()
                 }
             }
         })
@@ -186,7 +265,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
 
     private fun goToNextActivity() {
         // Show preloaded waterfall ad
-        loadAds("onboarding_inter", onSuccess = { goHome() }, onFailure = { goHome() })
+        loadAds(BaseConstants.PLACEMENT_ONBOARDING_INTER, onSuccess = { goHome() }, onFailure = { goHome() })
     }
     private fun goHome() {
         YNMAds.getInstance().adConfig.setInterFlow(RemoteConfigManager.instance!!.getStartIndexInter(), RemoteConfigManager.instance!!.getDeltaIndexInter())
@@ -196,29 +275,30 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
     }
 
     public fun getListPosNativeFull() : List<Int> {
-        if (isFiveObd()) {
-            return listOf(1,3);
-        }
-        return listOf(2)
+        // Return positions where ad type is native_fsn (full screen native)
+        return positionAdTypeMap.filter { it.value == "native_fsn" }
+            .keys
+            .sorted()
     }
+    
     public fun getListPosNativeNormal() : List<Int> {
-        if (isFiveObd()) {
-            return listOf(0,4);
-        }
-        return listOf(0,3)
+        // Return positions where ad type is native_view (normal native)
+        return positionAdTypeMap.filter { it.value == "native_view" }
+            .keys
+            .sorted()
     }
+    
     public fun getListNoNative() : List<Int> {
-        return listOf()
-        if (isFiveObd()) {
-            return listOf(2)
+        // Return positions where ad type is not native_view or native_fsn
+        return positionAdTypeMap.filter { 
+            it.value != "native_view" && it.value != "native_fsn" 
         }
-        return listOf(1)
+            .keys
+            .sorted()
     }
+    
     public fun getLastPos(): Int {
-        if (isFiveObd()) {
-            return 4
-        }
-        return 3
+        return getTotalPages() - 1
     }
 
 
@@ -277,7 +357,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingScreenBinding>() {
          * List of onboarding pages data
          * Default values are set for 5 pages, can be overridden using setListDataPage()
          */
-        private var listDataPage: List<DataPage>? = null
+        private var listDataPage: List<DataPage> = arrayListOf()
 
         /**
          * Set custom onboarding pages data

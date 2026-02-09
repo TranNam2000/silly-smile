@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.jrm.R
 import com.jrm.base.BaseFragment
 import com.jrm.databinding.FragmentObdSlideBinding
+import com.jrm.utils.BaseConstants
 import com.jrm.utils.purchase.IAPHelper
 
 
@@ -94,7 +95,7 @@ class OnboardingFragment(
                 0 -> {
                     if (!IAPHelper.isPremium()) {
                         activity.loadAds(
-                            "onboarding_1",
+                            BaseConstants.PLACEMENT_ONBOARDING_1,
                             adView = binding!!.nativeOnboarding,
                             onSuccess = { },
                             onFailure = { },
@@ -109,7 +110,7 @@ class OnboardingFragment(
                 1 -> {
                     if (!IAPHelper.isPremium()) {
                         activity.loadAds(
-                            "onboarding_2",
+                            BaseConstants.PLACEMENT_ONBOARDING_2,
                             adView = binding!!.nativeOnboarding,
                             onSuccess = { },
                             onFailure = { },
@@ -140,7 +141,7 @@ class OnboardingFragment(
                         context?.let {
                             activity.loadAds(
                                 adView = binding!!.nativeOnboardingFull,
-                                placementId = "onboarding_4",
+                                placementId = BaseConstants.PLACEMENT_ONBOARDING_4,
                                 lifecycleOwner = this
                             )
 
@@ -148,7 +149,7 @@ class OnboardingFragment(
                     } else {
                             activity.loadAds(
                                 adView = binding!!.nativeOnboarding,
-                                placementId = "onboarding_4",
+                                placementId = BaseConstants.PLACEMENT_ONBOARDING_4,
                                 lifecycleOwner = this
                             )
                     }
@@ -157,7 +158,7 @@ class OnboardingFragment(
                     if (activity.isFiveObd()) {
                                 activity.loadAds(
                                 adView = binding!!.nativeOnboarding,
-                                placementId = "onboarding_5",
+                                placementId = BaseConstants.PLACEMENT_ONBOARDING_5,
                                 lifecycleOwner = this
                             )
 
@@ -182,7 +183,7 @@ class OnboardingFragment(
     private fun showNativeObd3() {
         activity.loadAds(
             adView = binding!!.nativeOnboardingFull,
-            placementId = "onboarding_3",
+            placementId = BaseConstants.PLACEMENT_ONBOARDING_3,
             isShow = true,
             lifecycleOwner = this
         )

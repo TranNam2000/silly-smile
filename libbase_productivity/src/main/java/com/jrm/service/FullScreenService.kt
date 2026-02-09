@@ -59,6 +59,11 @@ object FullScreenService {
     // Callbacks for preload completion
     private val preloadCallbacks = mutableMapOf<String, (FullScreenPreloadResult) -> Unit>()
 
+    // Track if full screen ad is currently showing
+    @Volatile
+    var isFullScreenAdShowing: Boolean = false
+        private set
+
     private fun getUnitId(config: UnitIdConfig): String {
         return if (BuildConfig.DEBUG && config.unitIdTest.isNotEmpty()) {
             config.unitIdTest
@@ -321,6 +326,7 @@ object FullScreenService {
             }
         )
 
+        Logger.d("🔵 [FULL_SCREEN] Preloading native ad - adPlace=$adPlace, adPlaceConstant=$adPlaceConstant, adId=$adId")
         AdsNativeMultiPreload.preloadMultipleNativeAds(
             context as? Activity ?: return,
             YNMAirBridge.AppData(activityName, adPlaceConstant),
@@ -329,9 +335,12 @@ object FullScreenService {
             object : YNMAdsCallbacks() {
                 override fun onNativeAdLoaded(nativeAd: NativeAd) {
                     super.onNativeAdLoaded(nativeAd)
-                    Logger.d("Native ad preloaded successfully for $adPlace")
+                    Logger.d("🔵 [FULL_SCREEN] Native ad preloaded successfully - adPlace=$adPlace, adPlaceConstant=$adPlaceConstant")
+                    val isLoadedCheck = AdsNativeMultiPreload.isAdLoaded(adPlaceConstant)
+                    Logger.d("🔵 [FULL_SCREEN] Verification after preload: isAdLoaded($adPlaceConstant) = $isLoadedCheck")
                     preloadedAds[adPlace] = Pair("full_native", adPlaceConstant)
                     val callback = preloadCallbacks.remove(adPlace)
+
                     callback?.invoke(FullScreenPreloadResult(true, "full_native", adPlace))
                 }
 
@@ -376,6 +385,21 @@ object FullScreenService {
 
         Logger.d("Showing preloaded ad for $adPlace: format=$format")
 
+        // Wrap callback to reset showing state when ad is closed
+        val wrappedCallback: ((Boolean) -> Unit)? = if (callback != null) {
+            { result ->
+                isFullScreenAdShowing = false
+                callback.invoke(result)
+            }
+        } else {
+            { result ->
+                isFullScreenAdShowing = false
+            }
+        }
+
+        // Mark as showing AFTER all checks passed and callback is wrapped
+        isFullScreenAdShowing = true
+
         when (format) {
             "inter" -> {
                 showPreloadedInterstitial(
@@ -383,12 +407,12 @@ object FullScreenService {
                     activityName,
                     adPlace,
                     adPlaceConstant,
-                    callback
+                    wrappedCallback
                 )
             }
 
             "app_open" -> {
-                showPreloadedAppOpen(activity, activityName, adPlace, adPlaceConstant, callback)
+                showPreloadedAppOpen(activity, activityName, adPlace, adPlaceConstant, wrappedCallback)
             }
 
             "full_native" -> {
@@ -397,12 +421,13 @@ object FullScreenService {
                     activityName,
                     adPlace,
                     adPlaceConstant,
-                    callback
+                    wrappedCallback
                 )
             }
 
             else -> {
                 Logger.w("Unknown format: $format")
+                isFullScreenAdShowing = false
                 callback?.invoke(false)
             }
         }
@@ -469,11 +494,18 @@ object FullScreenService {
 
                 override fun onInterstitialShow() {
                     super.onInterstitialShow()
+                    // Ad is showing, callback will be called in onNextAction or onAdClosed
                 }
 
                 override fun onAdClosed() {
                     super.onAdClosed()
                     AdsInterMultiPreload.destroyPreloadedAd(adPlaceConstant)
+                    // Ensure callback is called if not already called
+                    // Note: onNextAction should have been called, but ensure state is reset
+                    if (isFullScreenAdShowing) {
+                        isFullScreenAdShowing = false
+                        callback?.invoke(true)
+                    }
                 }
 
                 override fun onAdFailedToLoad(adError: AdsError?) {
@@ -517,6 +549,11 @@ object FullScreenService {
                 override fun onAdClosed() {
                     super.onAdClosed()
                     AdsAppOpenMultiPreload.destroyPreloadedAd(adPlaceConstant)
+                    // Ensure state is reset if callback wasn't called
+                    if (isFullScreenAdShowing) {
+                        isFullScreenAdShowing = false
+                        callback?.invoke(true)
+                    }
                 }
 
                 override fun onAdFailedToLoad(adError: AdsError?) {
@@ -538,28 +575,24 @@ object FullScreenService {
         adPlaceConstant: String,
         callback: ((Boolean) -> Unit)?
     ) {
-        if (!AdsNativeMultiPreload.isAdLoaded(adPlaceConstant)) {
-            Logger.w("Native ad not loaded for $adPlaceConstant")
+        Logger.d("🔵 [FULL_SCREEN] Checking native ad for adPlace=$adPlace, adPlaceConstant=$adPlaceConstant")
+        val isLoaded = AdsNativeMultiPreload.isAdLoaded(adPlaceConstant)
+        Logger.d("🔵 [FULL_SCREEN] isAdLoaded($adPlaceConstant) = $isLoaded")
+        
+        if (!isLoaded) {
+            Logger.w("Native ad not loaded for $adPlaceConstant (adPlace=$adPlace)")
+            // Try to check with adPlace as fallback
+            val isLoadedWithAdPlace = AdsNativeMultiPreload.isAdLoaded(adPlace)
+            Logger.d("🔵 [FULL_SCREEN] Fallback check isAdLoaded($adPlace) = $isLoadedWithAdPlace")
+            if (isLoadedWithAdPlace) {
+                Logger.d("🔵 [FULL_SCREEN] Using adPlace as key instead of adPlaceConstant")
+                doShowPreloadedNativeFullScreen(activity, adPlace, adPlace, callback)
+                return
+            }
             callback?.invoke(false)
             return
         }
-
-        val delaySeconds = RemoteConfigManager.instance?.adConfig?.adPlacements?.get(adPlace)
-            ?.nativeConfig?.delayTime ?: 0L
-        val delayMs = (if (delaySeconds > 0) delaySeconds else 0L) * 1000L
-
-        if (delayMs > 0) {
-            Logger.d("Native full: showing after ${delaySeconds}s delay for $adPlace")
-            Handler(Looper.getMainLooper()).postDelayed({
-                if (!activity.isFinishing) {
-                    doShowPreloadedNativeFullScreen(activity, adPlace, adPlaceConstant, callback)
-                } else {
-                    callback?.invoke(false)
-                }
-            }, delayMs)
-        } else {
-            doShowPreloadedNativeFullScreen(activity, adPlace, adPlaceConstant, callback)
-        }
+        doShowPreloadedNativeFullScreen(activity, adPlace, adPlaceConstant, callback)
     }
 
     private fun doShowPreloadedNativeFullScreen(
@@ -575,41 +608,116 @@ object FullScreenService {
         }
 
         try {
-            // Inflate the full screen layout
-            val inflater = android.view.LayoutInflater.from(activity)
-            val fullScreenView = inflater.inflate(
-                com.jrm.R.layout.layout_native_fullscreen_waterfall,
-                null
-            )
-
-            // Get the YNMNativeAdView
-            val nativeAdView =
-                fullScreenView.findViewById<YNMNativeAdView>(com.jrm.R.id.native_onboarding_full)
-
-            // Get the next button
-            val btnNext = fullScreenView.findViewById<View>(
-                com.jrm.R.id.btn_next
-            )
-
-            // Get the container
-            val container = fullScreenView.findViewById<View>(
-                activity.resources.getIdentifier(
-                    "fullscreen_native_container",
-                    "id",
-                    activity.packageName
-                )
-            )
-
-            // Add to activity's root view
             val rootView =
                 activity.window.decorView.findViewById<android.view.ViewGroup>(android.R.id.content)
-            rootView.addView(fullScreenView)
+            if (rootView == null) {
+                Logger.e("Root view not found")
+                callback?.invoke(false)
+                return
+            }
 
-            // Show the container
-            container.visibility = View.VISIBLE
+            // Check if native_onboarding_full view already exists in activity
+            // Search in decorView to find existing views (views added programmatically)
+            val decorView = activity.window.decorView
+            val existingNativeAdView =
+                decorView.findViewById<YNMNativeAdView>(com.jrm.R.id.native_onboarding_full)
+            val existingContainer =
+                decorView.findViewById<View>(com.jrm.R.id.fullscreen_native_container)
+            val existingBtnNext = decorView.findViewById<View>(com.jrm.R.id.btn_next)
+            
+            Logger.d("Checking for existing views - nativeAdView: ${existingNativeAdView != null}, container: ${existingContainer != null}, btnNext: ${existingBtnNext != null}")
+
+            val nativeAdView: YNMNativeAdView
+            val container: View
+            val btnNext: View
+            val fullScreenView: View
+
+            if (existingNativeAdView != null && existingContainer != null && existingBtnNext != null) {
+                // Use existing views from activity
+                Logger.d("Using existing native_onboarding_full view in activity for $adPlace")
+                nativeAdView = existingNativeAdView
+                container = existingContainer
+                btnNext = existingBtnNext
+
+                // Clear previous click listeners to avoid multiple callbacks
+                btnNext.setOnClickListener(null)
+
+                // Show the container
+                container.visibility = View.VISIBLE
+                Logger.d("Container visibility set to VISIBLE for $adPlace")
+
+                // Set click listener
+                btnNext.setOnClickListener {
+                    // Hide container if using existing view
+                    container.visibility = View.GONE
+                    // Destroy the ad
+                    AdsNativeMultiPreload.destroyPreloadedAd(adPlaceConstant)
+                    // Clear from preloaded ads map
+                    preloadedAds.remove(adPlace)
+                    // Invoke callback
+                    callback?.invoke(true)
+                    Logger.d("Native full screen ad closed by user")
+                }
+            } else {
+                // Inflate new layout
+                Logger.d("Inflating new layout for native full screen ad for $adPlace")
+                val inflater = android.view.LayoutInflater.from(activity)
+                fullScreenView = inflater.inflate(
+                    com.jrm.R.layout.layout_native_fullscreen_waterfall,
+                    null
+                )
+
+                // Get the YNMNativeAdView
+                nativeAdView =
+                    fullScreenView.findViewById(com.jrm.R.id.native_onboarding_full)
+                if (nativeAdView == null) {
+                    Logger.e("Native ad view not found in layout")
+                    callback?.invoke(false)
+                    return
+                }
+
+                // Get the next button
+                btnNext = fullScreenView.findViewById<View>(com.jrm.R.id.btn_next)
+                if (btnNext == null) {
+                    Logger.e("Next button not found in layout")
+                    callback?.invoke(false)
+                    return
+                }
+
+                // Get the container
+                container =
+                    fullScreenView.findViewById<View>(com.jrm.R.id.fullscreen_native_container)
+                if (container == null) {
+                    Logger.e("Container not found in layout")
+                    callback?.invoke(false)
+                    return
+                }
+
+                // Add to root view
+                rootView.addView(fullScreenView)
+
+                // Show the container
+                container.visibility = View.VISIBLE
+
+                // Set click listener
+                btnNext.setOnClickListener {
+                    Logger.d("Native full screen ad close button clicked")
+                    // Remove the full screen view
+                    rootView.removeView(fullScreenView)
+                    // Destroy the ad
+                    AdsNativeMultiPreload.destroyPreloadedAd(adPlaceConstant)
+                    // Clear from preloaded ads map
+                    preloadedAds.remove(adPlace)
+                    // Invoke callback
+                    callback?.invoke(true)
+                    Logger.d("Native full screen ad closed by user")
+                }
+            }
+
 
             // Show the native ad using YNMNativeAdView's built-in method
             // YNMNativeAdView will automatically load and display the ad
+            Logger.d("Calling AdsNativeMultiPreload.showPreloadedNativeAd for $adPlace")
             AdsNativeMultiPreload.showPreloadedNativeAd(
                 activity,
                 nativeAdView,
@@ -618,20 +726,7 @@ object FullScreenService {
                 com.jrm.R.layout.custom_full_screen_native_ads,
             )
 
-            // Handle next button click
-            btnNext.setOnClickListener {
-                // Remove the full screen view
-                rootView.removeView(fullScreenView)
-                // Destroy the ad
-                AdsNativeMultiPreload.destroyPreloadedAd(adPlaceConstant)
-                // Clear from preloaded ads map
-                preloadedAds.remove(adPlace)
-                // Invoke callback
-                callback?.invoke(true)
-                Logger.d("Native full screen ad closed by user")
-            }
-
-            Logger.d("Native full screen ad shown for $adPlace")
+            Logger.d("Native full screen ad shown successfully for $adPlace")
         } catch (e: Exception) {
             Logger.e("Error showing native full screen ad", e)
             callback?.invoke(false)
@@ -643,7 +738,38 @@ object FullScreenService {
      * Check if ad is preloaded for a specific ad place
      */
     fun isPreloaded(adPlace: String): Boolean {
-        return preloadedAds.containsKey(adPlace)
+        val hasEntry = preloadedAds.containsKey(adPlace)
+        if (!hasEntry) {
+            return false
+        }
+        
+        // Verify that the ad is actually loaded in the SDK
+        val preloaded = preloadedAds[adPlace]
+        if (preloaded == null) {
+            return false
+        }
+        
+        val (format, adPlaceConstant) = preloaded
+        Logger.d("🔵 [FULL_SCREEN] isPreloaded($adPlace) - format=$format, adPlaceConstant=$adPlaceConstant")
+        
+        // Check if ad is actually loaded in the SDK
+        val isActuallyLoaded = when (format) {
+            "inter" -> AdsInterMultiPreload.isAdLoaded(adPlaceConstant)
+            "app_open" -> AdsAppOpenMultiPreload.isAdLoaded(adPlaceConstant)
+            "full_native" -> AdsNativeMultiPreload.isAdLoaded(adPlaceConstant)
+            else -> false
+        }
+        
+        Logger.d("🔵 [FULL_SCREEN] isPreloaded($adPlace) - SDK check result: $isActuallyLoaded")
+        
+        // If not actually loaded, remove from cache to prevent false positives
+        if (!isActuallyLoaded) {
+            Logger.w("🔵 [FULL_SCREEN] Ad marked as preloaded but not actually loaded, removing from cache")
+            preloadedAds.remove(adPlace)
+            return false
+        }
+        
+        return true
     }
 
     /**
@@ -676,5 +802,13 @@ object FullScreenService {
         preloadedAds.clear()
         adConfigCache.clear()
         preloadCallbacks.clear()
+        isFullScreenAdShowing = false
+    }
+
+    /**
+     * Reset showing state (use when needed to force reset)
+     */
+    fun resetShowingState() {
+        isFullScreenAdShowing = false
     }
 }

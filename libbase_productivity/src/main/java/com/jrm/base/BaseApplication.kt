@@ -46,9 +46,6 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    @Volatile
-    private var pendingYnmInit = false
-
     // region Properties
     @VisibleForTesting
     internal var activeActivitiesCount = 0
@@ -62,15 +59,13 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
     override fun onCreate() {
         super.onCreate()
         registerActivityLifecycleCallbacks(this)
-        applicationScope.launch {
-            runCatching {
-                initializeCore()
-                initializeFirebase()
-                initializeAds()
-                runOnMainThread { tryRunYnmInitIfReady() }
-            }.onFailure { exception ->
-                Logger.e("Error during application initialization", exception)
-            }
+        runCatching {
+            initializeCore()
+            initializeFirebase()
+            initializeAds()
+            tryRunYnmInitIfReady()
+        }.onFailure { exception ->
+            Logger.e("Error during application initialization", exception)
         }
     }
 
@@ -81,8 +76,8 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
      * reclaimed with the process.
      */
     override fun onTerminate() {
-        applicationScope.cancel()
         unregisterActivityLifecycleCallbacks(this)
+        applicationScope.cancel()
         super.onTerminate()
     }
     // endregion
@@ -92,7 +87,6 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
         activeActivitiesCount++
         if (activeActivitiesCount == 1) {
             onAppMovedToForeground()
-            tryRunYnmInitIfReady()
         }
     }
 
@@ -148,17 +142,17 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
      * Initialize and configure the ads SDK (config only). YNMAds.init() is deferred to
      * [tryRunYnmInitIfReady] when the first Activity exists, to avoid NPE in AppOpenManager lifecycle.
      */
-    private suspend fun initializeAds() {
+    private fun initializeAds() {
         SharedPref.saveBoolean(BaseConstants.ENABLE_ADS, true)
-        if (RemoteConfigManager.instance?.loadConfigCallback(this) == true) {
-            val adsConfig = createAdsConfig()
-            this.ynmAdsConfig = adsConfig
-            configureAdTracking()
-            adsConfig.intervalInterstitialAd =
-                (RemoteConfigManager.instance?.adConfig?.configs?.timeInterstitialCooldown ?: 30L).toInt()
-            adsConfig.intervalRewardAd =
-                (RemoteConfigManager.instance?.adConfig?.configs?.timeOutReward ?: 5L).toInt()
-            pendingYnmInit = true
+        val adsConfig = createAdsConfig()
+        this.ynmAdsConfig = adsConfig
+        configureAdTracking()
+        applicationScope.launch {
+            if (RemoteConfigManager.instance?.loadConfigCallback(this@BaseApplication) == true) {
+                this@BaseApplication.ynmAdsConfig.intervalInterstitialAd =
+                    (RemoteConfigManager.instance?.adConfig?.configs?.timeInterstitialCooldown
+                        ?: 15).toInt() * 1000
+            }
         }
     }
 
@@ -167,11 +161,8 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
      * we have at least one Activity, so AppOpenManager's lifecycle observer does not NPE.
      */
     private fun tryRunYnmInitIfReady() {
-        if (!pendingYnmInit || activeActivitiesCount < 1) return
-        val config = this.ynmAdsConfig ?: return
-        pendingYnmInit = false
         runCatching {
-            YNMAds.getInstance().init(null, this, config)
+            YNMAds.getInstance().init(null, this, this.ynmAdsConfig)
             initializeAirbridge()
             configureAdBehavior()
         }.onFailure { exception ->
@@ -194,7 +185,18 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
         }
 
         return YNMAdsConfig(this, YNMAdsConfig.PROVIDER_ADMOB, environment).apply {
-            idAdResume = BuildConfig._403_resume_open
+            applicationScope.launch {
+                if (RemoteConfigManager.instance?.loadConfigCallback(this@BaseApplication) == true) {
+                    val unitIdConfig =
+                        RemoteConfigManager.instance?.idRegistry?.apps?.get(0)?.unitIds?.filter { it.unitId == "403_resume_open" }
+                            ?.getOrNull(0)
+                    if (unitIdConfig != null)
+                        idAdResume = if (BuildConfig.DEBUG) {
+                            unitIdConfig.unitIdTest
+                        } else unitIdConfig.unitId
+
+                }
+            }
             listDeviceTest = mutableListOf(TEST_DEVICE_ID).also {
                 listTestDevice.addAll(it)
             }
@@ -256,9 +258,9 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
         }
     }
 
-    // endregion
+// endregion
 
-    // region App State Callbacks
+// region App State Callbacks
     /**
      * Called when app moves to foreground (first activity created)
      */
@@ -276,9 +278,9 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
             BaseEventLogger.logCustomEvent(EVENT_LEAVE_APP)
         }
     }
-    // endregion
+// endregion
 
-    // region Abstract Methods
+// region Abstract Methods
     /**
      * Provide the Airbridge token for this app
      * @return Airbridge token string
@@ -290,7 +292,7 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
      * @return Airbridge app name
      */
     abstract fun appNameAirBridge(): String
-    // endregion
+// endregion
 
     // region Companion Object
     companion object {
@@ -390,13 +392,12 @@ abstract class BaseApplication : AdsApplication(), Application.ActivityLifecycle
                     val context = contextApp
                     if (context != null && !SharedPref.readBoolean(FCM_TOKEN_KEY, false)) {
                         SharedPref.saveBoolean(FCM_TOKEN_KEY, true)
-
                     }
                 } ?: Logger.w("FCM token is null")
             }
         }
 
     }
-    // endregion
+// endregion
 
 }

@@ -48,6 +48,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initViews() {
         BaseUtils.setFinishObd(true)
+        BaseUtils.setSessionNumber()
         setupEdgeToEdge()
         navigate(MainFragment(), addToBackStack = false, showInter = false)
         requestNotificationPermission()
