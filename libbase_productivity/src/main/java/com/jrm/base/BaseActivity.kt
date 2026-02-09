@@ -38,6 +38,7 @@ import com.jrm.utils.BaseConstants
 import com.jrm.utils.InternetUtil
 import com.jrm.utils.LocaleHelper
 import com.jrm.utils.SharedPref
+import com.jrm.utils.findViewByName
 import com.jrm.utils.remote_config.RemoteConfigManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -135,7 +136,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
     protected abstract fun initViews()
 
     fun loadCollapsibleBanner(id:String, gravity: String? = "bottom") {
-        findViewByName<View>("bannerView")?.let {
+       findViewByName<View>("bannerView")?.let {
             if (!AdsHelper.isDisableAllAd()) {
                 YNMAds.getInstance().setInitCallback {
                     YNMAds.getInstance().loadCollapsibleBanner(this, id, gravity, YNMAdsCallbacks(YNMAirBridge.AppData(activityName, "banner"), YNMAds.BANNER))
@@ -412,22 +413,6 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    /**
-     * Safe way to find view by name across different modules
-     * Returns null if view doesn't exist instead of crashing
-     */
-    private inline fun <reified T : View> findViewByName(viewName: String): T? {
-        return try {
-            val resourceId = resources.getIdentifier(viewName, "id", packageName)
-            if (resourceId != 0) {
-                findViewById<T>(resourceId)
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
     fun loadNativeBanner() {
         if (!isInForeground || AppOpenManager.getInstance().isInterstitialShowing || isDestroyed || isFinishing) {
             return
@@ -509,7 +494,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
             return
         }
 
-        (collapsibleNativeAdManager as? com.jrm.ads.CollapsibleNativeAdManager)?.let { manager ->
+        (collapsibleNativeAdManager as? CollapsibleNativeAdManager)?.let { manager ->
             // Set collapse callback if provided
             onCollapse?.let { callback ->
                 manager.setOnCollapseCallback(callback)
@@ -604,7 +589,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
      * pauses when fragment is hidden and resumes when fragment is visible.
      */
     fun loadAds(
-        placementId: String,
+        placementName: String,
         adView: View? = null,
         onSuccess: (() -> Unit)? = null,
         onFailure: (() -> Unit)? = null,
@@ -614,7 +599,7 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
         WaterfallAdHelper.loadAd(
             activity = this,
             activityName = activityName,
-            placementName = placementId,
+            placementName = placementName,
             adView = adView,
             isShow = isShow,
             onSuccess = onSuccess,
@@ -630,14 +615,14 @@ public abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
      * @param onFailure Callback on failure
      */
     fun preloadAds(
-        placementId: String,
+        placementName: String,
         onSuccess: (() -> Unit)? = null,
         onFailure: (() -> Unit)? = null
     ) {
         WaterfallAdHelper.loadAd(
             activity = this,
             activityName = activityName,
-            placementName = placementId,
+            placementName = placementName,
             adView = null,
             onSuccess = onSuccess,
             onFailure = onFailure,

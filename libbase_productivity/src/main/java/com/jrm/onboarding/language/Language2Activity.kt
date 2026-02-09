@@ -12,7 +12,9 @@ import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.ads.nomyek_admob.admobs.AppOpenManager
+import com.ads.nomyek_admob.utils.AdsNativeMultiPreload
 import com.ironsource.sdk.IronSourceNetwork.showAd
+import com.jrm.service.NativeService
 import com.jrm.R
 import com.jrm.base.BaseActivity
 import com.jrm.base.BaseEventLogger
@@ -211,7 +213,7 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
 
     private fun showAd() {
         loadAds(
-            placementId = "language_2_ad_view",
+            placementName = "language_2_ad_view",
             adView = viewBinding.nativeAd
         )
     }
@@ -302,7 +304,7 @@ class Language2Activity : BaseActivity<ActivityLanguagesBinding>() {
 
     private fun reShowNativeLanguageAds() {
         loadAds(
-            placementId = "language_2_ad_view",
+            placementName = "language_2_ad_view",
             adView = viewBinding.nativeAd,
         )
     }

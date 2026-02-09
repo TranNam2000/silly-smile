@@ -385,17 +385,6 @@ object FullScreenService {
 
         Logger.d("Showing preloaded ad for $adPlace: format=$format")
 
-        // Wrap callback to reset showing state when ad is closed
-        val wrappedCallback: ((Boolean) -> Unit)? = if (callback != null) {
-            { result ->
-                isFullScreenAdShowing = false
-                callback.invoke(result)
-            }
-        } else {
-            { result ->
-                isFullScreenAdShowing = false
-            }
-        }
 
         // Mark as showing AFTER all checks passed and callback is wrapped
         isFullScreenAdShowing = true
@@ -406,13 +395,12 @@ object FullScreenService {
                     activity,
                     activityName,
                     adPlace,
-                    adPlaceConstant,
-                    wrappedCallback
+                    adPlaceConstant, callback
                 )
             }
 
             "app_open" -> {
-                showPreloadedAppOpen(activity, activityName, adPlace, adPlaceConstant, wrappedCallback)
+                showPreloadedAppOpen(activity, activityName, adPlace, adPlaceConstant, callback)
             }
 
             "full_native" -> {
@@ -421,7 +409,7 @@ object FullScreenService {
                     activityName,
                     adPlace,
                     adPlaceConstant,
-                    wrappedCallback
+                    callback
                 )
             }
 
@@ -502,15 +490,15 @@ object FullScreenService {
                     AdsInterMultiPreload.destroyPreloadedAd(adPlaceConstant)
                     // Ensure callback is called if not already called
                     // Note: onNextAction should have been called, but ensure state is reset
-                    if (isFullScreenAdShowing) {
-                        isFullScreenAdShowing = false
-                        callback?.invoke(true)
-                    }
+                    isFullScreenAdShowing = false
+                    callback?.invoke(true)
                 }
 
                 override fun onAdFailedToLoad(adError: AdsError?) {
                     super.onAdFailedToLoad(adError)
+                    isFullScreenAdShowing = false
                     callback?.invoke(false)
+
                 }
             }
         )
@@ -550,15 +538,14 @@ object FullScreenService {
                     super.onAdClosed()
                     AdsAppOpenMultiPreload.destroyPreloadedAd(adPlaceConstant)
                     // Ensure state is reset if callback wasn't called
-                    if (isFullScreenAdShowing) {
-                        isFullScreenAdShowing = false
-                        callback?.invoke(true)
-                    }
+                    isFullScreenAdShowing = false
+                    callback?.invoke(true)
                 }
 
                 override fun onAdFailedToLoad(adError: AdsError?) {
                     super.onAdFailedToLoad(adError)
                     callback?.invoke(false)
+                    isFullScreenAdShowing = false
                 }
             }
         )
@@ -578,7 +565,7 @@ object FullScreenService {
         Logger.d("🔵 [FULL_SCREEN] Checking native ad for adPlace=$adPlace, adPlaceConstant=$adPlaceConstant")
         val isLoaded = AdsNativeMultiPreload.isAdLoaded(adPlaceConstant)
         Logger.d("🔵 [FULL_SCREEN] isAdLoaded($adPlaceConstant) = $isLoaded")
-        
+
         if (!isLoaded) {
             Logger.w("Native ad not loaded for $adPlaceConstant (adPlace=$adPlace)")
             // Try to check with adPlace as fallback
@@ -624,7 +611,7 @@ object FullScreenService {
             val existingContainer =
                 decorView.findViewById<View>(com.jrm.R.id.fullscreen_native_container)
             val existingBtnNext = decorView.findViewById<View>(com.jrm.R.id.btn_next)
-            
+
             Logger.d("Checking for existing views - nativeAdView: ${existingNativeAdView != null}, container: ${existingContainer != null}, btnNext: ${existingBtnNext != null}")
 
             val nativeAdView: YNMNativeAdView
@@ -654,6 +641,7 @@ object FullScreenService {
                     AdsNativeMultiPreload.destroyPreloadedAd(adPlaceConstant)
                     // Clear from preloaded ads map
                     preloadedAds.remove(adPlace)
+                    isFullScreenAdShowing = false
                     // Invoke callback
                     callback?.invoke(true)
                     Logger.d("Native full screen ad closed by user")
@@ -708,6 +696,7 @@ object FullScreenService {
                     AdsNativeMultiPreload.destroyPreloadedAd(adPlaceConstant)
                     // Clear from preloaded ads map
                     preloadedAds.remove(adPlace)
+                    isFullScreenAdShowing = false
                     // Invoke callback
                     callback?.invoke(true)
                     Logger.d("Native full screen ad closed by user")
@@ -724,6 +713,11 @@ object FullScreenService {
                 adPlaceConstant,
                 com.jrm.R.layout.custom_full_screen_native_ads,
                 com.jrm.R.layout.custom_full_screen_native_ads,
+                callback = {
+                    if (!it) {
+                        isFullScreenAdShowing = false
+                    }
+                }
             )
 
             Logger.d("Native full screen ad shown successfully for $adPlace")
@@ -742,16 +736,16 @@ object FullScreenService {
         if (!hasEntry) {
             return false
         }
-        
+
         // Verify that the ad is actually loaded in the SDK
         val preloaded = preloadedAds[adPlace]
         if (preloaded == null) {
             return false
         }
-        
+
         val (format, adPlaceConstant) = preloaded
         Logger.d("🔵 [FULL_SCREEN] isPreloaded($adPlace) - format=$format, adPlaceConstant=$adPlaceConstant")
-        
+
         // Check if ad is actually loaded in the SDK
         val isActuallyLoaded = when (format) {
             "inter" -> AdsInterMultiPreload.isAdLoaded(adPlaceConstant)
@@ -759,16 +753,16 @@ object FullScreenService {
             "full_native" -> AdsNativeMultiPreload.isAdLoaded(adPlaceConstant)
             else -> false
         }
-        
+
         Logger.d("🔵 [FULL_SCREEN] isPreloaded($adPlace) - SDK check result: $isActuallyLoaded")
-        
+
         // If not actually loaded, remove from cache to prevent false positives
         if (!isActuallyLoaded) {
             Logger.w("🔵 [FULL_SCREEN] Ad marked as preloaded but not actually loaded, removing from cache")
             preloadedAds.remove(adPlace)
             return false
         }
-        
+
         return true
     }
 
@@ -805,10 +799,5 @@ object FullScreenService {
         isFullScreenAdShowing = false
     }
 
-    /**
-     * Reset showing state (use when needed to force reset)
-     */
-    fun resetShowingState() {
-        isFullScreenAdShowing = false
-    }
+
 }

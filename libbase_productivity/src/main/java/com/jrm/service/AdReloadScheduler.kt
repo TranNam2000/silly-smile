@@ -3,6 +3,7 @@ package com.jrm.service
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -67,10 +68,10 @@ object AdReloadScheduler {
         owner: LifecycleOwner,
         activity: Activity,
         intervalMs: Long,
-        initialDelayMs: Long? = null,
         placeLabel: String = placeName,
         onReload: (Activity, LifecycleOwner?) -> Boolean
     ) {
+        if (FullScreenService.isFullScreenAdShowing) return
         if (intervalMs <= 0L) return
         val key = getReloadKey(placeName, owner)
         intervalMsByKey[key] = intervalMs
@@ -92,6 +93,11 @@ object AdReloadScheduler {
                 val lifecycleOwner = lifecycleOwnerRefsByKey[key]?.get() ?: (act as? LifecycleOwner)
                 if (lifecycleOwner?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.STARTED) != true) {
                     Logger.d("[$placeLabel] Reload paused (lifecycle not visible)")
+                    return
+                }
+                if (lifecycleOwner is Fragment && lifecycleOwner.isHidden) {
+                    Logger.d("[$placeLabel] Reload skipped (fragment hidden)")
+                    handler.postDelayed(this, intervalMs)
                     return
                 }
                 val remainingMs = getRemainingReloadDelayMs(key, intervalMs)
@@ -137,11 +143,10 @@ object AdReloadScheduler {
         lifecycleObserversByKey[key] = observer
         owner.lifecycle.addObserver(observer)
 
-        val delayMs = initialDelayMs ?: intervalMs
-        handler.postDelayed(runnable, delayMs)
+        handler.postDelayed(runnable, intervalMs)
+        val ownerLabel = owner::class.java.simpleName
         Logger.d(
-            "[$placeLabel] Schedule reload ${intervalMs / 1000}s (owner: ${owner::class.java.simpleName})" +
-                if (initialDelayMs != null) " (initial delay ${initialDelayMs}ms)" else ""
+            "[$placeLabel] Schedule reload ${intervalMs / 1000}s (owner: $ownerLabel)"
         )
     }
 
@@ -152,6 +157,20 @@ object AdReloadScheduler {
         val prefix = placeName + "_"
         runnablesByKey.keys.filter { it.startsWith(prefix) }.toList().forEach { removeForKey(it) }
         Logger.d("[$placeName] Reload cancelled")
+    }
+
+    /**
+     * Hủy mọi reload có [owner] (nhanh: không cần biết placement id).
+     * Dùng khi fragment bị ẩn (show/hide) để dừng reload.
+     */
+    fun cancelReloadForOwner(owner: LifecycleOwner) {
+        val keysToRemove = runnablesByKey.keys.filter { key ->
+            lifecycleOwnerRefsByKey[key]?.get() == owner
+        }.toList()
+        keysToRemove.forEach { removeForKey(it) }
+        if (keysToRemove.isNotEmpty()) {
+            Logger.d("Reload cancelled for owner: ${owner::class.java.simpleName} (${keysToRemove.size} schedule(s))")
+        }
     }
 
     private fun removeScheduleOnly(key: String) {

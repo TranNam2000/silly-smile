@@ -19,7 +19,7 @@ class SplashAdLoader(
      */
     fun loadSplashNativeOrBanner(adView: View?) {
         activity.loadAds(
-            placementId = BaseConstants.PLACEMENT_SPLASH_AD_VIEW,
+            placementName = BaseConstants.PLACEMENT_SPLASH_AD_VIEW,
             adView = adView,
             onSuccess = {
                 viewModel.onSplashNativeLoaded(true)
@@ -36,7 +36,7 @@ class SplashAdLoader(
      */
     fun preloadL1Native(onFailure: () -> Unit) {
         activity.preloadAds(
-            placementId = BaseConstants.PLACEMENT_LANGUAGE_1_AD_VIEW,
+            placementName = BaseConstants.PLACEMENT_LANGUAGE_1_AD_VIEW,
             onSuccess = {
                 viewModel.onL1Loaded(true)
             },
@@ -49,7 +49,7 @@ class SplashAdLoader(
      */
     fun preloadL2Native(onFailure: () -> Unit) {
         activity.preloadAds(
-            placementId = BaseConstants.PLACEMENT_LANGUAGE_2_AD_VIEW,
+            placementName = BaseConstants.PLACEMENT_LANGUAGE_2_AD_VIEW,
             onSuccess = {
                 viewModel.onL2Loaded(true)
             },
@@ -73,7 +73,7 @@ class SplashAdLoader(
      */
     fun preloadSplashInterstitial() {
         activity.preloadAds(
-            placementId = BaseConstants.PLACEMENT_FS_SPLASH,
+            placementName = BaseConstants.PLACEMENT_FS_SPLASH,
             onSuccess = {
                 viewModel.onSplashInterPreloaded()
             },
@@ -89,7 +89,7 @@ class SplashAdLoader(
      */
     fun showSplashInterstitial(onComplete: () -> Unit) {
         activity.loadAds(
-            placementId = BaseConstants.PLACEMENT_FS_SPLASH,
+            placementName = BaseConstants.PLACEMENT_FS_SPLASH,
             onSuccess = onComplete,
             isShow = true,
             onFailure = {

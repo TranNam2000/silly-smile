@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -76,6 +77,7 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
         }
         
         return _binding?.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,12 +108,13 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
         super.onHiddenChanged(hidden)
 
         if (!hidden) {
-            // Fragment is now visible
+            // Fragment is now visible: load lại ad
             isInForeground = true
             startTime = System.currentTimeMillis()
             logScreenViewEvent()
+            loadAds()
         } else {
-            // Fragment is now hidden
+            // Fragment is now hidden (add + show/hide): reload sẽ bị bỏ qua trong scheduler (fragment.isHidden)
             isInForeground = false
         }
     }
@@ -174,16 +177,6 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
         this.refreshNativeTime = timeInSeconds
     }
 
-    fun showRefreshNative(listAdId: List<AdsNativeMultiPreload.AdIdModel>, adPlace: String) {
-        // Load native initially
-        loadNative(listAdId, adPlace)
-        
-        // Start refresh timer if refreshNativeTime > 0
-        if (refreshNativeTime > 0) {
-            startNativeRefreshTimer(listAdId, adPlace)
-        }
-    }
-
     private fun startNativeRefreshTimer(listAdId: List<AdsNativeMultiPreload.AdIdModel>, adPlace: String) {
         // Cancel existing timer if any
         stopNativeRefreshTimer()
@@ -193,7 +186,7 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
             override fun run() {
                 // Only refresh if fragment is in foreground
                 if (isInForeground) {
-                    loadNative(listAdId, adPlace)
+
                 }
                 
                 // Schedule next refresh
@@ -211,68 +204,6 @@ abstract class BaseFragment<B : ViewBinding>(val bindingFactory: (LayoutInflater
         }
         refreshNativeRunnable = null
         refreshNativeHandler = null
-    }
-
-    fun loadNative(listAdId: List<AdsNativeMultiPreload.AdIdModel>, adPlace: String) {
-        if (IAPHelper.isPremium()) {
-            findViewByName<YNMNativeAdView>("nativeAd")?.let { adView ->
-                adView.visibility = View.GONE
-            }
-            return
-        }
-        if (activity == null || AdsHelper.isDisableAllAd()) return
-        YNMAds.getInstance().setInitCallback {
-            activity?.let {
-                var adView: YNMNativeAdView? = findViewByName<YNMNativeAdView>("nativeAd")
-
-                if (adView != null) {
-                    AdsHelper.checkAndShowNativeMissing(it, R.layout.custom_native_admob_medium, listOf(
-                        BaseConstants.INTER_SPLASH, BaseConstants.NATIVE_SPLASH,
-                        BaseConstants.NATIVE_LANGUAGE2, BaseConstants.NATIVE_ONBOARD_1, BaseConstants.NATIVE_ONBOARD_2, BaseConstants.NATIVE_ONBOARD_3, BaseConstants.NATIVE_ONBOARD_4, BaseConstants.NATIVE_ONBOARD_5), adView,
-                        {
-                        }
-                    ) {
-                        AdsNativeMultiPreload.preloadMultipleNativeAds(
-                            it,
-                            YNMAirBridge.AppData(fragmentName, adPlace),
-                            listAdId,
-                            adPlace,
-                            object : YNMAdsCallbacks() {
-                                override fun onNativeAdLoaded(nativeAd: NativeAd) {
-                                    super.onNativeAdLoaded(nativeAd)
-                                    // Show the native ad in the native ad view if available
-                                    findViewByName<YNMNativeAdView>("nativeAd")?.let { adView ->
-                                        AdsNativeMultiPreload.showPreloadedNativeAd(
-                                            it,
-                                            adView,
-                                            adPlace,
-                                            R.layout.custom_native_admob_medium,
-                                            R.layout.custom_native_admob_medium
-                                        )
-                                    }
-                                }
-
-                                override fun onAdClicked() {
-                                    super.onAdClicked()
-                                    // Log ad click event
-                                    logEvent(
-                                        "native_ad_clicked",
-                                        "click",
-                                        adPlace,
-                                        1,
-                                        mapOf(
-                                            "screen_name" to fragmentName,
-                                            "ad_place" to adPlace
-                                        )
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-
-            }
-        }
     }
 
     /**

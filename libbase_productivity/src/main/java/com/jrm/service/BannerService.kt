@@ -151,7 +151,6 @@ object BannerService {
                 Logger.d("[$placementName] Chưa hết interval, không request ad (đợi thêm ${remainingMs}ms)")
                 scheduleReloadIfNeeded(
                     activity, placementName, activityName, timeReloadSeconds,
-                    initialDelayMs = remainingMs,
                     onResult = callback,
                     lifecycleOwner = lifecycleOwner
                 )
@@ -168,8 +167,10 @@ object BannerService {
                 Logger.d("Banner shown for placementName=$placementName")
                 if (timeReloadSeconds > 0L) {
                     val owner = lifecycleOwner ?: (activity as LifecycleOwner)
-                    if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)) {
-                        val reloadKey = AdReloadScheduler.getReloadKey(placementName, owner)
+                    val state = owner.lifecycle.currentState
+                    val canSchedule = (state != Lifecycle.State.DESTROYED)
+                    if (canSchedule){
+                    val reloadKey = AdReloadScheduler.getReloadKey(placementName, owner)
                         AdReloadScheduler.markReloadDone(reloadKey)
                         scheduleReloadIfNeeded(
                             activity, placementName, activityName, timeReloadSeconds, callback,
@@ -191,7 +192,6 @@ object BannerService {
         activityName: String,
         timeReloadSeconds: Long,
         onResult: ((Boolean) -> Unit)?,
-        initialDelayMs: Long? = null,
         lifecycleOwner: LifecycleOwner? = null
     ) {
         if (timeReloadSeconds <= 0) return
@@ -202,10 +202,9 @@ object BannerService {
             owner = ownerToObserve,
             activity = activity,
             intervalMs = intervalMs,
-            initialDelayMs = initialDelayMs,
             placeLabel = placeName,
             onReload = { act, owner ->
-                if (FullScreenService.isFullScreenAdShowing) return@schedule false
+
                 loadAndShowBanner(act, activityName, placeName, onResult, lifecycleOwner = owner)
                 true
             }

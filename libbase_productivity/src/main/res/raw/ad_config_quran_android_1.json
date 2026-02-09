@@ -22,7 +22,7 @@
           "enable": true,
           "min_time_splash": 5,
           "time_out_splash": 12,
-          "enable_btn_continue": false
+          "enable_btn_continue": true
         },
         "paywall": {
           "enable": true,
@@ -46,7 +46,7 @@
         "fs_splash": {
           "type": "full_screen_ad",
           "enable": true,
-          "ordered_priority_ads": "101_spl_inter_high_f1;101_spl_inter",
+          "ordered_priority_ads": "403_resume_open;101_spl_inter",
           "session_cap": -1,
           "max_attempt": 1,
           "native_config": {
@@ -84,7 +84,7 @@
           "native_config": {
             "layout_res": "native_admob_medium_2",
             "meta_layout_res": "native_admob_medium_2",
-            "reload_time": 0
+            "reload_time": 5
           },
           "session_cap": -1,
           "max_attempt": 1
@@ -96,7 +96,7 @@
           "native_config": {
             "layout_res": "native_admob_medium_2",
             "meta_layout_res": "native_admob_medium_2",
-            "reload_time": 0
+            "reload_time": 5
           },
           "session_cap": -1,
           "max_attempt": 1
@@ -108,7 +108,7 @@
           "native_config": {
             "layout_res": "native_admob_medium_2",
             "meta_layout_res": "native_admob_medium_2",
-            "reload_time": 0
+            "reload_time": 5
           },
           "session_cap": -1,
           "max_attempt": 1
@@ -120,7 +120,7 @@
           "native_config": {
             "layout_res": "native_admob_medium_2",
             "meta_layout_res": "native_admob_medium_2",
-            "reload_time": 0
+            "reload_time": 5
           },
           "session_cap": -1,
           "max_attempt": 1

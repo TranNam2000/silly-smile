@@ -1,29 +1,32 @@
 package com.jrm.onboarding.onboarding
 
 import android.view.View
-import com.jrm.utils.Logger
-import androidx.lifecycle.Observer
-import kotlinx.coroutines.*
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.jrm.R
 import com.jrm.base.BaseFragment
 import com.jrm.databinding.FragmentObdSlideBinding
-import com.jrm.utils.BaseConstants
-import com.jrm.utils.purchase.IAPHelper
+import com.jrm.utils.AdsHelper
+import com.jrm.utils.Logger
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class OnboardingFragment(
     private var position: Int = 0,
     var idImage: Int = R.drawable.obd1,
     var idText: Int = 0,
-    var idTextDetail: Int = 0
+    var idTextDetail: Int = 0,
+    var placementName: String,
+    var type: String
 ) : BaseFragment<FragmentObdSlideBinding>(FragmentObdSlideBinding::inflate) {
     private var isFirstPause = true
-    companion object {
-        var isClickNativeFull = false
-    }
-    private var showMax = false;
-    lateinit var activity : OnboardingActivity;
+
+    lateinit var activity: OnboardingActivity;
     private var autoNextJob: Job? = null
 
     private fun safeGetString(resId: Int): String? {
@@ -41,152 +44,36 @@ class OnboardingFragment(
         // Safe string resource handling
         safeGetString(idText)?.let { binding?.tvInside?.text = it }
         safeGetString(idTextDetail)?.let { binding?.tvDetail?.text = it }
-
-        when (position) {
-            0 -> {
-                if (!IAPHelper.isPremium()) {
-                } else {
-                    binding?.nativeOnboarding?.visibility = View.GONE
-                }
-                Logger.d( "ob2NativeHigh")
-            }
-
-            1 -> {
-
-            }
-
-            2 -> {
-                if (activity.isFiveObd()) {
-                    binding?.clFrad?.visibility = View.VISIBLE
-                    binding?.nativeOnboarding?.visibility = View.GONE
-                } else {
-                    binding?.nativeOnboarding?.visibility = View.GONE
-                    binding?.nativeOnboardingFull?.visibility = View.VISIBLE
-                }
-            }
-
-            3 -> {
-
-            }
-            4 -> {
-
-            }
-        }
     }
 
     override fun addEvent() {
     }
 
-    private fun setupLoadingOb3Observer() {
-        val activity = requireActivity() as OnboardingActivity
-        activity.loadingOb3LiveData.observe(this, Observer { isLoading ->
-            if (!isLoading) {
-                // When loadingOb3 becomes false, show native ad
-                showNativeObd3()
-            }
-        })
-    }
     private var isFirstResume = true
     override fun onResume() {
         super.onResume()
         if (isFirstResume) {
-            Logger.d( "onResume: " + position)
-            when (position) {
-                0 -> {
-                    if (!IAPHelper.isPremium()) {
-                        activity.loadAds(
-                            BaseConstants.PLACEMENT_ONBOARDING_1,
-                            adView = binding!!.nativeOnboarding,
-                            onSuccess = { },
-                            onFailure = { },
-                            lifecycleOwner = this
-                        )
-                    } else {
-                        binding?.nativeOnboarding?.visibility = View.GONE
-                    }
-                    Logger.d( "ob2NativeHigh")
-                }
-
-                1 -> {
-                    if (!IAPHelper.isPremium()) {
-                        activity.loadAds(
-                            BaseConstants.PLACEMENT_ONBOARDING_2,
-                            adView = binding!!.nativeOnboarding,
-                            onSuccess = { },
-                            onFailure = { },
-                            lifecycleOwner = this
-                        )
-                    }
-                    else {
-                        binding?.nativeOnboarding?.visibility = View.GONE
-                    }
-                    Logger.d( "ob3NativeHigh")
-                }
-
-                2 -> {
-                    if (activity.isFiveObd()) {
-                        binding?.clFrad?.visibility = View.VISIBLE
-                        binding?.nativeOnboarding?.visibility = View.GONE
-                    } else {
-                        binding?.nativeOnboarding?.visibility = View.GONE
-                        binding?.nativeOnboardingFull?.visibility = View.VISIBLE
-                        setupLoadingOb3Observer()
-                    }
-                }
-
-                3 -> {
-                    if (activity.isFiveObd()) {
-                        binding?.nativeOnboarding?.visibility = View.GONE
-                        binding?.nativeOnboardingFull?.visibility = View.VISIBLE
-                        context?.let {
-                            activity.loadAds(
-                                adView = binding!!.nativeOnboardingFull,
-                                placementId = BaseConstants.PLACEMENT_ONBOARDING_4,
-                                lifecycleOwner = this
-                            )
-
-                        }
-                    } else {
-                            activity.loadAds(
-                                adView = binding!!.nativeOnboarding,
-                                placementId = BaseConstants.PLACEMENT_ONBOARDING_4,
-                                lifecycleOwner = this
-                            )
-                    }
-                }
-                4 -> {
-                    if (activity.isFiveObd()) {
-                                activity.loadAds(
-                                adView = binding!!.nativeOnboarding,
-                                placementId = BaseConstants.PLACEMENT_ONBOARDING_5,
-                                lifecycleOwner = this
-                            )
-
-                    }
-                }
-            }
-        } else {
-            if (position in activity.getListPosNativeFull()) {
-                if (isClickNativeFull) {
-                    isClickNativeFull = false;
-                    (requireActivity() as OnboardingActivity).onClickNext()
-                } else {
-                    // Start auto next job after 5 seconds
-                    startAutoNextJob()
-                }
-                return
+            if (!AdsHelper.isDisableObdAd()) {
+                if (type == "native_view")
+                    activity.loadAds(
+                        placementName,
+                        adView = binding!!.nativeOnboarding,
+                        onSuccess = { },
+                        onFailure = { },
+                        lifecycleOwner = this
+                    ) else
+                    activity.loadAds(
+                        placementName,
+                        adView = binding!!.nativeOnboardingFull,
+                        onSuccess = { },
+                        onFailure = { },
+                        lifecycleOwner = this
+                    )
+            } else {
+                binding?.nativeOnboarding?.isVisible = true
+                binding?.nativeOnboardingFull?.isVisible = true
             }
         }
-        isFirstResume = false
-    }
-
-    private fun showNativeObd3() {
-        activity.loadAds(
-            adView = binding!!.nativeOnboardingFull,
-            placementId = BaseConstants.PLACEMENT_ONBOARDING_3,
-            isShow = true,
-            lifecycleOwner = this
-        )
     }
 
     private fun reShowNativeOnboarding(position: Int) {
@@ -223,7 +110,7 @@ class OnboardingFragment(
                 }
             } catch (e: CancellationException) {
                 // Job was cancelled, do nothing
-                Logger.d( "Auto next job cancelled")
+                Logger.d("Auto next job cancelled")
             }
         }
     }

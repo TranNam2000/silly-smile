@@ -4,8 +4,6 @@ import android.app.Activity
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.jrm.utils.Logger
-import com.ads.nomyek_admob.admobs.AppOpenManager
 import com.ads.nomyek_admob.ads_components.YNMAdsCallbacks
 import com.ads.nomyek_admob.ads_components.ads_native.YNMNativeAdView
 import com.ads.nomyek_admob.ads_components.wrappers.AdsError
@@ -13,10 +11,11 @@ import com.ads.nomyek_admob.event.YNMAirBridge
 import com.ads.nomyek_admob.utils.AdsNativeMultiPreload
 import com.google.android.gms.ads.nativead.NativeAd
 import com.jrm.R
+import com.jrm.model.AdConfigModel
 import com.jrm.service.Helper.buildUnitIdConfigList
 import com.jrm.service.Helper.convertToAdIdModelList
-import com.jrm.service.NativeService.loadNativeAd
-import com.jrm.model.AdConfigModel
+import com.jrm.service.NativeService.cancelReload
+import com.jrm.utils.Logger
 import com.jrm.utils.remote_config.RemoteConfigManager
 
 object NativeService {
@@ -47,14 +46,19 @@ object NativeService {
         onFailure: (() -> Unit)? = null,
         lifecycleOwner: LifecycleOwner? = null
     ) {
+        Logger.d("[$placeName] loadNativeAd() activity=${activity.javaClass.simpleName}, activityName=$activityName, adView=${if (adView != null) "set" else "null"}, waitForLoad=$waitForLoad")
+
         val listAdId = convertToAdIdModelList(buildUnitIdConfigList(config, placeName))
         if (listAdId.isEmpty()) {
+            Logger.w("[$placeName] loadNativeAd() skip: no ad config (listAdId empty)")
             onFailure?.invoke()
             adView?.visibility = View.GONE
             return
         }
+        Logger.d("[$placeName] loadNativeAd() adIds=${listAdId.size}")
 
         if (adView == null) {
+            Logger.d("[$placeName] loadNativeAd() preloadOnly (no adView)")
             preloadOnly(activity, placeName, activityName, listAdId, onSuccess, onFailure)
             return
         }
@@ -62,21 +66,33 @@ object NativeService {
         val (layoutAdmob, layoutMax) = getLayoutResources(config, placeName)
         val timeReload = config?.adPlacements?.get(placeName)?.nativeConfig?.reloadTime ?: 0L
         val intervalMs = timeReload * 1000L
+        Logger.d("[$placeName] loadNativeAd() timeReload=${timeReload}s, layoutAdmob=$layoutAdmob, layoutMax=$layoutMax")
         val ownerToObserve = lifecycleOwner ?: (activity as LifecycleOwner)
         if (timeReload > 0L) {
             val reloadKey = AdReloadScheduler.getReloadKey(placeName, ownerToObserve)
             val remainingMs = AdReloadScheduler.getRemainingReloadDelayMs(reloadKey, intervalMs)
             if (remainingMs > 0L) {
-                Logger.d( "[$placeName] Chưa hết interval, không request ad (đợi thêm ${remainingMs}ms)")
+                Logger.d("[$placeName] loadNativeAd() skip: reload interval not reached, wait ${remainingMs}ms")
                 scheduleReloadIfNeeded(
-                    activity, placeName, activityName, adView, timeReload, waitForLoad,
-                    onSuccess, onFailure, lifecycleOwner = lifecycleOwner, initialDelayMs = remainingMs
+                    activity,
+                    placeName,
+                    activityName,
+                    adView,
+                    timeReload,
+                    waitForLoad,
+                    onSuccess,
+                    onFailure,
+                    lifecycleOwner = lifecycleOwner,
                 )
                 onSuccess?.invoke()
                 return
             }
         }
-        if (AdsNativeMultiPreload.isAdLoaded(placeName)) {
+
+        val isLoaded = AdsNativeMultiPreload.isAdLoaded(placeName)
+        Logger.d("[$placeName] loadNativeAd() isAdLoaded=$isLoaded")
+        if (isLoaded) {
+            Logger.d("[$placeName] loadNativeAd() showing preloaded ad in view")
             showAdInView(
                 activity,
                 activityName,
@@ -92,6 +108,8 @@ object NativeService {
             )
             return
         }
+
+        Logger.d("[$placeName] loadNativeAd() preloadAndShow (requesting new ad)")
         preloadAndShow(
             activity,
             placeName,
@@ -122,7 +140,7 @@ object NativeService {
         lifecycleOwner: LifecycleOwner? = null
     ) {
         val activityLabel = "${activity.javaClass.simpleName}($activityName)"
-        Logger.d( "[$placeName] Show native ad tại Activity: $activityLabel")
+        Logger.d("[$placeName] showAdInView() activity=$activityLabel, layoutAdmob=$layoutAdmob, layoutMax=$layoutMax, timeReload=${timeReload}s")
         AdsNativeMultiPreload.showPreloadedNativeAd(
             activity,
             adView,
@@ -131,10 +149,13 @@ object NativeService {
             layoutMax
         )
         adView.visibility = View.VISIBLE
-        onSuccess?.invoke()
         if (timeReload > 0L) {
             val owner = lifecycleOwner ?: (activity as LifecycleOwner)
-            if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)) {
+            val state = owner.lifecycle.currentState
+            val canSchedule = (state != Lifecycle.State.DESTROYED)
+            Logger.d("[$placeName] showAdInView() lifecycle state=$state, canSchedule=$canSchedule")
+            if (canSchedule) {
+                Logger.d("[$placeName] showAdInView() markReloadDone + scheduleReload in ${timeReload}s")
                 val reloadKey = AdReloadScheduler.getReloadKey(placeName, owner)
                 AdReloadScheduler.markReloadDone(reloadKey)
                 scheduleReloadIfNeeded(
@@ -148,8 +169,11 @@ object NativeService {
                     onFailure,
                     lifecycleOwner = lifecycleOwner
                 )
+            } else {
+                Logger.w("[$placeName] showAdInView() skip schedule reload: owner state=$state")
             }
         }
+        onSuccess?.invoke()
     }
 
     private fun preloadOnly(
@@ -160,6 +184,7 @@ object NativeService {
         onSuccess: (() -> Unit)?,
         onFailure: (() -> Unit)?
     ) {
+        Logger.d("[$placeName] preloadOnly() activity=${activity.javaClass.simpleName}, adIds=${listAdId.size}")
         AdsNativeMultiPreload.preloadMultipleNativeAds(
             activity,
             YNMAirBridge.AppData(activityName, placeName),
@@ -168,11 +193,13 @@ object NativeService {
             object : YNMAdsCallbacks() {
                 override fun onNativeAdLoaded(nativeAd: NativeAd) {
                     super.onNativeAdLoaded(nativeAd)
+                    Logger.d("[$placeName] preloadOnly() onNativeAdLoaded success")
                     onSuccess?.invoke()
                 }
 
                 override fun onAdFailedToLoad(adError: AdsError?) {
                     super.onAdFailedToLoad(adError)
+                    Logger.w("[$placeName] preloadOnly() onAdFailedToLoad error=${adError?.message}")
                     onFailure?.invoke()
                 }
             }
@@ -193,7 +220,8 @@ object NativeService {
         onFailure: (() -> Unit)?,
         lifecycleOwner: LifecycleOwner? = null
     ) {
-        if (waitForLoad){
+        Logger.d("[$placeName] preloadAndShow() start, waitForLoad=$waitForLoad, adIds=${listAdId.size}")
+        if (waitForLoad) {
             adView.visibility = View.VISIBLE
         }
         AdsNativeMultiPreload.preloadMultipleNativeAds(
@@ -204,6 +232,7 @@ object NativeService {
             object : YNMAdsCallbacks() {
                 override fun onNativeAdLoaded(nativeAd: NativeAd) {
                     super.onNativeAdLoaded(nativeAd)
+                    Logger.d("[$placeName] preloadAndShow() onNativeAdLoaded -> showAdInView")
                     showAdInView(
                         activity,
                         activityName,
@@ -221,6 +250,7 @@ object NativeService {
 
                 override fun onAdFailedToLoad(adError: AdsError?) {
                     super.onAdFailedToLoad(adError)
+                    Logger.w("[$placeName] preloadAndShow() onAdFailedToLoad error=${adError?.message}")
                     adView.visibility = View.GONE
                     onFailure?.invoke()
                 }
@@ -241,7 +271,6 @@ object NativeService {
         onSuccess: (() -> Unit)?,
         onFailure: (() -> Unit)?,
         lifecycleOwner: LifecycleOwner? = null,
-        initialDelayMs: Long? = null
     ) {
         if (timeReload <= 0) return
         val intervalMs = timeReload * 1000L
@@ -251,13 +280,22 @@ object NativeService {
             owner = ownerToObserve,
             activity = activity,
             intervalMs = intervalMs,
-            initialDelayMs = initialDelayMs,
             placeLabel = placeName,
             onReload = { act, owner ->
+                Logger.d("[$placeName] isFullScreenAdShowing : " + FullScreenService.isFullScreenAdShowing.toString())
                 if (FullScreenService.isFullScreenAdShowing) return@schedule false
                 Logger.d("[$placeName] Reload native ad tại Activity: ${act.javaClass.simpleName}($activityName)")
                 AdsNativeMultiPreload.destroyPreloadedAd(placeName)
-                loadNativeAd(act, placeName, activityName, adView, waitForLoad, onSuccess, onFailure, owner)
+                loadNativeAd(
+                    act,
+                    placeName,
+                    activityName,
+                    adView,
+                    waitForLoad,
+                    onSuccess,
+                    onFailure,
+                    owner
+                )
                 true
             }
         )
